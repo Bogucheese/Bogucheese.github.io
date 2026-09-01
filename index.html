@@ -1,568 +1,310 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
-  
-  
-  <title>LZH Code Blog</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
-<meta property="og:type" content="website">
-<meta property="og:title" content="LZH Code Blog">
-<meta property="og:url" content="https://lzhcodeblog.site/index.html">
-<meta property="og:site_name" content="LZH Code Blog">
-<meta property="og:description" content="一个专注于编程实践、技术分享与个人成长的博客。">
-<meta property="og:locale" content="zh_CN">
-<meta property="article:author" content="LZH">
-<meta property="article:tag" content="编程, 技术博客, 前端, 后端, 学习笔记">
-<meta name="twitter:card" content="summary">
-  
-    <link rel="alternate" href="/atom.xml" title="LZH Code Blog" type="application/atom+xml">
-  
-  
-    <link rel="shortcut icon" href="/favicon.png">
-  
-  
-  
-<link rel="stylesheet" href="/css/style.css">
-
-  
-  
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.2.0/css/fork-awesome.min.css">
-
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>LZH Code Blog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css">
+  <link rel="stylesheet" href="/css/style.css">
 <meta name="generator" content="Hexo 8.1.2"></head>
-
 <body>
-  <div id="container">
-    <div id="wrap">
-      <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">LZH Code Blog</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">记录代码、思考与成长</a>
-        </h2>
-      
+  <header class="csdn-header">
+  <div class="header-container">
+    <div class="header-left">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i>
+        <span>LZH Code Blog</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/" class="nav-link active">
+          <i class="fas fa-home"></i> 首页
+        </a>
+        <a href="/archives/" class="nav-link">
+          <i class="fas fa-archive"></i> 归档
+        </a>
+        <a href="/categories/" class="nav-link">
+          <i class="fas fa-folder"></i> 分类
+        </a>
+        <a href="/tags/" class="nav-link">
+          <i class="fas fa-tags"></i> 标签
+        </a>
+        <a href="/about/" class="nav-link">
+          <i class="fas fa-user"></i> 关于
+        </a>
+      </nav>
     </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"><span class="fa fa-bars"></span></a>
-        
-          <a class="main-nav-link" href="/">首页</a>
-        
-          <a class="main-nav-link" href="/archives/">归档</a>
-        
-          <a class="main-nav-link" href="/categories/">分类</a>
-        
-          <a class="main-nav-link" href="/tags/">标签</a>
-        
-          <a class="main-nav-link" href="/about/">关于</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          
-            <a class="nav-icon" target="_blank" rel="noopener" href="https://github.com/Bogucheese"><span class="fa fa-github"></span></a>
-          
-        
-        
-          <a class="nav-icon" href="/atom.xml" title="RSS 订阅"><span class="fa fa-rss"></span></a>
-        
-        <a class="nav-icon nav-search-btn" title="搜索"><span class="fa fa-search"></span></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="搜索"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://lzhcodeblog.site"></form>
+    <div class="header-right">
+      <div class="search-box">
+        <input type="text" placeholder="搜索文章..." id="headerSearch">
+        <button onclick="search()"><i class="fas fa-search"></i></button>
       </div>
     </div>
   </div>
 </header>
 
-      <div class="outer">
-        <section id="main">
-  
-    <article id="post-python-data-analysis-tutorial" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/09/01/python-data-analysis-tutorial/" class="article-date">
-  <time class="dt-published" datetime="2026-09-01T07:30:00.000Z" itemprop="datePublished">2026-09-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">编程教程</a>►<a class="article-category-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">Python</a>►<a class="article-category-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a>
-  </div>
 
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
+  <div class="main-container">
+    <main class="content-left">
+      <div class="article-list">
         
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/09/01/python-data-analysis-tutorial/">Python 数据分析入门指南 - 从零基础到实战项目</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <h1 id="Python-数据分析入门指南-从零基础到实战项目"><a href="#Python-数据分析入门指南-从零基础到实战项目" class="headerlink" title="Python 数据分析入门指南 - 从零基础到实战项目"></a>Python 数据分析入门指南 - 从零基础到实战项目</h1><blockquote>
-<p>本文是一份完整的数据分析入门教程，适合零基础学习者。通过一个真实的电商数据分析项目，带你掌握 Python 数据分析的核心技能。</p>
-</blockquote>
-<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
-<li><a href="#%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA">环境搭建</a></li>
-<li><a href="#%E6%95%B0%E6%8D%AE%E5%8A%A0%E8%BD%BD%E4%B8%8E%E6%8E%A2%E7%B4%A2">数据加载与探索</a></li>
-<li><a href="#%E6%95%B0%E6%8D%AE%E6%B8%85%E6%B4%97">数据清洗</a></li>
-<li><a href="#%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90">数据分析</a></li>
-<li><a href="#%E6%95%B0%E6%8D%AE%E5%8F%AF%E8%A7%86%E5%8C%96">数据可视化</a></li>
-<li><a href="#%E5%AE%9E%E6%88%98%E9%A1%B9%E7%9B%AE">实战项目</a></li>
-<li><a href="#%E6%80%BB%E7%BB%93%E4%B8%8E%E8%BF%9B%E9%98%B6">总结与进阶</a></li>
-</ol>
-<hr>
-<h2 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h2><h3 id="安装-Python"><a href="#安装-Python" class="headerlink" title="安装 Python"></a>安装 Python</h3><p>首先确保你安装了 Python 3.8 或更高版本：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查 Python 版本</span></span><br><span class="line">python --version</span><br><span class="line"></span><br><span class="line"><span class="comment"># Windows 用户可以从 python.org 下载</span></span><br><span class="line"><span class="comment"># macOS 用户可以使用 Homebrew</span></span><br><span class="line">brew install python@3.11</span><br><span class="line"></span><br><span class="line"><span class="comment"># Linux 用户可以使用包管理器</span></span><br><span class="line"><span class="built_in">sudo</span> apt-get install python3 python3-pip</span><br></pre></td></tr></table></figure>
-
-<h3 id="创建虚拟环境"><a href="#创建虚拟环境" class="headerlink" title="创建虚拟环境"></a>创建虚拟环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 创建虚拟环境</span></span><br><span class="line">python -m venv data-analysis-env</span><br><span class="line"></span><br><span class="line"><span class="comment"># 激活虚拟环境</span></span><br><span class="line"><span class="comment"># Windows</span></span><br><span class="line">data-analysis-env\Scripts\activate</span><br><span class="line"></span><br><span class="line"><span class="comment"># macOS/Linux</span></span><br><span class="line"><span class="built_in">source</span> data-analysis-env/bin/activate</span><br></pre></td></tr></table></figure>
-
-<h3 id="安装必要的库"><a href="#安装必要的库" class="headerlink" title="安装必要的库"></a>安装必要的库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install pandas numpy matplotlib seaborn jupyter scikit-learn</span><br></pre></td></tr></table></figure>
-
-<p>创建 <code>requirements.txt</code> 文件：</p>
-<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">pandas==2.1.0</span><br><span class="line">numpy==1.26.0</span><br><span class="line">matplotlib==3.8.0</span><br><span class="line">seaborn==0.13.0</span><br><span class="line">jupyter==1.0.0</span><br><span class="line">scikit-learn==1.3.0</span><br></pre></td></tr></table></figure>
-
-<h3 id="验证安装"><a href="#验证安装" class="headerlink" title="验证安装"></a>验证安装</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Pandas 版本：<span class="subst">&#123;pd.__version__&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;NumPy 版本：<span class="subst">&#123;np.__version__&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Matplotlib 版本：<span class="subst">&#123;plt.matplotlib.__version__&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;Seaborn 版本：<span class="subst">&#123;sns.__version__&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>输出应该类似：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Pandas 版本：2.1.0</span><br><span class="line">NumPy 版本：1.26.0</span><br><span class="line">Matplotlib 版本：3.8.0</span><br><span class="line">Seaborn 版本：0.13.0</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="数据加载与探索"><a href="#数据加载与探索" class="headerlink" title="数据加载与探索"></a>数据加载与探索</h2><h3 id="创建示例数据集"><a href="#创建示例数据集" class="headerlink" title="创建示例数据集"></a>创建示例数据集</h3><p>首先，我们创建一个模拟的电商销售数据集：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime, timedelta</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置随机种子以保证结果可复现</span></span><br><span class="line">np.random.seed(<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成日期范围</span></span><br><span class="line">dates = pd.date_range(start=<span class="string">&#x27;2024-01-01&#x27;</span>, end=<span class="string">&#x27;2024-12-31&#x27;</span>, freq=<span class="string">&#x27;D&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成产品类别</span></span><br><span class="line">categories = [<span class="string">&#x27;电子产品&#x27;</span>, <span class="string">&#x27;服装&#x27;</span>, <span class="string">&#x27;图书&#x27;</span>, <span class="string">&#x27;家居&#x27;</span>, <span class="string">&#x27;食品&#x27;</span>]</span><br><span class="line">products = &#123;</span><br><span class="line">    <span class="string">&#x27;电子产品&#x27;</span>: [<span class="string">&#x27;手机&#x27;</span>, <span class="string">&#x27;电脑&#x27;</span>, <span class="string">&#x27;平板&#x27;</span>, <span class="string">&#x27;耳机&#x27;</span>, <span class="string">&#x27;充电器&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;服装&#x27;</span>: [<span class="string">&#x27;T 恤&#x27;</span>, <span class="string">&#x27;牛仔裤&#x27;</span>, <span class="string">&#x27;外套&#x27;</span>, <span class="string">&#x27;运动鞋&#x27;</span>, <span class="string">&#x27;帽子&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;图书&#x27;</span>: [<span class="string">&#x27;小说&#x27;</span>, <span class="string">&#x27;教材&#x27;</span>, <span class="string">&#x27;漫画&#x27;</span>, <span class="string">&#x27;杂志&#x27;</span>, <span class="string">&#x27;工具书&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;家居&#x27;</span>: [<span class="string">&#x27;床单&#x27;</span>, <span class="string">&#x27;台灯&#x27;</span>, <span class="string">&#x27;收纳盒&#x27;</span>, <span class="string">&#x27;抱枕&#x27;</span>, <span class="string">&#x27;地毯&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;食品&#x27;</span>: [<span class="string">&#x27;零食&#x27;</span>, <span class="string">&#x27;茶叶&#x27;</span>, <span class="string">&#x27;坚果&#x27;</span>, <span class="string">&#x27;饼干&#x27;</span>, <span class="string">&#x27;咖啡&#x27;</span>]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment"># 生成订单数据</span></span><br><span class="line">orders = []</span><br><span class="line"><span class="keyword">for</span> date <span class="keyword">in</span> dates:</span><br><span class="line">    <span class="comment"># 每天的订单数量在 10-50 之间随机</span></span><br><span class="line">    num_orders = np.random.randint(<span class="number">10</span>, <span class="number">51</span>)</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_orders):</span><br><span class="line">        category = np.random.choice(categories)</span><br><span class="line">        product = np.random.choice(products[category])</span><br><span class="line">        quantity = np.random.randint(<span class="number">1</span>, <span class="number">6</span>)</span><br><span class="line">        price = np.random.uniform(<span class="number">10</span>, <span class="number">5000</span>)</span><br><span class="line">        discount = np.random.choice([<span class="number">0</span>, <span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.3</span>], p=[<span class="number">0.5</span>, <span class="number">0.2</span>, <span class="number">0.2</span>, <span class="number">0.1</span>])</span><br><span class="line">        customer_id = <span class="string">f&quot;C<span class="subst">&#123;np.random.randint(<span class="number">1000</span>, <span class="number">9999</span>)&#125;</span>&quot;</span></span><br><span class="line">        region = np.random.choice([<span class="string">&#x27;华东&#x27;</span>, <span class="string">&#x27;华南&#x27;</span>, <span class="string">&#x27;华北&#x27;</span>, <span class="string">&#x27;西南&#x27;</span>, <span class="string">&#x27;西北&#x27;</span>])</span><br><span class="line">        </span><br><span class="line">        orders.append(&#123;</span><br><span class="line">            <span class="string">&#x27;order_id&#x27;</span>: <span class="string">f&quot;ORD<span class="subst">&#123;<span class="built_in">len</span>(orders)+<span class="number">1</span>:06d&#125;</span>&quot;</span>,</span><br><span class="line">            <span class="string">&#x27;order_date&#x27;</span>: date,</span><br><span class="line">            <span class="string">&#x27;customer_id&#x27;</span>: customer_id,</span><br><span class="line">            <span class="string">&#x27;category&#x27;</span>: category,</span><br><span class="line">            <span class="string">&#x27;product&#x27;</span>: product,</span><br><span class="line">            <span class="string">&#x27;quantity&#x27;</span>: quantity,</span><br><span class="line">            <span class="string">&#x27;unit_price&#x27;</span>: <span class="built_in">round</span>(price, <span class="number">2</span>),</span><br><span class="line">            <span class="string">&#x27;discount&#x27;</span>: discount,</span><br><span class="line">            <span class="string">&#x27;region&#x27;</span>: region,</span><br><span class="line">            <span class="string">&#x27;payment_method&#x27;</span>: np.random.choice([<span class="string">&#x27;支付宝&#x27;</span>, <span class="string">&#x27;微信&#x27;</span>, <span class="string">&#x27;信用卡&#x27;</span>, <span class="string">&#x27;货到付款&#x27;</span>]),</span><br><span class="line">            <span class="string">&#x27;rating&#x27;</span>: np.random.choice([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], p=[<span class="number">0.05</span>, <span class="number">0.1</span>, <span class="number">0.2</span>, <span class="number">0.4</span>, <span class="number">0.25</span>])</span><br><span class="line">        &#125;)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 DataFrame</span></span><br><span class="line">df = pd.DataFrame(orders)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 计算订单金额</span></span><br><span class="line">df[<span class="string">&#x27;total_amount&#x27;</span>] = df[<span class="string">&#x27;unit_price&#x27;</span>] * df[<span class="string">&#x27;quantity&#x27;</span>] * (<span class="number">1</span> - df[<span class="string">&#x27;discount&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存为 CSV</span></span><br><span class="line">df.to_csv(<span class="string">&#x27;ecommerce_sales.csv&#x27;</span>, index=<span class="literal">False</span>, encoding=<span class="string">&#x27;utf-8-sig&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;数据集已创建，共 <span class="subst">&#123;<span class="built_in">len</span>(df)&#125;</span> 条记录&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="加载数据"><a href="#加载数据" class="headerlink" title="加载数据"></a>加载数据</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pandas <span class="keyword">as</span> pd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 读取 CSV 文件</span></span><br><span class="line">df = pd.read_csv(<span class="string">&#x27;ecommerce_sales.csv&#x27;</span>, parse_dates=[<span class="string">&#x27;order_date&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 显示前 5 行</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 数据预览 ===&quot;</span>)</span><br><span class="line">df.head()</span><br></pre></td></tr></table></figure>
-
-<p>输出示例：</p>
-<table>
-<thead>
-<tr>
-<th>order_id</th>
-<th>order_date</th>
-<th>customer_id</th>
-<th>category</th>
-<th>product</th>
-<th>quantity</th>
-<th>unit_price</th>
-<th>discount</th>
-<th>region</th>
-<th>payment_method</th>
-<th>rating</th>
-<th>total_amount</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>ORD000001</td>
-<td>2024-01-01</td>
-<td>C5672</td>
-<td>电子产品</td>
-<td>手机</td>
-<td>2</td>
-<td>3299.00</td>
-<td>0.1</td>
-<td>华东</td>
-<td>支付宝</td>
-<td>5</td>
-<td>5938.20</td>
-</tr>
-<tr>
-<td>ORD000002</td>
-<td>2024-01-01</td>
-<td>C1234</td>
-<td>服装</td>
-<td>T 恤</td>
-<td>3</td>
-<td>89.99</td>
-<td>0</td>
-<td>华南</td>
-<td>微信</td>
-<td>4</td>
-<td>269.97</td>
-</tr>
-<tr>
-<td>ORD000003</td>
-<td>2024-01-01</td>
-<td>C8765</td>
-<td>图书</td>
-<td>小说</td>
-<td>1</td>
-<td>45.00</td>
-<td>0.2</td>
-<td>华北</td>
-<td>支付宝</td>
-<td>5</td>
-<td>36.00</td>
-</tr>
-<tr>
-<td>ORD000004</td>
-<td>2024-01-01</td>
-<td>C3456</td>
-<td>家居</td>
-<td>台灯</td>
-<td>2</td>
-<td>159.00</td>
-<td>0</td>
-<td>西南</td>
-<td>信用卡</td>
-<td>3</td>
-<td>318.00</td>
-</tr>
-<tr>
-<td>ORD000005</td>
-<td>2024-01-01</td>
-<td>C7890</td>
-<td>食品</td>
-<td>咖啡</td>
-<td>4</td>
-<td>68.50</td>
-<td>0.1</td>
-<td>西北</td>
-<td>微信</td>
-<td>4</td>
-<td>246.60</td>
-</tr>
-</tbody></table>
-<h3 id="数据基本信息"><a href="#数据基本信息" class="headerlink" title="数据基本信息"></a>数据基本信息</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">print</span>(<span class="string">&quot;=== 数据基本信息 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n数据形状：<span class="subst">&#123;df.shape&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n数据类型：\n<span class="subst">&#123;df.dtypes&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n缺失值统计：\n<span class="subst">&#123;df.isnull().<span class="built_in">sum</span>()&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n基本统计信息：\n<span class="subst">&#123;df.describe()&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<p>输出：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">=== 数据基本信息 ===</span><br><span class="line"></span><br><span class="line">数据形状：(10957, 12)</span><br><span class="line"></span><br><span class="line">数据类型:</span><br><span class="line">order_id          object</span><br><span class="line">order_date        datetime64[ns]</span><br><span class="line">customer_id       object</span><br><span class="line">category          object</span><br><span class="line">product           object</span><br><span class="line">quantity           int32</span><br><span class="line">unit_price       float64</span><br><span class="line">discount         float64</span><br><span class="line">region            object</span><br><span class="line">payment_method    object</span><br><span class="line">rating             int32</span><br><span class="line">total_amount     float64</span><br><span class="line"></span><br><span class="line">缺失值统计:</span><br><span class="line">order_id        0</span><br><span class="line">order_date      0</span><br><span class="line">customer_id     0</span><br><span class="line">category        0</span><br><span class="line">product         0</span><br><span class="line">quantity        0</span><br><span class="line">unit_price      0</span><br><span class="line">discount        0</span><br><span class="line">region          0</span><br><span class="line">payment_method  0</span><br><span class="line">rating          0</span><br><span class="line">total_amount    0</span><br><span class="line"></span><br><span class="line">基本统计信息:</span><br><span class="line">       quantity    unit_price    discount   total_amount      rating</span><br><span class="line">count  10957.0000  10957.000000  10957.0000   10957.000000  10957.0000</span><br><span class="line">mean       3.0235   1589.234567      0.1023    2534.567890      3.6789</span><br><span class="line">std        1.4123   1234.567890      0.1345    2123.456789      1.0234</span><br><span class="line">min        1.0000     10.000000      0.0000      10.000000      1.0000</span><br><span class="line">25%        2.0000    567.890000      0.0000     890.123000      3.0000</span><br><span class="line">50%        3.0000   1234.560000      0.1000    1890.234000      4.0000</span><br><span class="line">75%        4.0000   2345.670000      0.2000    3456.789000      5.0000</span><br><span class="line">max        5.0000   5000.000000      0.3000   15000.000000      5.0000</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="数据清洗"><a href="#数据清洗" class="headerlink" title="数据清洗"></a>数据清洗</h2><h3 id="检查重复值"><a href="#检查重复值" class="headerlink" title="检查重复值"></a>检查重复值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 检查重复订单</span></span><br><span class="line">duplicate_orders = df[df.duplicated(subset=[<span class="string">&#x27;order_id&#x27;</span>], keep=<span class="literal">False</span>)]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;重复订单数：<span class="subst">&#123;<span class="built_in">len</span>(duplicate_orders)&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除重复值</span></span><br><span class="line">df = df.drop_duplicates(subset=[<span class="string">&#x27;order_id&#x27;</span>], keep=<span class="string">&#x27;first&#x27;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;删除重复后数据量：<span class="subst">&#123;<span class="built_in">len</span>(df)&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="处理异常值"><a href="#处理异常值" class="headerlink" title="处理异常值"></a>处理异常值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 检测价格异常值</span></span><br><span class="line">Q1 = df[<span class="string">&#x27;unit_price&#x27;</span>].quantile(<span class="number">0.25</span>)</span><br><span class="line">Q3 = df[<span class="string">&#x27;unit_price&#x27;</span>].quantile(<span class="number">0.75</span>)</span><br><span class="line">IQR = Q3 - Q1</span><br><span class="line"></span><br><span class="line">lower_bound = Q1 - <span class="number">1.5</span> * IQR</span><br><span class="line">upper_bound = Q3 + <span class="number">1.5</span> * IQR</span><br><span class="line"></span><br><span class="line">outliers = df[(df[<span class="string">&#x27;unit_price&#x27;</span>] &lt; lower_bound) | (df[<span class="string">&#x27;unit_price&#x27;</span>] &gt; upper_bound)]</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;价格异常值数量：<span class="subst">&#123;<span class="built_in">len</span>(outliers)&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;异常值价格范围：<span class="subst">&#123;outliers[<span class="string">&#x27;unit_price&#x27;</span>].<span class="built_in">min</span>()&#125;</span> - <span class="subst">&#123;outliers[<span class="string">&#x27;unit_price&#x27;</span>].<span class="built_in">max</span>()&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化异常值</span></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">6</span>))</span><br><span class="line">plt.boxplot(df[<span class="string">&#x27;unit_price&#x27;</span>], vert=<span class="literal">False</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;单价&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;商品价格箱线图&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="处理缺失值"><a href="#处理缺失值" class="headerlink" title="处理缺失值"></a>处理缺失值</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 虽然我们的示例数据没有缺失值，但实际工作中经常会遇到</span></span><br><span class="line"><span class="comment"># 以下是常见的处理方法：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 1. 删除含有缺失值的行</span></span><br><span class="line"><span class="comment"># df = df.dropna()</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 2. 用均值填充数值列</span></span><br><span class="line"><span class="comment"># df[&#x27;unit_price&#x27;] = df[&#x27;unit_price&#x27;].fillna(df[&#x27;unit_price&#x27;].mean())</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 3. 用众数填充分类列</span></span><br><span class="line"><span class="comment"># df[&#x27;region&#x27;] = df[&#x27;region&#x27;].fillna(df[&#x27;region&#x27;].mode()[0])</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 4. 用前向填充（适合时间序列）</span></span><br><span class="line"><span class="comment"># df = df.fillna(method=&#x27;ffill&#x27;)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 5. 用后向填充</span></span><br><span class="line"><span class="comment"># df = df.fillna(method=&#x27;bfill&#x27;)</span></span><br></pre></td></tr></table></figure>
-
-<h3 id="数据格式转换"><a href="#数据格式转换" class="headerlink" title="数据格式转换"></a>数据格式转换</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 确保日期格式正确</span></span><br><span class="line">df[<span class="string">&#x27;order_date&#x27;</span>] = pd.to_datetime(df[<span class="string">&#x27;order_date&#x27;</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 提取时间特征</span></span><br><span class="line">df[<span class="string">&#x27;year&#x27;</span>] = df[<span class="string">&#x27;order_date&#x27;</span>].dt.year</span><br><span class="line">df[<span class="string">&#x27;month&#x27;</span>] = df[<span class="string">&#x27;order_date&#x27;</span>].dt.month</span><br><span class="line">df[<span class="string">&#x27;day&#x27;</span>] = df[<span class="string">&#x27;order_date&#x27;</span>].dt.day</span><br><span class="line">df[<span class="string">&#x27;weekday&#x27;</span>] = df[<span class="string">&#x27;order_date&#x27;</span>].dt.weekday  <span class="comment"># 0=周一，6=周日</span></span><br><span class="line">df[<span class="string">&#x27;quarter&#x27;</span>] = df[<span class="string">&#x27;order_date&#x27;</span>].dt.quarter</span><br><span class="line">df[<span class="string">&#x27;week&#x27;</span>] = df[<span class="string">&#x27;order_date&#x27;</span>].dt.isocalendar().week</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建时间段标签</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_time_period</span>(<span class="params">hour</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="number">6</span> &lt;= hour &lt; <span class="number">12</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;早晨&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="number">12</span> &lt;= hour &lt; <span class="number">14</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;中午&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="number">14</span> &lt;= hour &lt; <span class="number">18</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;下午&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> <span class="number">18</span> &lt;= hour &lt; <span class="number">22</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;晚上&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;深夜&#x27;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加订单时间段（示例，实际需要小时数据）</span></span><br><span class="line">df[<span class="string">&#x27;time_period&#x27;</span>] = <span class="string">&#x27;白天&#x27;</span>  <span class="comment"># 简化示例</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数据清洗完成！&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;最终数据量：<span class="subst">&#123;<span class="built_in">len</span>(df)&#125;</span> 条记录&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="数据分析"><a href="#数据分析" class="headerlink" title="数据分析"></a>数据分析</h2><h3 id="销售概览"><a href="#销售概览" class="headerlink" title="销售概览"></a>销售概览</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 总销售额</span></span><br><span class="line">total_sales = df[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;总销售额：¥<span class="subst">&#123;total_sales:,<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 总订单数</span></span><br><span class="line">total_orders = <span class="built_in">len</span>(df)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;总订单数：<span class="subst">&#123;total_orders:,&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 平均订单金额</span></span><br><span class="line">avg_order = df[<span class="string">&#x27;total_amount&#x27;</span>].mean()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;平均订单金额：¥<span class="subst">&#123;avg_order:,<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户总数</span></span><br><span class="line">total_customers = df[<span class="string">&#x27;customer_id&#x27;</span>].nunique()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;客户总数：<span class="subst">&#123;total_customers:,&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 人均消费</span></span><br><span class="line">avg_customer = total_sales / total_customers</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;人均消费：¥<span class="subst">&#123;avg_customer:,<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="按类别分析"><a href="#按类别分析" class="headerlink" title="按类别分析"></a>按类别分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各类别销售统计</span></span><br><span class="line">category_stats = df.groupby(<span class="string">&#x27;category&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: [<span class="string">&#x27;sum&#x27;</span>, <span class="string">&#x27;mean&#x27;</span>, <span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;quantity&#x27;</span>: <span class="string">&#x27;sum&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;customer_id&#x27;</span>: <span class="string">&#x27;nunique&#x27;</span></span><br><span class="line">&#125;).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">category_stats.columns = [<span class="string">&#x27;销售总额&#x27;</span>, <span class="string">&#x27;平均订单&#x27;</span>, <span class="string">&#x27;订单数&#x27;</span>, <span class="string">&#x27;销售数量&#x27;</span>, <span class="string">&#x27;客户数&#x27;</span>]</span><br><span class="line">category_stats[<span class="string">&#x27;销售占比&#x27;</span>] = (category_stats[<span class="string">&#x27;销售总额&#x27;</span>] / category_stats[<span class="string">&#x27;销售总额&#x27;</span>].<span class="built_in">sum</span>() * <span class="number">100</span>).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 各类别销售统计 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(category_stats.sort_values(<span class="string">&#x27;销售总额&#x27;</span>, ascending=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
-
-<p>输出示例：</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">=== 各类别销售统计 ===</span><br><span class="line">          销售总额   平均订单   订单数   销售数量   客户数   销售占比</span><br><span class="line">电子产品  15234567.89  2345.67  6500   12345   4532   45.23%</span><br><span class="line">服装       8765432.10   567.89  15432   45678   8765   26.01%</span><br><span class="line">家居       4567890.12   345.67  13210   34567   6543   13.55%</span><br><span class="line">食品       3456789.01   123.45  28000   89012   9876   10.25%</span><br><span class="line">图书       1678901.23    67.89  24715   56789   8901    4.98%</span><br></pre></td></tr></table></figure>
-
-<h3 id="按地区分析"><a href="#按地区分析" class="headerlink" title="按地区分析"></a>按地区分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 各地区销售统计</span></span><br><span class="line">region_stats = df.groupby(<span class="string">&#x27;region&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: [<span class="string">&#x27;sum&#x27;</span>, <span class="string">&#x27;mean&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;order_id&#x27;</span>: <span class="string">&#x27;count&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;customer_id&#x27;</span>: <span class="string">&#x27;nunique&#x27;</span></span><br><span class="line">&#125;).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">region_stats.columns = [<span class="string">&#x27;销售总额&#x27;</span>, <span class="string">&#x27;平均订单&#x27;</span>, <span class="string">&#x27;订单数&#x27;</span>, <span class="string">&#x27;客户数&#x27;</span>]</span><br><span class="line">region_stats[<span class="string">&#x27;人均消费&#x27;</span>] = (region_stats[<span class="string">&#x27;销售总额&#x27;</span>] / region_stats[<span class="string">&#x27;客户数&#x27;</span>]).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 各地区销售统计 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(region_stats.sort_values(<span class="string">&#x27;销售总额&#x27;</span>, ascending=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
-
-<h3 id="按月趋势分析"><a href="#按月趋势分析" class="headerlink" title="按月趋势分析"></a>按月趋势分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 月度销售趋势</span></span><br><span class="line">monthly_sales = df.groupby([<span class="string">&#x27;year&#x27;</span>, <span class="string">&#x27;month&#x27;</span>]).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: <span class="string">&#x27;sum&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;order_id&#x27;</span>: <span class="string">&#x27;count&#x27;</span></span><br><span class="line">&#125;).reset_index()</span><br><span class="line"></span><br><span class="line">monthly_sales[<span class="string">&#x27;年月&#x27;</span>] = monthly_sales[<span class="string">&#x27;year&#x27;</span>].astype(<span class="built_in">str</span>) + <span class="string">&#x27;-&#x27;</span> + monthly_sales[<span class="string">&#x27;month&#x27;</span>].astype(<span class="built_in">str</span>).<span class="built_in">str</span>.zfill(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 月度销售趋势 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(monthly_sales[[<span class="string">&#x27;年月&#x27;</span>, <span class="string">&#x27;total_amount&#x27;</span>, <span class="string">&#x27;order_id&#x27;</span>]].to_string(index=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
-
-<h3 id="支付方式分析"><a href="#支付方式分析" class="headerlink" title="支付方式分析"></a>支付方式分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 支付方式统计</span></span><br><span class="line">payment_stats = df.groupby(<span class="string">&#x27;payment_method&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: <span class="string">&#x27;sum&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;order_id&#x27;</span>: <span class="string">&#x27;count&#x27;</span></span><br><span class="line">&#125;).reset_index()</span><br><span class="line"></span><br><span class="line">payment_stats.columns = [<span class="string">&#x27;支付方式&#x27;</span>, <span class="string">&#x27;销售总额&#x27;</span>, <span class="string">&#x27;订单数&#x27;</span>]</span><br><span class="line">payment_stats[<span class="string">&#x27;占比&#x27;</span>] = (payment_stats[<span class="string">&#x27;订单数&#x27;</span>] / payment_stats[<span class="string">&#x27;订单数&#x27;</span>].<span class="built_in">sum</span>() * <span class="number">100</span>).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 支付方式统计 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(payment_stats.sort_values(<span class="string">&#x27;订单数&#x27;</span>, ascending=<span class="literal">False</span>))</span><br></pre></td></tr></table></figure>
-
-<h3 id="客户分析"><a href="#客户分析" class="headerlink" title="客户分析"></a>客户分析</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 客户价值分析</span></span><br><span class="line">customer_stats = df.groupby(<span class="string">&#x27;customer_id&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: [<span class="string">&#x27;sum&#x27;</span>, <span class="string">&#x27;mean&#x27;</span>, <span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;category&#x27;</span>: <span class="string">&#x27;nunique&#x27;</span></span><br><span class="line">&#125;).reset_index()</span><br><span class="line"></span><br><span class="line">customer_stats.columns = [<span class="string">&#x27;客户 ID&#x27;</span>, <span class="string">&#x27;总消费&#x27;</span>, <span class="string">&#x27;平均订单&#x27;</span>, <span class="string">&#x27;订单数&#x27;</span>, <span class="string">&#x27;购买类别数&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># RFM 分析基础</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 客户价值 TOP 10 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(customer_stats.sort_values(<span class="string">&#x27;总消费&#x27;</span>, ascending=<span class="literal">False</span>).head(<span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户分层</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">customer_level</span>(<span class="params">avg_order</span>):</span><br><span class="line">    <span class="keyword">if</span> avg_order &gt;= <span class="number">2000</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;VIP 客户&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> avg_order &gt;= <span class="number">1000</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;重要客户&#x27;</span></span><br><span class="line">    <span class="keyword">elif</span> avg_order &gt;= <span class="number">500</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;普通客户&#x27;</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">&#x27;潜在客户&#x27;</span></span><br><span class="line"></span><br><span class="line">customer_stats[<span class="string">&#x27;客户等级&#x27;</span>] = customer_stats[<span class="string">&#x27;平均订单&#x27;</span>].apply(customer_level)</span><br><span class="line">level_dist = customer_stats[<span class="string">&#x27;客户等级&#x27;</span>].value_counts()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 客户等级分布 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(level_dist)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="数据可视化"><a href="#数据可视化" class="headerlink" title="数据可视化"></a>数据可视化</h2><h3 id="设置绘图风格"><a href="#设置绘图风格" class="headerlink" title="设置绘图风格"></a>设置绘图风格</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"><span class="keyword">import</span> seaborn <span class="keyword">as</span> sns</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置中文字体</span></span><br><span class="line">plt.rcParams[<span class="string">&#x27;font.sans-serif&#x27;</span>] = [<span class="string">&#x27;SimHei&#x27;</span>, <span class="string">&#x27;Arial Unicode MS&#x27;</span>, <span class="string">&#x27;DejaVu Sans&#x27;</span>]</span><br><span class="line">plt.rcParams[<span class="string">&#x27;axes.unicode_minus&#x27;</span>] = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置 seaborn 风格</span></span><br><span class="line">sns.set_style(<span class="string">&quot;whitegrid&quot;</span>)</span><br><span class="line">sns.set_palette(<span class="string">&quot;husl&quot;</span>)</span><br></pre></td></tr></table></figure>
-
-<h3 id="销售趋势图"><a href="#销售趋势图" class="headerlink" title="销售趋势图"></a>销售趋势图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 月度销售趋势</span></span><br><span class="line">fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">1</span>, figsize=(<span class="number">14</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 销售额趋势</span></span><br><span class="line">ax1 = axes[<span class="number">0</span>]</span><br><span class="line">monthly = df.groupby(df[<span class="string">&#x27;order_date&#x27;</span>].dt.to_period(<span class="string">&#x27;M&#x27;</span>))[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>()</span><br><span class="line">ax1.plot(monthly.index.astype(<span class="built_in">str</span>), monthly.values, marker=<span class="string">&#x27;o&#x27;</span>, linewidth=<span class="number">2</span>, markersize=<span class="number">6</span>)</span><br><span class="line">ax1.set_title(<span class="string">&#x27;2024 年月度销售额趋势&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax1.set_xlabel(<span class="string">&#x27;月份&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax1.set_ylabel(<span class="string">&#x27;销售额 (元)&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax1.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">ax1.tick_params(axis=<span class="string">&#x27;x&#x27;</span>, rotation=<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加数据标签</span></span><br><span class="line"><span class="keyword">for</span> i, v <span class="keyword">in</span> <span class="built_in">enumerate</span>(monthly.values):</span><br><span class="line">    ax1.annotate(<span class="string">f&#x27;<span class="subst">&#123;v/<span class="number">10000</span>:<span class="number">.1</span>f&#125;</span>万&#x27;</span>, (i, v), ha=<span class="string">&#x27;center&#x27;</span>, va=<span class="string">&#x27;bottom&#x27;</span>, fontsize=<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 订单数量趋势</span></span><br><span class="line">ax2 = axes[<span class="number">1</span>]</span><br><span class="line">orders_monthly = df.groupby(df[<span class="string">&#x27;order_date&#x27;</span>].dt.to_period(<span class="string">&#x27;M&#x27;</span>))[<span class="string">&#x27;order_id&#x27;</span>].count()</span><br><span class="line">ax2.bar(orders_monthly.index.astype(<span class="built_in">str</span>), orders_monthly.values, color=<span class="string">&#x27;skyblue&#x27;</span>, alpha=<span class="number">0.7</span>)</span><br><span class="line">ax2.set_title(<span class="string">&#x27;2024 年月度订单数量趋势&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax2.set_xlabel(<span class="string">&#x27;月份&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax2.set_ylabel(<span class="string">&#x27;订单数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax2.tick_params(axis=<span class="string">&#x27;x&#x27;</span>, rotation=<span class="number">45</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(<span class="string">&#x27;sales_trend.png&#x27;</span>, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="类别销售占比"><a href="#类别销售占比" class="headerlink" title="类别销售占比"></a>类别销售占比</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 饼图</span></span><br><span class="line">fig, axes = plt.subplots(<span class="number">1</span>, <span class="number">2</span>, figsize=(<span class="number">16</span>, <span class="number">6</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 销售额占比</span></span><br><span class="line">ax1 = axes[<span class="number">0</span>]</span><br><span class="line">category_sales = df.groupby(<span class="string">&#x27;category&#x27;</span>)[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>()</span><br><span class="line">colors = plt.cm.Set3(np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="built_in">len</span>(category_sales)))</span><br><span class="line">wedges, texts, autotexts = ax1.pie(category_sales.values, labels=category_sales.index, </span><br><span class="line">                                    autopct=<span class="string">&#x27;%1.1f%%&#x27;</span>, colors=colors, startangle=<span class="number">90</span>)</span><br><span class="line">ax1.set_title(<span class="string">&#x27;各类别销售额占比&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置字体</span></span><br><span class="line"><span class="keyword">for</span> text <span class="keyword">in</span> texts:</span><br><span class="line">    text.set_fontsize(<span class="number">11</span>)</span><br><span class="line"><span class="keyword">for</span> autotext <span class="keyword">in</span> autotexts:</span><br><span class="line">    autotext.set_fontsize(<span class="number">10</span>)</span><br><span class="line">    autotext.set_color(<span class="string">&#x27;white&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 订单数量占比</span></span><br><span class="line">ax2 = axes[<span class="number">1</span>]</span><br><span class="line">category_orders = df.groupby(<span class="string">&#x27;category&#x27;</span>)[<span class="string">&#x27;order_id&#x27;</span>].count()</span><br><span class="line">colors2 = plt.cm.Pastel1(np.linspace(<span class="number">0</span>, <span class="number">1</span>, <span class="built_in">len</span>(category_orders)))</span><br><span class="line">wedges2, texts2, autotexts2 = ax2.pie(category_orders.values, labels=category_orders.index,</span><br><span class="line">                                       autopct=<span class="string">&#x27;%1.1f%%&#x27;</span>, colors=colors2, startangle=<span class="number">90</span>)</span><br><span class="line">ax2.set_title(<span class="string">&#x27;各类别订单数量占比&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> text <span class="keyword">in</span> texts2:</span><br><span class="line">    text.set_fontsize(<span class="number">11</span>)</span><br><span class="line"><span class="keyword">for</span> autotext <span class="keyword">in</span> autotexts2:</span><br><span class="line">    autotext.set_fontsize(<span class="number">10</span>)</span><br><span class="line">    autotext.set_color(<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(<span class="string">&#x27;category_pie.png&#x27;</span>, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="地区销售热力图"><a href="#地区销售热力图" class="headerlink" title="地区销售热力图"></a>地区销售热力图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 地区 - 类别热力图</span></span><br><span class="line">pivot_data = df.pivot_table(values=<span class="string">&#x27;total_amount&#x27;</span>, index=<span class="string">&#x27;region&#x27;</span>, </span><br><span class="line">                            columns=<span class="string">&#x27;category&#x27;</span>, aggfunc=<span class="string">&#x27;sum&#x27;</span>)</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">12</span>, <span class="number">8</span>))</span><br><span class="line">sns.heatmap(pivot_data, annot=<span class="literal">True</span>, fmt=<span class="string">&#x27;.0f&#x27;</span>, cmap=<span class="string">&#x27;YlOrRd&#x27;</span>, </span><br><span class="line">            linewidths=<span class="number">0.5</span>, linecolor=<span class="string">&#x27;gray&#x27;</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;各地区 - 各类别销售热力图&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;产品类别&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;地区&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(<span class="string">&#x27;region_heatmap.png&#x27;</span>, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="客户分布直方图"><a href="#客户分布直方图" class="headerlink" title="客户分布直方图"></a>客户分布直方图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 客户消费分布</span></span><br><span class="line">fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">2</span>, figsize=(<span class="number">14</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 客户总消费分布</span></span><br><span class="line">ax1 = axes[<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">customer_total = df.groupby(<span class="string">&#x27;customer_id&#x27;</span>)[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>()</span><br><span class="line">ax1.hist(customer_total, bins=<span class="number">50</span>, color=<span class="string">&#x27;steelblue&#x27;</span>, alpha=<span class="number">0.7</span>, edgecolor=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">ax1.set_title(<span class="string">&#x27;客户总消费分布&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax1.set_xlabel(<span class="string">&#x27;消费金额 (元)&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax1.set_ylabel(<span class="string">&#x27;客户数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax1.axvline(customer_total.mean(), color=<span class="string">&#x27;red&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, label=<span class="string">f&#x27;平均值：¥<span class="subst">&#123;customer_total.mean():<span class="number">.2</span>f&#125;</span>&#x27;</span>)</span><br><span class="line">ax1.legend()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 订单数量分布</span></span><br><span class="line">ax2 = axes[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">customer_orders = df.groupby(<span class="string">&#x27;customer_id&#x27;</span>)[<span class="string">&#x27;order_id&#x27;</span>].count()</span><br><span class="line">ax2.hist(customer_orders, bins=<span class="number">30</span>, color=<span class="string">&#x27;coral&#x27;</span>, alpha=<span class="number">0.7</span>, edgecolor=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">ax2.set_title(<span class="string">&#x27;客户订单数量分布&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax2.set_xlabel(<span class="string">&#x27;订单数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax2.set_ylabel(<span class="string">&#x27;客户数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax2.axvline(customer_orders.mean(), color=<span class="string">&#x27;red&#x27;</span>, linestyle=<span class="string">&#x27;--&#x27;</span>, label=<span class="string">f&#x27;平均值：<span class="subst">&#123;customer_orders.mean():<span class="number">.1</span>f&#125;</span>&#x27;</span>)</span><br><span class="line">ax2.legend()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 评分分布</span></span><br><span class="line">ax3 = axes[<span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">rating_dist = df[<span class="string">&#x27;rating&#x27;</span>].value_counts().sort_index()</span><br><span class="line">ax3.bar(rating_dist.index, rating_dist.values, color=<span class="string">&#x27;green&#x27;</span>, alpha=<span class="number">0.7</span>, edgecolor=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">ax3.set_title(<span class="string">&#x27;客户评分分布&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax3.set_xlabel(<span class="string">&#x27;评分&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax3.set_ylabel(<span class="string">&#x27;数量&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax3.set_xticks([<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment"># 折扣使用分布</span></span><br><span class="line">ax4 = axes[<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line">discount_dist = df[<span class="string">&#x27;discount&#x27;</span>].value_counts().sort_index()</span><br><span class="line">ax4.bar([<span class="string">f&#x27;<span class="subst">&#123;d*<span class="number">100</span>:<span class="number">.0</span>f&#125;</span>%&#x27;</span> <span class="keyword">for</span> d <span class="keyword">in</span> discount_dist.index], discount_dist.values, </span><br><span class="line">        color=<span class="string">&#x27;purple&#x27;</span>, alpha=<span class="number">0.7</span>, edgecolor=<span class="string">&#x27;black&#x27;</span>)</span><br><span class="line">ax4.set_title(<span class="string">&#x27;折扣使用分布&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax4.set_xlabel(<span class="string">&#x27;折扣率&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax4.set_ylabel(<span class="string">&#x27;订单数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(<span class="string">&#x27;customer_distribution.png&#x27;</span>, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="相关性热力图"><a href="#相关性热力图" class="headerlink" title="相关性热力图"></a>相关性热力图</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 数值变量相关性分析</span></span><br><span class="line">corr_cols = [<span class="string">&#x27;quantity&#x27;</span>, <span class="string">&#x27;unit_price&#x27;</span>, <span class="string">&#x27;discount&#x27;</span>, <span class="string">&#x27;total_amount&#x27;</span>, <span class="string">&#x27;rating&#x27;</span>]</span><br><span class="line">corr_matrix = df[corr_cols].corr()</span><br><span class="line"></span><br><span class="line">plt.figure(figsize=(<span class="number">10</span>, <span class="number">8</span>))</span><br><span class="line">sns.heatmap(corr_matrix, annot=<span class="literal">True</span>, fmt=<span class="string">&#x27;.2f&#x27;</span>, cmap=<span class="string">&#x27;coolwarm&#x27;</span>, </span><br><span class="line">            square=<span class="literal">True</span>, linewidths=<span class="number">0.5</span>, center=<span class="number">0</span>,</span><br><span class="line">            xticklabels=[<span class="string">&#x27;数量&#x27;</span>, <span class="string">&#x27;单价&#x27;</span>, <span class="string">&#x27;折扣&#x27;</span>, <span class="string">&#x27;总金额&#x27;</span>, <span class="string">&#x27;评分&#x27;</span>],</span><br><span class="line">            yticklabels=[<span class="string">&#x27;数量&#x27;</span>, <span class="string">&#x27;单价&#x27;</span>, <span class="string">&#x27;折扣&#x27;</span>, <span class="string">&#x27;总金额&#x27;</span>, <span class="string">&#x27;评分&#x27;</span>])</span><br><span class="line">plt.title(<span class="string">&#x27;变量相关性热力图&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(<span class="string">&#x27;correlation_heatmap.png&#x27;</span>, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 相关性分析 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(corr_matrix.<span class="built_in">round</span>(<span class="number">3</span>))</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="实战项目"><a href="#实战项目" class="headerlink" title="实战项目"></a>实战项目</h2><h3 id="项目一：销售预测"><a href="#项目一：销售预测" class="headerlink" title="项目一：销售预测"></a>项目一：销售预测</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.model_selection <span class="keyword">import</span> train_test_split</span><br><span class="line"><span class="keyword">from</span> sklearn.linear_model <span class="keyword">import</span> LinearRegression</span><br><span class="line"><span class="keyword">from</span> sklearn.metrics <span class="keyword">import</span> mean_squared_error, r2_score</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备数据 - 按日期聚合</span></span><br><span class="line">daily_sales = df.groupby(<span class="string">&#x27;order_date&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: <span class="string">&#x27;sum&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;order_id&#x27;</span>: <span class="string">&#x27;count&#x27;</span></span><br><span class="line">&#125;).reset_index()</span><br><span class="line"></span><br><span class="line">daily_sales.columns = [<span class="string">&#x27;date&#x27;</span>, <span class="string">&#x27;sales&#x27;</span>, <span class="string">&#x27;orders&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建时间特征</span></span><br><span class="line">daily_sales[<span class="string">&#x27;day_of_week&#x27;</span>] = daily_sales[<span class="string">&#x27;date&#x27;</span>].dt.dayofweek</span><br><span class="line">daily_sales[<span class="string">&#x27;month&#x27;</span>] = daily_sales[<span class="string">&#x27;date&#x27;</span>].dt.month</span><br><span class="line">daily_sales[<span class="string">&#x27;day&#x27;</span>] = daily_sales[<span class="string">&#x27;date&#x27;</span>].dt.day</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建滞后特征</span></span><br><span class="line">daily_sales[<span class="string">&#x27;sales_lag1&#x27;</span>] = daily_sales[<span class="string">&#x27;sales&#x27;</span>].shift(<span class="number">1</span>)</span><br><span class="line">daily_sales[<span class="string">&#x27;sales_lag7&#x27;</span>] = daily_sales[<span class="string">&#x27;sales&#x27;</span>].shift(<span class="number">7</span>)</span><br><span class="line">daily_sales[<span class="string">&#x27;sales_rolling7&#x27;</span>] = daily_sales[<span class="string">&#x27;sales&#x27;</span>].rolling(<span class="number">7</span>).mean()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 删除 NaN 值</span></span><br><span class="line">daily_sales = daily_sales.dropna()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征和目标</span></span><br><span class="line">X = daily_sales[[<span class="string">&#x27;day_of_week&#x27;</span>, <span class="string">&#x27;month&#x27;</span>, <span class="string">&#x27;day&#x27;</span>, <span class="string">&#x27;sales_lag1&#x27;</span>, <span class="string">&#x27;sales_lag7&#x27;</span>, <span class="string">&#x27;sales_rolling7&#x27;</span>]]</span><br><span class="line">y = daily_sales[<span class="string">&#x27;sales&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 划分训练集和测试集</span></span><br><span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=<span class="number">0.2</span>, random_state=<span class="number">42</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 训练模型</span></span><br><span class="line">model = LinearRegression()</span><br><span class="line">model.fit(X_train, y_train)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 预测</span></span><br><span class="line">y_pred = model.predict(X_test)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 评估</span></span><br><span class="line">mse = mean_squared_error(y_test, y_pred)</span><br><span class="line">r2 = r2_score(y_test, y_pred)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;=== 销售预测模型评估 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;均方误差 (MSE): <span class="subst">&#123;mse:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;R² 分数：<span class="subst">&#123;r2:<span class="number">.4</span>f&#125;</span>&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;\n特征重要性:&quot;</span>)</span><br><span class="line"><span class="keyword">for</span> feature, coef <span class="keyword">in</span> <span class="built_in">zip</span>(X.columns, model.coef_):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;  <span class="subst">&#123;feature&#125;</span>: <span class="subst">&#123;coef:<span class="number">.2</span>f&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化预测结果</span></span><br><span class="line">plt.figure(figsize=(<span class="number">14</span>, <span class="number">6</span>))</span><br><span class="line">plt.plot(y_test.values, label=<span class="string">&#x27;实际销售额&#x27;</span>, linewidth=<span class="number">2</span>)</span><br><span class="line">plt.plot(y_pred, label=<span class="string">&#x27;预测销售额&#x27;</span>, linewidth=<span class="number">2</span>, alpha=<span class="number">0.7</span>)</span><br><span class="line">plt.title(<span class="string">&#x27;销售预测 vs 实际销售&#x27;</span>, fontsize=<span class="number">16</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">plt.xlabel(<span class="string">&#x27;样本索引&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">plt.ylabel(<span class="string">&#x27;销售额 (元)&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">plt.legend()</span><br><span class="line">plt.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="项目二：客户分群"><a href="#项目二：客户分群" class="headerlink" title="项目二：客户分群"></a>项目二：客户分群</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> sklearn.cluster <span class="keyword">import</span> KMeans</span><br><span class="line"><span class="keyword">from</span> sklearn.preprocessing <span class="keyword">import</span> StandardScaler</span><br><span class="line"></span><br><span class="line"><span class="comment"># 准备客户特征数据</span></span><br><span class="line">customer_features = df.groupby(<span class="string">&#x27;customer_id&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_amount&#x27;</span>: [<span class="string">&#x27;sum&#x27;</span>, <span class="string">&#x27;mean&#x27;</span>, <span class="string">&#x27;count&#x27;</span>],</span><br><span class="line">    <span class="string">&#x27;rating&#x27;</span>: <span class="string">&#x27;mean&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;category&#x27;</span>: <span class="string">&#x27;nunique&#x27;</span></span><br><span class="line">&#125;).reset_index()</span><br><span class="line"></span><br><span class="line">customer_features.columns = [<span class="string">&#x27;customer_id&#x27;</span>, <span class="string">&#x27;total_spent&#x27;</span>, <span class="string">&#x27;avg_order&#x27;</span>, </span><br><span class="line">                             <span class="string">&#x27;order_count&#x27;</span>, <span class="string">&#x27;avg_rating&#x27;</span>, <span class="string">&#x27;category_count&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># 特征缩放</span></span><br><span class="line">scaler = StandardScaler()</span><br><span class="line">features_scaled = scaler.fit_transform(customer_features[[<span class="string">&#x27;total_spent&#x27;</span>, <span class="string">&#x27;avg_order&#x27;</span>, </span><br><span class="line">                                                          <span class="string">&#x27;order_count&#x27;</span>, <span class="string">&#x27;avg_rating&#x27;</span>, </span><br><span class="line">                                                          <span class="string">&#x27;category_count&#x27;</span>]])</span><br><span class="line"></span><br><span class="line"><span class="comment"># K-Means 聚类</span></span><br><span class="line">kmeans = KMeans(n_clusters=<span class="number">4</span>, random_state=<span class="number">42</span>, n_init=<span class="number">10</span>)</span><br><span class="line">customer_features[<span class="string">&#x27;cluster&#x27;</span>] = kmeans.fit_predict(features_scaled)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 分析各集群特征</span></span><br><span class="line">cluster_profile = customer_features.groupby(<span class="string">&#x27;cluster&#x27;</span>).agg(&#123;</span><br><span class="line">    <span class="string">&#x27;total_spent&#x27;</span>: <span class="string">&#x27;mean&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;avg_order&#x27;</span>: <span class="string">&#x27;mean&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;order_count&#x27;</span>: <span class="string">&#x27;mean&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;avg_rating&#x27;</span>: <span class="string">&#x27;mean&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;category_count&#x27;</span>: <span class="string">&#x27;mean&#x27;</span>,</span><br><span class="line">    <span class="string">&#x27;customer_id&#x27;</span>: <span class="string">&#x27;count&#x27;</span></span><br><span class="line">&#125;).<span class="built_in">round</span>(<span class="number">2</span>)</span><br><span class="line"></span><br><span class="line">cluster_profile.columns = [<span class="string">&#x27;平均总消费&#x27;</span>, <span class="string">&#x27;平均订单&#x27;</span>, <span class="string">&#x27;平均订单数&#x27;</span>, <span class="string">&#x27;平均评分&#x27;</span>, </span><br><span class="line">                          <span class="string">&#x27;平均类别数&#x27;</span>, <span class="string">&#x27;客户数&#x27;</span>]</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n=== 客户分群画像 ===&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(cluster_profile)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 可视化分群结果</span></span><br><span class="line">fig, axes = plt.subplots(<span class="number">2</span>, <span class="number">2</span>, figsize=(<span class="number">14</span>, <span class="number">10</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment"># 各集群客户数和平均消费</span></span><br><span class="line">ax1 = axes[<span class="number">0</span>, <span class="number">0</span>]</span><br><span class="line">cluster_counts = customer_features[<span class="string">&#x27;cluster&#x27;</span>].value_counts().sort_index()</span><br><span class="line">colors = [<span class="string">&#x27;#FF6B6B&#x27;</span>, <span class="string">&#x27;#4ECDC4&#x27;</span>, <span class="string">&#x27;#45B7D1&#x27;</span>, <span class="string">&#x27;#FFA07A&#x27;</span>]</span><br><span class="line">bars = ax1.bar(cluster_counts.index, cluster_counts.values, color=colors)</span><br><span class="line">ax1.set_title(<span class="string">&#x27;各集群客户数量&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax1.set_xlabel(<span class="string">&#x27;集群编号&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax1.set_ylabel(<span class="string">&#x27;客户数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line"><span class="keyword">for</span> bar, count <span class="keyword">in</span> <span class="built_in">zip</span>(bars, cluster_counts.values):</span><br><span class="line">    ax1.text(bar.get_x() + bar.get_width()/<span class="number">2</span>, bar.get_height() + <span class="number">50</span>, </span><br><span class="line">             <span class="built_in">str</span>(count), ha=<span class="string">&#x27;center&#x27;</span>, va=<span class="string">&#x27;bottom&#x27;</span>, fontsize=<span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 雷达图 - 各集群特征</span></span><br><span class="line">ax2 = axes[<span class="number">0</span>, <span class="number">1</span>]</span><br><span class="line">categories = [<span class="string">&#x27;总消费&#x27;</span>, <span class="string">&#x27;订单均价&#x27;</span>, <span class="string">&#x27;订单数&#x27;</span>, <span class="string">&#x27;评分&#x27;</span>, <span class="string">&#x27;类别数&#x27;</span>]</span><br><span class="line">angles = np.linspace(<span class="number">0</span>, <span class="number">2</span> * np.pi, <span class="built_in">len</span>(categories), endpoint=<span class="literal">False</span>).tolist()</span><br><span class="line">angles += angles[:<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> cluster <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    cluster_data = customer_features[customer_features[<span class="string">&#x27;cluster&#x27;</span>] == cluster]</span><br><span class="line">    values = cluster_data[[<span class="string">&#x27;total_spent&#x27;</span>, <span class="string">&#x27;avg_order&#x27;</span>, <span class="string">&#x27;order_count&#x27;</span>, </span><br><span class="line">                           <span class="string">&#x27;avg_rating&#x27;</span>, <span class="string">&#x27;category_count&#x27;</span>]].mean().values</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 归一化</span></span><br><span class="line">    values = values / values.<span class="built_in">max</span>()</span><br><span class="line">    values = values.tolist()</span><br><span class="line">    values += values[:<span class="number">1</span>]</span><br><span class="line">    </span><br><span class="line">    ax2.plot(angles, values, <span class="string">&#x27;o-&#x27;</span>, linewidth=<span class="number">2</span>, label=<span class="string">f&#x27;集群<span class="subst">&#123;cluster&#125;</span>&#x27;</span>, color=colors[cluster])</span><br><span class="line">    ax2.fill(angles, values, alpha=<span class="number">0.15</span>, color=colors[cluster])</span><br><span class="line"></span><br><span class="line">ax2.set_xticks(angles[:-<span class="number">1</span>])</span><br><span class="line">ax2.set_xticklabels(categories, fontsize=<span class="number">10</span>)</span><br><span class="line">ax2.set_title(<span class="string">&#x27;各集群特征雷达图&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax2.legend(loc=<span class="string">&#x27;upper right&#x27;</span>, bbox_to_anchor=(<span class="number">1.3</span>, <span class="number">1</span>))</span><br><span class="line">ax2.grid(<span class="literal">True</span>, alpha=<span class="number">0.3</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 集群 0 vs 集群 1 对比</span></span><br><span class="line">ax3 = axes[<span class="number">1</span>, <span class="number">0</span>]</span><br><span class="line">cluster_0 = customer_features[customer_features[<span class="string">&#x27;cluster&#x27;</span>] == <span class="number">0</span>][<span class="string">&#x27;total_spent&#x27;</span>]</span><br><span class="line">cluster_1 = customer_features[customer_features[<span class="string">&#x27;cluster&#x27;</span>] == <span class="number">1</span>][<span class="string">&#x27;total_spent&#x27;</span>]</span><br><span class="line">ax3.boxplot([cluster_0, cluster_1], labels=[<span class="string">&#x27;集群 0&#x27;</span>, <span class="string">&#x27;集群 1&#x27;</span>], patch_artist=<span class="literal">True</span>,</span><br><span class="line">            boxprops=<span class="built_in">dict</span>(facecolor=<span class="string">&#x27;lightblue&#x27;</span>),</span><br><span class="line">            medianprops=<span class="built_in">dict</span>(color=<span class="string">&#x27;red&#x27;</span>))</span><br><span class="line">ax3.set_title(<span class="string">&#x27;集群 0 vs 集群 1 - 总消费对比&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax3.set_ylabel(<span class="string">&#x27;总消费 (元)&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 订单数分布</span></span><br><span class="line">ax4 = axes[<span class="number">1</span>, <span class="number">1</span>]</span><br><span class="line"><span class="keyword">for</span> cluster <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">4</span>):</span><br><span class="line">    cluster_data = customer_features[customer_features[<span class="string">&#x27;cluster&#x27;</span>] == cluster]</span><br><span class="line">    ax4.hist(cluster_data[<span class="string">&#x27;order_count&#x27;</span>], alpha=<span class="number">0.5</span>, label=<span class="string">f&#x27;集群<span class="subst">&#123;cluster&#125;</span>&#x27;</span>, </span><br><span class="line">             bins=<span class="number">20</span>, color=colors[cluster])</span><br><span class="line">ax4.set_title(<span class="string">&#x27;各集群订单数分布&#x27;</span>, fontsize=<span class="number">14</span>, fontweight=<span class="string">&#x27;bold&#x27;</span>)</span><br><span class="line">ax4.set_xlabel(<span class="string">&#x27;订单数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax4.set_ylabel(<span class="string">&#x27;客户数&#x27;</span>, fontsize=<span class="number">12</span>)</span><br><span class="line">ax4.legend()</span><br><span class="line"></span><br><span class="line">plt.tight_layout()</span><br><span class="line">plt.savefig(<span class="string">&#x27;customer_clustering.png&#x27;</span>, dpi=<span class="number">300</span>, bbox_inches=<span class="string">&#x27;tight&#x27;</span>)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
-
-<h3 id="项目三：构建数据分析报告"><a href="#项目三：构建数据分析报告" class="headerlink" title="项目三：构建数据分析报告"></a>项目三：构建数据分析报告</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 生成数据分析报告</span></span><br><span class="line">report = <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string"># 电商销售数据分析报告</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 一、数据概览</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">- **数据时间范围**: <span class="subst">&#123;df[<span class="string">&#x27;order_date&#x27;</span>].<span class="built_in">min</span>().strftime(<span class="string">&#x27;%Y-%m-%d&#x27;</span>)&#125;</span> 至 <span class="subst">&#123;df[<span class="string">&#x27;order_date&#x27;</span>].<span class="built_in">max</span>().strftime(<span class="string">&#x27;%Y-%m-%d&#x27;</span>)&#125;</span></span></span><br><span class="line"><span class="string">- **总记录数**: <span class="subst">&#123;<span class="built_in">len</span>(df):,&#125;</span> 条</span></span><br><span class="line"><span class="string">- **总销售额**: ¥<span class="subst">&#123;df[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>():,<span class="number">.2</span>f&#125;</span></span></span><br><span class="line"><span class="string">- **总订单数**: <span class="subst">&#123;<span class="built_in">len</span>(df):,&#125;</span></span></span><br><span class="line"><span class="string">- **客户总数**: <span class="subst">&#123;df[<span class="string">&#x27;customer_id&#x27;</span>].nunique():,&#125;</span></span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 二、核心指标</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">| 指标 | 数值 |</span></span><br><span class="line"><span class="string">|------|------|</span></span><br><span class="line"><span class="string">| 平均订单金额 | ¥<span class="subst">&#123;df[<span class="string">&#x27;total_amount&#x27;</span>].mean():,<span class="number">.2</span>f&#125;</span> |</span></span><br><span class="line"><span class="string">| 人均消费 | ¥<span class="subst">&#123;df.groupby(<span class="string">&#x27;customer_id&#x27;</span>)[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>().mean():,<span class="number">.2</span>f&#125;</span> |</span></span><br><span class="line"><span class="string">| 最高单笔订单 | ¥<span class="subst">&#123;df[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">max</span>():,<span class="number">.2</span>f&#125;</span> |</span></span><br><span class="line"><span class="string">| 平均评分 | <span class="subst">&#123;df[<span class="string">&#x27;rating&#x27;</span>].mean():<span class="number">.2</span>f&#125;</span> / 5.0 |</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 三、销售排名</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">### 按产品类别</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加类别排名</span></span><br><span class="line">category_rank = df.groupby(<span class="string">&#x27;category&#x27;</span>)[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>().sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="keyword">for</span> i, (cat, sales) <span class="keyword">in</span> <span class="built_in">enumerate</span>(category_rank.items(), <span class="number">1</span>):</span><br><span class="line">    report += <span class="string">f&quot;<span class="subst">&#123;i&#125;</span>. **<span class="subst">&#123;cat&#125;</span>**: ¥<span class="subst">&#123;sales:,<span class="number">.2</span>f&#125;</span>\n&quot;</span></span><br><span class="line"></span><br><span class="line">report += <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">### 按地区</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加地区排名</span></span><br><span class="line">region_rank = df.groupby(<span class="string">&#x27;region&#x27;</span>)[<span class="string">&#x27;total_amount&#x27;</span>].<span class="built_in">sum</span>().sort_values(ascending=<span class="literal">False</span>)</span><br><span class="line"><span class="keyword">for</span> i, (reg, sales) <span class="keyword">in</span> <span class="built_in">enumerate</span>(region_rank.items(), <span class="number">1</span>):</span><br><span class="line">    report += <span class="string">f&quot;<span class="subst">&#123;i&#125;</span>. **<span class="subst">&#123;reg&#125;</span>**: ¥<span class="subst">&#123;sales:,<span class="number">.2</span>f&#125;</span>\n&quot;</span></span><br><span class="line"></span><br><span class="line">report += <span class="string">f&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">## 四、关键发现</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. **销售主力**: <span class="subst">&#123;category_rank.index[<span class="number">0</span>]&#125;</span> 是销售额最高的类别，占比 <span class="subst">&#123;category_rank.iloc[<span class="number">0</span>]/category_rank.<span class="built_in">sum</span>()*<span class="number">100</span>:<span class="number">.1</span>f&#125;</span>%</span></span><br><span class="line"><span class="string">2. **核心市场**: <span class="subst">&#123;region_rank.index[<span class="number">0</span>]&#125;</span> 地区贡献了最大销售额</span></span><br><span class="line"><span class="string">3. **客户价值**: 前 10% 的客户贡献了总销售额的约 40%</span></span><br><span class="line"><span class="string">4. **支付偏好**: 支付宝是最受欢迎的支付方式</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 五、建议</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">1. 加大对 <span class="subst">&#123;category_rank.index[<span class="number">0</span>]&#125;</span> 类别的营销投入</span></span><br><span class="line"><span class="string">2. 在 <span class="subst">&#123;region_rank.index[<span class="number">0</span>]&#125;</span> 地区开展更多促销活动</span></span><br><span class="line"><span class="string">3. 推出 VIP 会员计划，提升高价值客户留存</span></span><br><span class="line"><span class="string">4. 优化其他支付方式的用户体验</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">---</span></span><br><span class="line"><span class="string">*报告生成时间：<span class="subst">&#123;datetime.now().strftime(<span class="string">&#x27;%Y-%m-%d %H:%M:%S&#x27;</span>)&#125;</span>*</span></span><br><span class="line"><span class="string">&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 保存报告</span></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(<span class="string">&#x27;sales_analysis_report.md&#x27;</span>, <span class="string">&#x27;w&#x27;</span>, encoding=<span class="string">&#x27;utf-8&#x27;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(report)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;数据分析报告已生成：sales_analysis_report.md&quot;</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;\n&quot;</span> + <span class="string">&quot;=&quot;</span>*<span class="number">50</span>)</span><br><span class="line"><span class="built_in">print</span>(report)</span><br></pre></td></tr></table></figure>
-
-<hr>
-<h2 id="总结与进阶"><a href="#总结与进阶" class="headerlink" title="总结与进阶"></a>总结与进阶</h2><h3 id="本教程涵盖的技能"><a href="#本教程涵盖的技能" class="headerlink" title="本教程涵盖的技能"></a>本教程涵盖的技能</h3><table>
-<thead>
-<tr>
-<th>技能领域</th>
-<th>具体内容</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>环境搭建</td>
-<td>Python、虚拟环境、依赖管理</td>
-</tr>
-<tr>
-<td>数据处理</td>
-<td>Pandas 基础、数据清洗、格式转换</td>
-</tr>
-<tr>
-<td>数据探索</td>
-<td>描述性统计、分组聚合、透视表</td>
-</tr>
-<tr>
-<td>数据可视化</td>
-<td>Matplotlib、Seaborn、图表美化</td>
-</tr>
-<tr>
-<td>机器学习</td>
-<td>线性回归、K-Means 聚类</td>
-</tr>
-<tr>
-<td>报告撰写</td>
-<td>Markdown 报告、数据故事</td>
-</tr>
-</tbody></table>
-<h3 id="进阶学习路线"><a href="#进阶学习路线" class="headerlink" title="进阶学习路线"></a>进阶学习路线</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">入门 → 进阶 → 高级</span><br><span class="line">  ↓      ↓       ↓</span><br><span class="line">Pandas  时间序列  深度学习</span><br><span class="line">NumPy   统计检验  大规模数据</span><br><span class="line">Matplotlib 机器学习  分布式计算</span><br><span class="line">Seaborn   特征工程  模型部署</span><br></pre></td></tr></table></figure>
-
-<h3 id="推荐学习资源"><a href="#推荐学习资源" class="headerlink" title="推荐学习资源"></a>推荐学习资源</h3><p><strong>书籍</strong>：</p>
-<ul>
-<li>《利用 Python 进行数据分析》- Wes McKinney</li>
-<li>《Python 数据科学手册》- Jake VanderPlas</li>
-<li>《统计学习方法》- 李航</li>
-</ul>
-<p><strong>在线课程</strong>：</p>
-<ul>
-<li>Coursera: Applied Data Science with Python</li>
-<li>edX: Data Science MicroMasters</li>
-<li>Kaggle: Python&#x2F;Pandas&#x2F;Machine Learning 教程</li>
-</ul>
-<p><strong>实践平台</strong>：</p>
-<ul>
-<li>Kaggle: 数据科学竞赛和数据集</li>
-<li>天池：阿里云数据竞赛平台</li>
-<li>UCI Machine Learning Repository: 经典数据集</li>
-</ul>
-<h3 id="下一步学习建议"><a href="#下一步学习建议" class="headerlink" title="下一步学习建议"></a>下一步学习建议</h3><ol>
-<li><strong>深入学习 Pandas</strong>：掌握更高级的数据操作技巧</li>
-<li><strong>学习时间序列分析</strong>：ARIMA、Prophet 等预测模型</li>
-<li><strong>掌握更多可视化库</strong>：Plotly、Bokeh 等交互式图表</li>
-<li><strong>实践真实项目</strong>：从 Kaggle 或工作中找实际数据</li>
-<li><strong>建立作品集</strong>：在 GitHub 上分享你的分析项目</li>
-</ol>
-<hr>
-<h2 id="附录：完整代码"><a href="#附录：完整代码" class="headerlink" title="附录：完整代码"></a>附录：完整代码</h2><p>本教程的完整代码和数据集已上传至 GitHub：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 克隆项目</span></span><br><span class="line">git <span class="built_in">clone</span> https://github.com/yourusername/ecommerce-analysis.git</span><br><span class="line"></span><br><span class="line"><span class="comment"># 进入项目目录</span></span><br><span class="line"><span class="built_in">cd</span> ecommerce-analysis</span><br><span class="line"></span><br><span class="line"><span class="comment"># 安装依赖</span></span><br><span class="line">pip install -r requirements.txt</span><br><span class="line"></span><br><span class="line"><span class="comment"># 运行分析</span></span><br><span class="line">jupyter notebook ecommerce_analysis.ipynb</span><br></pre></td></tr></table></figure>
-
-<hr>
-<p><em>教程结束！希望这份指南能帮助你开启 Python 数据分析之旅。如有问题，欢迎在评论区留言讨论。</em></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://lzhcodeblog.site/2026/09/01/python-data-analysis-tutorial/" data-id="cuidpENfvH5gaJn6j6aj_93TR" data-title="Python 数据分析入门指南 - 从零基础到实战项目" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Pandas/" rel="tag">Pandas</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/" rel="tag">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" rel="tag">入门教程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-test" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/09/01/test/" class="article-date">
-  <time class="dt-published" datetime="2026-09-01T04:23:56.000Z" itemprop="datePublished">2026-09-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/test/">test</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/09/01/test/">test</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>test</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://lzhcodeblog.site/2026/09/01/test/" data-id="cuidMPfw_PGgOrplkG3BkpUY6" data-title="test" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/test/" rel="tag">test</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-    <article id="post-hello-world" class="h-entry article article-type-post" itemprop="blogPost" itemscope itemtype="https://schema.org/BlogPosting">
-  <div class="article-meta">
-    <a href="/2026/09/01/hello-world/" class="article-date">
-  <time class="dt-published" datetime="2026-08-31T16:00:00.000Z" itemprop="datePublished">2026-09-01</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="p-name article-title" href="/2026/09/01/hello-world/">欢迎来到 LZH Code Blog</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="e-content article-entry" itemprop="articleBody">
-      
-        <p>这里是我的个人技术博客，主要记录编程实践、学习笔记和日常思考。</p>
-<p>我会在这里持续分享遇到的问题、解决方案，以及一路学习和成长的过程。希望这些内容也能为正在探索技术的你带来一点帮助。</p>
-<p>新的文章正在准备中，欢迎常来看看。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://lzhcodeblog.site/2026/09/01/hello-world/" data-id="cuidgSleHLy6W4s5hOxSu5WZG" data-title="欢迎来到 LZH Code Blog" class="article-share-link"><span class="fa fa-share">分享</span></a>
-      
-      
-      
-  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-  
-
-
-</section>
-        
-          <aside id="sidebar">
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
+        <article class="article-card">
+          <h2 class="article-title">
             <a href="/2026/09/01/python-data-analysis-tutorial/">Python 数据分析入门指南 - 从零基础到实战项目</a>
-          </li>
+          </h2>
+          <div class="article-summary">
+            &lt;h1 id=&#34;Python-数据分析入门指南-从零基础到实战项目&#34;&gt;&lt;a href=&#34;#Python-数据分析入门指南-从零基础到实战项目&#34; class=&#34;headerlink&#34; title=&#34;Python 数据分析入门指南 - 从零基础到实战项目&#34;&gt;&lt;/a&gt;Python 数据分析入门指南 - 从零基础到实战项目&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;本文是一份完整的数据分析入门教程，适合零基...
+          </div>
+          <div class="article-meta">
+            <span class="meta-item">
+              <i class="far fa-calendar"></i>
+              2026-09-01
+            </span>
+            
+            <span class="meta-item">
+              <i class="far fa-folder"></i>
+              
+                编程教程
+              
+                /Python
+              
+                /数据分析
+              
+            </span>
+            
+          </div>
+          
+          <div class="article-tags">
+            
+            <a href="/tags/Python/" class="tag-link">Python</a>
+            
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-link">数据分析</a>
+            
+            <a href="/tags/Pandas/" class="tag-link">Pandas</a>
+            
+            <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-link">可视化</a>
+            
+            <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-link">入门教程</a>
+            
+          </div>
+          
+        </article>
         
-          <li>
+        <article class="article-card">
+          <h2 class="article-title">
             <a href="/2026/09/01/test/">test</a>
-          </li>
+          </h2>
+          <div class="article-summary">
+            &lt;p&gt;test&lt;/p&gt;
+...
+          </div>
+          <div class="article-meta">
+            <span class="meta-item">
+              <i class="far fa-calendar"></i>
+              2026-09-01
+            </span>
+            
+            <span class="meta-item">
+              <i class="far fa-folder"></i>
+              
+                test
+              
+            </span>
+            
+          </div>
+          
+          <div class="article-tags">
+            
+            <a href="/tags/test/" class="tag-link">test</a>
+            
+          </div>
+          
+        </article>
         
-          <li>
+        <article class="article-card">
+          <h2 class="article-title">
             <a href="/2026/09/01/hello-world/">欢迎来到 LZH Code Blog</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">分类</h3>
-    <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/test/">test</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">编程教程</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">Python</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">数据分析</a><span class="category-list-count">1</span></li></ul></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E9%9A%8F%E7%AC%94/">随笔</a><span class="category-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
-    <div class="widget">
-      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/" rel="tag">Hexo</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Pandas/" rel="tag">Pandas</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/" rel="tag">Python</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/test/" rel="tag">test</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" rel="tag">入门教程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8D%9A%E5%AE%A2/" rel="tag">博客</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" rel="tag">可视化</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" rel="tag">数据分析</a><span class="tag-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2026/09/">九月 2026</a><span class="archive-list-count">3</span></li></ul>
-    </div>
-  </div>
-
-
-  
-</aside>
+          </h2>
+          <div class="article-summary">
+            &lt;p&gt;这里是我的个人技术博客，主要记录编程实践、学习笔记和日常思考。&lt;/p&gt;
+&lt;p&gt;我会在这里持续分享遇到的问题、解决方案，以及一路学习和成长的过程。希望这些内容也能为正在探索技术的你带来一点帮助。&lt;/p&gt;
+&lt;p&gt;新的文章正在准备中，欢迎常来看看。&lt;/p&gt;
+...
+          </div>
+          <div class="article-meta">
+            <span class="meta-item">
+              <i class="far fa-calendar"></i>
+              2026-09-01
+            </span>
+            
+            <span class="meta-item">
+              <i class="far fa-folder"></i>
+              
+                随笔
+              
+            </span>
+            
+          </div>
+          
+          <div class="article-tags">
+            
+            <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-link">博客</a>
+            
+            <a href="/tags/Hexo/" class="tag-link">Hexo</a>
+            
+          </div>
+          
+        </article>
         
       </div>
-      <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
+
       
-        Copyright © 2026 LZH
-      
-      &copy; 2026 LZH<br>
-      Powered by <a href="https://hexo.io/" target="_blank">Hexo</a>
+    </main>
+
+    <aside class="sidebar-right">
+  <div class="profile-card">
+    <div class="profile-bg"></div>
+    <div class="profile-avatar">
+      <img src="/images/avatar.png" alt="博主头像" onerror="this.src='https://ui-avatars.com/api/?name=LZH&background=fc5533&color=fff&size=128'">
     </div>
+    <div class="profile-info">
+      <h3 class="profile-name">LZH</h3>
+      <p class="profile-desc">热爱编程，分享技术笔记</p>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-value">3</span>
+          <span class="stat-label">文章</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-module">
+    <div class="module-title">
+      <i class="fas fa-fire"></i> 热门文章
+    </div>
+    <ul class="hot-article-list">
+      
+      <li class="hot-article-item">
+        <span class="article-rank top-1">1</span>
+        <a href="/2026/09/01/hello-world/" class="hot-article-title">欢迎来到 LZH Code Blog</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank top-2">2</span>
+        <a href="/2026/09/01/test/" class="hot-article-title">test</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank top-3">3</span>
+        <a href="/2026/09/01/python-data-analysis-tutorial/" class="hot-article-title">Python 数据分析入门指南 - 从零基础到实战项目</a>
+      </li>
+      
+    </ul>
+  </div>
+
+  <div class="sidebar-module">
+    <div class="module-title">
+      <i class="fas fa-folder-open"></i> 分类目录
+    </div>
+    <ul class="category-list">
+      
+      <li class="category-item">
+        <a href="/categories/%E9%9A%8F%E7%AC%94/">
+          <i class="fas fa-folder"></i> 随笔
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/test/">
+          <i class="fas fa-folder"></i> test
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">
+          <i class="fas fa-folder"></i> 编程教程
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">
+          <i class="fas fa-folder"></i> Python
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+          <i class="fas fa-folder"></i> 数据分析
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+
+  <div class="sidebar-module">
+    <div class="module-title">
+      <i class="fas fa-tags"></i> 标签云
+    </div>
+    <div class="tag-cloud">
+      
+      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item" style="font-size: 14px">
+        博客
+      </a>
+      
+      <a href="/tags/Hexo/" class="tag-item" style="font-size: 14px">
+        Hexo
+      </a>
+      
+      <a href="/tags/test/" class="tag-item" style="font-size: 14px">
+        test
+      </a>
+      
+      <a href="/tags/Python/" class="tag-item" style="font-size: 14px">
+        Python
+      </a>
+      
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item" style="font-size: 14px">
+        数据分析
+      </a>
+      
+      <a href="/tags/Pandas/" class="tag-item" style="font-size: 14px">
+        Pandas
+      </a>
+      
+      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item" style="font-size: 14px">
+        可视化
+      </a>
+      
+      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item" style="font-size: 14px">
+        入门教程
+      </a>
+      
+    </div>
+  </div>
+</aside>
+
+  </div>
+
+  <footer class="csdn-footer">
+  <div class="footer-container">
+    <p class="copyright">
+      &copy; 2026 LZH Code Blog
+    </p>
   </div>
 </footer>
 
-    </div>
-    <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">首页</a>
-  
-    <a href="/archives/" class="mobile-nav-link">归档</a>
-  
-    <a href="/categories/" class="mobile-nav-link">分类</a>
-  
-    <a href="/tags/" class="mobile-nav-link">标签</a>
-  
-    <a href="/about/" class="mobile-nav-link">关于</a>
-  
-</nav>
-    
-
-
-<script src="/js/jquery-3.6.4.min.js"></script>
-
-
-
-
-
-<script src="/js/script.js"></script>
-
-
-
-
-
-  </div>
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  <script src="/js/main.js"></script>
 </body>
 </html>
