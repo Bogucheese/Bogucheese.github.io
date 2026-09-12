@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录 - LZH Code Blog</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/styles/github.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 8.1.2"></head>
+<body>
+  <header class="csdn-header">
+  <div class="header-container">
+    <div class="header-left">
+      <a href="/" class="logo">
+        <i class="fas fa-code"></i>
+        <span>LZH Code Blog</span>
+      </a>
+      <nav class="header-nav">
+        <a href="/" class="nav-link ">
+          <i class="fas fa-home"></i> 首页
+        </a>
+        <a href="/archives/" class="nav-link">
+          <i class="fas fa-archive"></i> 归档
+        </a>
+        <a href="/categories/" class="nav-link">
+          <i class="fas fa-folder"></i> 分类
+        </a>
+        <a href="/tags/" class="nav-link">
+          <i class="fas fa-tags"></i> 标签
+        </a>
+        <a href="/about/" class="nav-link">
+          <i class="fas fa-user"></i> 关于
+        </a>
+      </nav>
+    </div>
+    <div class="header-right">
+      <div class="search-box">
+        <input type="text" placeholder="搜索文章..." id="headerSearch">
+        <button onclick="search()"><i class="fas fa-search"></i></button>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+  <div class="main-container">
+    <main class="content-left">
+      <article class="article-detail">
+        <div class="article-header">
+          <h1 class="article-title-detail">把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</h1>
+          <div class="article-meta-detail">
+            <span class="meta-item">
+              <i class="far fa-calendar"></i> 2026-09-12
+            </span>
+            
+            <span class="meta-item">
+              <i class="far fa-folder"></i>
+              
+                项目实战
+              
+                /前端
+              
+            </span>
+            
+            
+            <span class="meta-item">
+              <i class="fas fa-tags"></i>
+              
+                drawio
+              
+                , AI Agent
+              
+                , TypeScript
+              
+                , 思维导图
+              
+                , Electron
+              
+                , 二次开发
+              
+            </span>
+            
+          </div>
+        </div>
+
+        <div class="article-body">
+          <h1 id="把-drawio-二开成-AI-思维导图工具：架构设计与踩坑实录"><a href="#把-drawio-二开成-AI-思维导图工具：架构设计与踩坑实录" class="headerlink" title="把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录"></a>把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</h1><blockquote>
+<p>最近完成了一个对个人意义比较大的项目：<strong>MindmapAI</strong>——基于 drawio 二次开发的<br>AI 思维导图&#x2F;思考图工具。给它一个主题、一篇文章、一个链接甚至一份 Word&#x2F;PDF<br>文档，它能提炼要点、自我评审，然后在画布上自动画出一张结构化的图。<br>这篇文章记录整个项目的架构取舍和踩坑过程，代码已全部开源。</p>
+</blockquote>
+<p><img src="/images/mindmap-ai/m5-demo-mindmap.png" alt="MindmapAI 生成的思维导图"></p>
+<ul>
+<li>仓库：<a target="_blank" rel="noopener" href="https://github.com/Bogucheese/MindmapAI">github.com&#x2F;Bogucheese&#x2F;MindmapAI</a></li>
+<li>技术栈：TypeScript &#x2F; drawio (mxGraph) &#x2F; Electron &#x2F; 零依赖 Node 脚本</li>
+</ul>
+<h2 id="一、为什么不直接-fork-改源码"><a href="#一、为什么不直接-fork-改源码" class="headerlink" title="一、为什么不直接 fork 改源码"></a>一、为什么不直接 fork 改源码</h2><p>二开 drawio 最容易想到的路是 fork 仓库直接改。我没走这条路，原因是两个：</p>
+<ol>
+<li><strong>合规</strong>。drawio 是 Apache-2.0 项目，直接在其源码里掺杂自己的代码再发布，<br>代码边界和声明都会变得模糊。我想让仓库里 100% 是自己的代码。</li>
+<li><strong>可升级</strong>。源码混改之后，上游每升一个版本都是一次痛苦的 merge。</li>
+</ol>
+<p>最后的方案是「<strong>运行时拉取 + 补丁注入</strong>」：</p>
+<ul>
+<li>仓库只放原创代码和一个 <code>patches/</code> 目录（要注入上游文件的片段、资源、<br>pinned 的上游 commit hash）；</li>
+<li><code>scripts/setup-upstream.mjs</code> 首次运行时按 pinned 提交浅克隆上游<br>drawio &#x2F; drawio-desktop，然后把接入点（菜单、插件 script 标签、i18n 词条、<br>品牌资源）<strong>幂等地注入</strong>进去——注入用标记注释识别，重复执行不会重复插；</li>
+<li><code>webapp/</code> 在 <code>.gitignore</code> 里，随时删掉重拉，上游升级就是改一行 hash<br>再跑一次脚本。</li>
+</ul>
+<p>这个结构让「我的代码」和「上游代码」在物理上完全分离，<code>NOTICE.md</code> 里把每项<br>注入逐条声明，Apache-2.0 的义务履行得很干净。</p>
+<h2 id="二、总体架构"><a href="#二、总体架构" class="headerlink" title="二、总体架构"></a>二、总体架构</h2><pre><code class="hljs nix">┌─────────────────────────────────────────────────┐
+│  webapp<span class="hljs-symbol">/</span> (上游 drawio, pinned commit, 运行时拉取) │
+│  ┌───────────────────────────────────────────┐  │
+│  │ js<span class="hljs-symbol">/ai/mindmap-ai.js</span>  ← ai<span class="hljs-symbol">/</span> 模块打包的 IIFE │  │
+│  └───────────────────────────────────────────┘  │
+├─────────────────────────────────────────────────┤
+│  ai<span class="hljs-symbol">/</span> (TypeScript 源码, esbuild → IIFE 插件)      │
+│  ├─ ai<span class="hljs-symbol">/</span>       OpenAI 兼容客户端 <span class="hljs-operator">+</span> prompt <span class="hljs-operator">+</span> schema│
+│  ├─ agent<span class="hljs-symbol">/</span>    生成管线 <span class="hljs-symbol">/</span> Agent 工具循环 <span class="hljs-symbol">/</span> 抓取    │
+│  ├─ charts<span class="hljs-symbol">/</span>   <span class="hljs-number">12</span> 种思考图: 槽位协议→确定性布局    │
+│  ├─ mindmap<span class="hljs-symbol">/</span>  树模型 → 画布装配                  │
+│  └─ ui<span class="hljs-symbol">/</span>       对话框 <span class="hljs-symbol">/</span> Agent 面板 <span class="hljs-symbol">/</span> 菜单          │
+├─────────────────────────────────────────────────┤
+│  scripts<span class="hljs-symbol">/start.mjs</span>  零依赖静态服务器(含抓取中继)  │
+│  desktop<span class="hljs-symbol">/</span>           Electron 壳(上游 desktop 注入)│
+└─────────────────────────────────────────────────┘</code></pre>
+
+<p>核心 AI 代码都在 <code>ai/</code> 目录的 TypeScript 模块里，esbuild 打成单文件 IIFE，<br>通过注入的 <code>&lt;script src=&quot;js/ai/mindmap-ai.js?v=N&quot;&gt;</code> 挂进 drawio。<br>这样 AI 层完全独立：自己的单测（vitest）、自己的类型检查（tsc）、自己的构建，<br>不污染 drawio 的构建链。</p>
+<h2 id="三、核心设计：决策在模型，几何在代码"><a href="#三、核心设计：决策在模型，几何在代码" class="headerlink" title="三、核心设计：决策在模型，几何在代码"></a>三、核心设计：决策在模型，几何在代码</h2><p>这是整个项目最重要的一条架构原则。让 LLM 直接输出画布坐标（x&#x2F;y&#x2F;w&#x2F;h）几乎<br>必然得到一坨重叠错位的东西，所以我把职责切成两半：</p>
+<ul>
+<li><strong>模型只做内容和结构决策</strong>：12 种思考图各定义一个「槽位协议」<br>（一份 JSON schema 描述 + 示例），模型按协议填 JSON；</li>
+<li><strong>代码做全部几何</strong>：每个图型一个确定性布局函数，输入槽位 JSON，输出带<br>坐标&#x2F;样式&#x2F;连线的中间表示，再统一装配到 mxGraph 画布。</li>
+</ul>
+<p>以流程图为例，槽位协议长这样（节选）：</p>
+<pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;AI Agent 工作流程&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;lanes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;用户&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;Agent&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;工具&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;steps&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;label&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;提出目标&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;terminator&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;lane&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">0</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s4&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;label&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;目标达成?&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;decision&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;lane&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s5&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;label&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;输出结果&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;shape&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;terminator&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;lane&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1</span><span class="hljs-punctuation">&#125;</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;edges&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s4&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;to&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s5&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;label&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;是&quot;</span><span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">&#123;</span><span class="hljs-attr">&quot;from&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s4&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;to&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;s2&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;label&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;否&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;dashed&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-literal"><span class="hljs-keyword">true</span></span><span class="hljs-punctuation">&#125;</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">&#125;</span></code></pre>
+
+<p>早期版本流程图只支持「步骤 i 连 i+1」的线性链，用户实测后直接吐槽<br>「连线一点也不规范」——decision 分支根本画不出来。于是协议加了显式<br><code>edges</code>（分支&#x2F;回退都能表达），布局层把所有连线统一成 drawio 标准的<br><strong>正交路由</strong>，按两端几何关系自动选连接点：顺流沿流向、回退侧面绕行、<br>跨泳道侧向一跃。几何规则全部有单测固化（节点不许越出泳道、连线必须有<br>定向连接点、禁止斜直线）。</p>
+<p><img src="/images/mindmap-ai/test-chart-tree.png" alt="12 种思考图之一：树形图"></p>
+<h2 id="四、来源驱动的生成管线：每一步都有据可查"><a href="#四、来源驱动的生成管线：每一步都有据可查" class="headerlink" title="四、来源驱动的生成管线：每一步都有据可查"></a>四、来源驱动的生成管线：每一步都有据可查</h2><p>「贴一篇文章生成导图」的管线不是一次 LLM 调用，而是四段：</p>
+<ol>
+<li><strong>分块</strong>：文档按 Markdown 标题切章节，超长章节按段落装箱（纯确定性代码）；</li>
+<li><strong>提炼</strong>：逐块提炼要点，<strong>必须带原文引文</strong>（quote 字段）；</li>
+<li><strong>架构</strong>：基于全部要点生成导图骨架，每个节点回填支撑它的要点 id；</li>
+<li><strong>评审</strong>：grounding &#x2F; coverage &#x2F; specificity &#x2F; structure 四维打分，<br>不达标自动回炉重构一次。</li>
+</ol>
+<p>引文不是装饰品：它跟着节点存进 <code>.drawio</code> 文件（节点 value 上的 <code>mm-*</code><br>属性），重开文件悬停节点还能看到「这句话是从原文哪句来的」。来源驱动的<br>价值就在这里——图不是模型凭空编的，每个节点都有出处。</p>
+<h2 id="五、Agent-模式：把控制流真正交给模型"><a href="#五、Agent-模式：把控制流真正交给模型" class="headerlink" title="五、Agent 模式：把控制流真正交给模型"></a>五、Agent 模式：把控制流真正交给模型</h2><p>管线模式之外还有一个 Agent 模式（生成对话框里勾选）：模型不再是被动的<br>JSON 生成器，而是拿到一组工具自主工作：</p>
+<ul>
+<li>思考图：<code>read_notes</code>（查要点）&#x2F; <code>fetch_url</code>（抓网页）&#x2F; <code>submit_chart</code><br>（提交槽位，代码校验不过就把错误喂回去让它自己修，最多 3 次提交）；</li>
+<li>思维导图：<code>add_node</code> &#x2F; <code>update_node</code> &#x2F; <code>finish_changes</code> 等 7 个工具，<br>模型逐个节点放置，放完自我检查还能再修一轮；</li>
+<li>生成完成后，Agent 面板的输入框还能继续下指令（「把术语统一为 AI<br>Agent」），Agent 用工具改完自动重排画布。</li>
+</ul>
+<p>侧边栏的 Agent 面板把这一切实时播出来：哪条要点被提炼、评审打了多少分、<br>每次工具调用的参数摘要——不是黑盒转圈，是真的能看见它在干什么。</p>
+<p><img src="/images/mindmap-ai/test-deepseek-final.png" alt="真实模型全流程运行（DeepSeek）"></p>
+<h2 id="六、踩坑实录"><a href="#六、踩坑实录" class="headerlink" title="六、踩坑实录"></a>六、踩坑实录</h2><p>开发中踩的坑比写的代码更有记忆点，挑六个有代表性的：</p>
+<h3 id="1-浏览器-CORS：抓取功能在浏览器里必然残废"><a href="#1-浏览器-CORS：抓取功能在浏览器里必然残废" class="headerlink" title="1. 浏览器 CORS：抓取功能在浏览器里必然残废"></a>1. 浏览器 CORS：抓取功能在浏览器里必然残废</h3><p>链接模式要抓第三方网页，浏览器直连被 CORS 拦截，公共代理 r.jina.ai 在<br>国内网络直接超时。解法：抓取本来就不该在浏览器里做——应用本来就靠<br><code>start.mjs</code> 这个本地服务器跑，给它内置一个同源中继<br><code>GET /mm-fetch-proxy?url=&lt;目标&gt;</code>，服务端发起请求（无 CORS）原样回传。<br>抓取链变成：直连 → 同源中继 → 公共代理，浏览器模式开箱即用，不用配任何东西。</p>
+<h3 id="2-URL-拼接吃掉端口号"><a href="#2-URL-拼接吃掉端口号" class="headerlink" title="2. URL 拼接吃掉端口号"></a>2. URL 拼接吃掉端口号</h3><p>中继联调时一度怎么都 404：拼出来的请求路径是 <code>/?url=...</code> 而不是<br><code>/mm-fetch-proxy?url=...</code>。原因是我写了 <code>${origin}?url=${target}</code>——<br>origin 没有尾斜杠时，<code>http://127.0.0.1:8000?url=x</code> 里的 <code>?</code> 被 URL 解析器<br>当成查询串起点，路径部分直接没了。教训：<strong>URL 拼接永远用构造器或显式路径</strong>，<br>别拼字符串。</p>
+<h3 id="3-PDF-的-FlateDecode-不是裸-deflate"><a href="#3-PDF-的-FlateDecode-不是裸-deflate" class="headerlink" title="3. PDF 的 FlateDecode 不是裸 deflate"></a>3. PDF 的 FlateDecode 不是裸 deflate</h3><p>文档转导图功能要零依赖解析 PDF（不引 pdf.js）：解压内容流再按 <code>Tj/TJ</code><br>文本操作符拼文本。第一版用 <code>DecompressionStream(&#39;deflate-raw&#39;)</code> 死活解不出，<br>查了 PDF 规范才发现 FlateDecode 是 <strong>zlib 封装（RFC 1950）</strong>，要带头部和<br>校验和，对应 <code>&#39;deflate&#39;</code>；少数生成器才写裸流。现在两种都试，zlib 优先。<br>（顺带：docx 解析也是零依赖——中央目录定位 <code>word/document.xml</code>，<br>裸 deflate 解压，XML 粗提取。）</p>
+<h3 id="4-sed-的-展开"><a href="#4-sed-的-展开" class="headerlink" title="4. sed 的 &amp; 展开"></a>4. sed 的 <code>&amp;</code> 展开</h3><p>批量往 i18n 资源文件插词条时用了 sed，替换文本里的 <code>&amp;</code><br>（”Summarize &amp; suggestions”）被展开成「整个匹配行」，菜单标签变成了<br><code>Summarize aiChartTooSmall=Chart content is too thin. suggestions…</code><br>这种缝合怪。资源文件批量改动，<strong>用 perl 或 Node 脚本，别用 sed</strong>。</p>
+<h3 id="5-drawio-的暗色主题信号藏在哪"><a href="#5-drawio-的暗色主题信号藏在哪" class="headerlink" title="5. drawio 的暗色主题信号藏在哪"></a>5. drawio 的暗色主题信号藏在哪</h3><p>Agent 面板要跟随编辑器暗色主题。先猜 <code>ui.theme</code>，是 null；再猜<br><code>Editor.currentTheme</code>，是 ‘kennedy’（那是界面布局变体，不是明暗）。<br>翻上游源码才找到真信号：<strong><code>Editor.darkMode</code> 布尔值</strong> + <code>darkModeChanged</code><br>事件——新版 drawio 把明暗和布局拆成了两套系统。顺着这个事件做重渲染，<br>切主题时面板按事件历史重播卡片，会话内容不丢。</p>
+<h3 id="6-首次点击菜单，面板反而消失"><a href="#6-首次点击菜单，面板反而消失" class="headerlink" title="6. 首次点击菜单，面板反而消失"></a>6. 首次点击菜单，面板反而消失</h3><p>「Agent 面板」菜单项的行为是 <code>ensureAgentPanel(ui).toggle()</code>：面板首次<br>创建时默认可见，<code>toggle()</code> 立刻把它藏了——用户第一次点击什么都看不到，<br>要点第二次。一行修复：初始 <code>display:none</code>。这种 bug 单测抓不到，<br>只有真点一遍才会发现，也是后来补浏览器 E2E 的直接动机。</p>
+<h2 id="七、测试与工程化"><a href="#七、测试与工程化" class="headerlink" title="七、测试与工程化"></a>七、测试与工程化</h2><ul>
+<li><strong>单元测试</strong>：vitest，21 个文件 162 个用例。布局几何（零重叠&#x2F;泳道不越界）、<br>抓取回退链、文档提取（手搓 zip&#x2F;pdf fixtures）、槽位校验、主题&#x2F;语言切换<br>重渲染都有覆盖；</li>
+<li><strong>Mock LLM 服务器</strong>（<code>ai/dev-mock-server.mjs</code>）：OpenAI 兼容端点，按<br>system prompt 里的 <code>[MM-STAGE:xxx]</code> 标记路由到固定脚本响应，连<br>function calling 的 <code>tool_calls</code> 都能演。浏览器里把 Base URL 指到它，<br>不烧一分钱 quota 就能跑完整生成链路的 E2E；</li>
+<li><strong>浏览器 E2E</strong>：用浏览器自动化真实点击 UI（开对话框、填链接、注入文件、<br>看画布单元格），控制台报错和菜单结构都能断言；</li>
+<li>打包链路：esbuild 出 IIFE → 注入上游 bootstrap（<code>?v=N</code> 版本号防缓存）→<br>Electron 壳走 <code>mmAiFetch</code> 主进程通道抓网页（天然无 CORS）。</li>
+</ul>
+<h2 id="八、路线图与链接"><a href="#八、路线图与链接" class="headerlink" title="八、路线图与链接"></a>八、路线图与链接</h2><p>已完成：三来源生成（主题&#x2F;粘贴&#x2F;链接）、12 种思考图、评审管线、Agent 模式、<br>桌面版打包、文档转导图（Markdown&#x2F;Word&#x2F;PDF）、总结与优化建议、面板暗色主题、<br>流程图分支连线。</p>
+<p>待办：Markdown 双向编辑、XMind&#x2F;Freeplane&#x2F;OPML 导入、macOS&#x2F;Linux 打包与签名。</p>
+<p>如果你对「LLM + 图形编辑器」这个方向感兴趣，欢迎来仓库看看：<br><a target="_blank" rel="noopener" href="https://github.com/Bogucheese/MindmapAI">github.com&#x2F;Bogucheese&#x2F;MindmapAI</a>。<br>本地跑起来只要一句 <code>node scripts/start.mjs</code>（首次自动拉上游），<br>配上任何 OpenAI 兼容端点就能用。</p>
+
+        </div>
+
+        <nav class="article-nav">
+          
+
+          
+          <div class="nav-item next">
+            <div class="nav-label">下一篇</div>
+            <a href="/2026/09/01/python-data-analysis-tutorial/" class="nav-title">Python 数据分析入门指南 - 从零基础到实战项目</a>
+          </div>
+          
+        </nav>
+      </article>
+    </main>
+
+    <aside class="sidebar-right">
+  <div class="profile-card">
+    <div class="profile-bg"></div>
+    <div class="profile-avatar">
+      <img src="/images/avatar.png" alt="博主头像" onerror="this.src='https://ui-avatars.com/api/?name=LZH&background=fc5533&color=fff&size=128'">
+    </div>
+    <div class="profile-info">
+      <h3 class="profile-name">LZH</h3>
+      <p class="profile-desc">热爱编程，分享技术笔记</p>
+      <div class="profile-stats">
+        <div class="stat-item">
+          <span class="stat-value">3</span>
+          <span class="stat-label">文章</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sidebar-module">
+    <div class="module-title">
+      <i class="fas fa-fire"></i> 热门文章
+    </div>
+    <ul class="hot-article-list">
+      
+      <li class="hot-article-item">
+        <span class="article-rank top-1">1</span>
+        <a href="/2026/09/01/hello-world/" class="hot-article-title">欢迎来到 LZH Code Blog</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank top-2">2</span>
+        <a href="/2026/09/01/python-data-analysis-tutorial/" class="hot-article-title">Python 数据分析入门指南 - 从零基础到实战项目</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank top-3">3</span>
+        <a href="/2026/09/12/drawio-mindmap-ai-secondary-development/" class="hot-article-title">把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</a>
+      </li>
+      
+    </ul>
+  </div>
+
+  <div class="sidebar-module">
+    <div class="module-title">
+      <i class="fas fa-folder-open"></i> 分类目录
+    </div>
+    <ul class="category-list">
+      
+      <li class="category-item">
+        <a href="/categories/%E9%9A%8F%E7%AC%94/">
+          <i class="fas fa-folder"></i> 随笔
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">
+          <i class="fas fa-folder"></i> 编程教程
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">
+          <i class="fas fa-folder"></i> Python
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+          <i class="fas fa-folder"></i> 数据分析
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
+          <i class="fas fa-folder"></i> 项目实战
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/%E5%89%8D%E7%AB%AF/">
+          <i class="fas fa-folder"></i> 前端
+          <span class="category-count">(1)</span>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+
+  <div class="sidebar-module">
+    <div class="module-title">
+      <i class="fas fa-tags"></i> 标签云
+    </div>
+    <div class="tag-cloud">
+      
+      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item" style="font-size: 14px">
+        博客
+      </a>
+      
+      <a href="/tags/Hexo/" class="tag-item" style="font-size: 14px">
+        Hexo
+      </a>
+      
+      <a href="/tags/Python/" class="tag-item" style="font-size: 14px">
+        Python
+      </a>
+      
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item" style="font-size: 14px">
+        数据分析
+      </a>
+      
+      <a href="/tags/Pandas/" class="tag-item" style="font-size: 14px">
+        Pandas
+      </a>
+      
+      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item" style="font-size: 14px">
+        可视化
+      </a>
+      
+      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item" style="font-size: 14px">
+        入门教程
+      </a>
+      
+      <a href="/tags/drawio/" class="tag-item" style="font-size: 14px">
+        drawio
+      </a>
+      
+      <a href="/tags/AI-Agent/" class="tag-item" style="font-size: 14px">
+        AI Agent
+      </a>
+      
+      <a href="/tags/TypeScript/" class="tag-item" style="font-size: 14px">
+        TypeScript
+      </a>
+      
+      <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" class="tag-item" style="font-size: 14px">
+        思维导图
+      </a>
+      
+      <a href="/tags/Electron/" class="tag-item" style="font-size: 14px">
+        Electron
+      </a>
+      
+      <a href="/tags/%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" class="tag-item" style="font-size: 14px">
+        二次开发
+      </a>
+      
+    </div>
+  </div>
+</aside>
+
+  </div>
+
+  <footer class="csdn-footer">
+  <div class="footer-container">
+    <p class="copyright">
+      &copy; 2026 LZH Code Blog
+    </p>
+  </div>
+</footer>
+
+  <button class="back-to-top" id="backToTop" onclick="scrollToTop()">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+  <script src="/js/main.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/core.min.js"></script>
+  <script>hljs.highlightAll();</script>
+</body>
+</html>
