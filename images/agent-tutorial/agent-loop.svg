@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 560" font-family="-apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#9aa5b5"/>
+    </marker>
+  </defs>
+
+  <!-- 闭环弧线（顺时针） -->
+  <path d="M 560 84 Q 668 122 716 238" fill="none" stroke="#9aa5b5" stroke-width="2.5" marker-end="url(#arr)"/>
+  <path d="M 716 322 Q 668 438 560 476" fill="none" stroke="#9aa5b5" stroke-width="2.5" marker-end="url(#arr)"/>
+  <path d="M 400 476 Q 292 438 244 322" fill="none" stroke="#9aa5b5" stroke-width="2.5" marker-end="url(#arr)"/>
+  <path d="M 244 238 Q 292 122 400 84" fill="none" stroke="#9aa5b5" stroke-width="2.5" marker-end="url(#arr)"/>
+
+  <!-- 中心文案 -->
+  <text x="480" y="272" text-anchor="middle" font-size="16" font-weight="700" fill="#2b3445">持续闭环</text>
+  <text x="480" y="296" text-anchor="middle" font-size="11" fill="#8a94a6">直至任务完成</text>
+
+  <!-- ① 感知（上） -->
+  <rect x="405" y="30" width="150" height="64" rx="32" fill="#ffffff" stroke="#d9dee7" stroke-width="1.5"/>
+  <text x="480" y="58" text-anchor="middle" font-size="14.5" font-weight="700" fill="#2b3445">① 感知</text>
+  <text x="480" y="79" text-anchor="middle" font-size="10" fill="#8a94a6">获取状态与需求</text>
+
+  <!-- ② 决策（右） -->
+  <rect x="695" y="248" width="150" height="64" rx="32" fill="#fc5533"/>
+  <text x="770" y="276" text-anchor="middle" font-size="14.5" font-weight="700" fill="#ffffff">② 决策</text>
+  <text x="770" y="297" text-anchor="middle" font-size="10" fill="#ffffff" opacity="0.85">LLM 推理与规划</text>
+  <text x="858" y="272" font-size="10.5" fill="#fc5533">「思考者」</text>
+  <text x="858" y="290" font-size="10.5" fill="#fc5533">而非「执行者」</text>
+
+  <!-- ③ 执行（下） -->
+  <rect x="405" y="466" width="150" height="64" rx="32" fill="#ffffff" stroke="#d9dee7" stroke-width="1.5"/>
+  <text x="480" y="494" text-anchor="middle" font-size="14.5" font-weight="700" fill="#2b3445">③ 执行</text>
+  <text x="480" y="515" text-anchor="middle" font-size="10" fill="#8a94a6">调用工具执行操作</text>
+
+  <!-- ④ 反馈（左） -->
+  <rect x="115" y="248" width="150" height="64" rx="32" fill="#ffffff" stroke="#d9dee7" stroke-width="1.5"/>
+  <text x="190" y="276" text-anchor="middle" font-size="14.5" font-weight="700" fill="#2b3445">④ 反馈</text>
+  <text x="190" y="297" text-anchor="middle" font-size="10" fill="#8a94a6">结果回传与校验</text>
+</svg>

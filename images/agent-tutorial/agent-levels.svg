@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 520" font-family="-apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7.5" markerHeight="7.5" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#aab2c0"/>
+    </marker>
+  </defs>
+
+  <!-- 智能水平提升虚线箭头 -->
+  <line x1="70" y1="430" x2="880" y2="118" stroke="#aab2c0" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arr)"/>
+  <text x="60" y="100" font-size="13" font-weight="700" fill="#4a5568">决策智能水平提升</text>
+  <text x="60" y="122" font-size="10.5" fill="#8a94a6">从规则驱动到自主智能</text>
+
+  <!-- 阶梯 1：简单反射 Agent -->
+  <rect x="48" y="370" width="160" height="90" rx="8" fill="#fdeee8"/>
+  <text x="128" y="400" text-anchor="middle" font-size="13" font-weight="700" fill="#2b3445">简单反射 Agent</text>
+  <text x="128" y="424" text-anchor="middle" font-size="10.5" fill="#5b6472">硬编码规则响应</text>
+  <text x="128" y="442" text-anchor="middle" font-size="10.5" fill="#5b6472">无记忆、无规划</text>
+
+  <!-- 阶梯 2：基于模型的反射 Agent -->
+  <rect x="220" y="315" width="160" height="145" rx="8" fill="#fcd9c8"/>
+  <text x="300" y="345" text-anchor="middle" font-size="12" font-weight="700" fill="#2b3445">基于模型的反射 Agent</text>
+  <text x="300" y="369" text-anchor="middle" font-size="10.5" fill="#5b6472">维护内部状态模型</text>
+  <text x="300" y="387" text-anchor="middle" font-size="10.5" fill="#5b6472">跟踪环境变化</text>
+  <text x="300" y="405" text-anchor="middle" font-size="10.5" fill="#5b6472">具备基础状态记忆</text>
+
+  <!-- 阶梯 3：目标驱动 Agent -->
+  <rect x="392" y="260" width="160" height="200" rx="8" fill="#fab693"/>
+  <text x="472" y="290" text-anchor="middle" font-size="13" font-weight="700" fill="#2b3445">目标驱动 Agent</text>
+  <text x="472" y="314" text-anchor="middle" font-size="10.5" fill="#5b4030">具备明确目标</text>
+  <text x="472" y="332" text-anchor="middle" font-size="10.5" fill="#5b4030">自主拆解任务</text>
+  <text x="472" y="350" text-anchor="middle" font-size="10.5" fill="#5b4030">规划行动路径</text>
+
+  <!-- 阶梯 4：效用驱动 Agent -->
+  <rect x="564" y="205" width="160" height="255" rx="8" fill="#f89468"/>
+  <text x="644" y="235" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">效用驱动 Agent</text>
+  <text x="644" y="259" text-anchor="middle" font-size="10.5" fill="#ffffff" opacity="0.9">效用函数权衡方案</text>
+  <text x="644" y="277" text-anchor="middle" font-size="10.5" fill="#ffffff" opacity="0.9">成本 · 效率 · 偏好</text>
+  <text x="644" y="295" text-anchor="middle" font-size="10.5" fill="#ffffff" opacity="0.9">输出最优解</text>
+
+  <!-- 阶梯 5：学习型 Agent -->
+  <rect x="736" y="150" width="160" height="310" rx="8" fill="#fc5533"/>
+  <text x="816" y="180" text-anchor="middle" font-size="13" font-weight="700" fill="#ffffff">学习型 Agent</text>
+  <text x="816" y="204" text-anchor="middle" font-size="10.5" fill="#ffffff" opacity="0.9">从反馈中持续学习</text>
+  <text x="816" y="222" text-anchor="middle" font-size="10.5" fill="#ffffff" opacity="0.9">自动优化决策逻辑</text>
+  <text x="816" y="240" text-anchor="middle" font-size="10.5" fill="#ffffff" opacity="0.9">效果随交互提升</text>
+
+  <!-- 基线 -->
+  <line x1="40" y1="460" x2="910" y2="460" stroke="#c9d1dc" stroke-width="1.5"/>
+  <text x="48" y="486" font-size="11" fill="#8a94a6">规则驱动</text>
+  <text x="896" y="486" text-anchor="end" font-size="11" fill="#8a94a6">自主智能</text>
+</svg>

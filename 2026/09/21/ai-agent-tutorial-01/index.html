@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>AI Agent 原理与技术教程（一）：核心定义、系统组成与运行机制 - LZH Code Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <header class="site-header">
+  <div class="header-container">
+    <a href="/" class="logo">
+      LZH Code Blog<span class="logo-dot">.</span>
+    </a>
+    <nav class="header-nav">
+      
+      <a href="/" class="nav-link ">首页</a>
+      
+      <a href="/archives/" class="nav-link ">归档</a>
+      
+      <a href="/categories/" class="nav-link ">分类</a>
+      
+      <a href="/tags/" class="nav-link ">标签</a>
+      
+      <a href="/about/" class="nav-link ">关于</a>
+      
+    </nav>
+    <form class="search-box" action="/" method="get" role="search">
+      <input type="search" name="search" class="search-input" placeholder="搜索文章…" aria-label="搜索文章">
+    </form>
+  </div>
+</header>
+
+
+  <div class="main-container">
+    <main class="content-left">
+      <article class="article-detail">
+        <header class="article-header">
+          <h1 class="article-title-detail">AI Agent 原理与技术教程（一）：核心定义、系统组成与运行机制</h1>
+          <div class="article-meta article-meta-detail">
+            <span class="meta-item">2026-09-21</span>
+            
+            <span class="meta-item">
+              <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">技术教程</a> / <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/AI/">AI</a>
+            </span>
+            
+            
+            <span class="meta-item">
+              <a href="/tags/AI-Agent/">AI Agent</a> · <a href="/tags/LLM/">LLM</a> · <a href="/tags/%E6%99%BA%E8%83%BD%E4%BD%93/">智能体</a> · <a href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+            </span>
+            
+          </div>
+        </header>
+
+        <div class="article-body">
+          <p><img src="/images/agent-tutorial/cover.png" alt="AI Agent 原理与技术"></p>
+<blockquote>
+<p>这是《AI Agent 原理与技术》系列教程的第一篇，从最核心的概念讲起：<br>Agent 到底是什么、由哪些模块组成、如何运转、有哪些类型、适合什么场景。<br>全文以「旅行预订 Agent」为贯穿示例，帮助建立对 Agent 系统的整体认知框架。</p>
+</blockquote>
+<h2 id="一、AI-Agent-核心定义"><a href="#一、AI-Agent-核心定义" class="headerlink" title="一、AI Agent 核心定义"></a>一、AI Agent 核心定义</h2><h3 id="1-广义定义（经典人工智能范畴）"><a href="#1-广义定义（经典人工智能范畴）" class="headerlink" title="1. 广义定义（经典人工智能范畴）"></a>1. 广义定义（经典人工智能范畴）</h3><p>AI Agent（智能体）是一类能够<strong>感知外部环境、自主做出决策、并通过动作作用于环境</strong>的智能系统。该概念远早于大语言模型（LLM）诞生，早期的 Agent 多基于硬编码规则、专家系统实现，能力边界由开发者预先设定。</p>
+<h3 id="2-狭义定义（LLM-时代主流）"><a href="#2-狭义定义（LLM-时代主流）" class="headerlink" title="2. 狭义定义（LLM 时代主流）"></a>2. 狭义定义（LLM 时代主流）</h3><p>我们当下常说的 AI Agent，特指<strong>以大语言模型为核心决策大脑</strong>的智能系统：它通过 LLM 理解自然语言指令、推理上下文逻辑、制定行动规划，再通过调用工具与外部环境交互，最终完成复杂任务，实现从「文字生成」到「实际做事」的能力跃迁。</p>
+<p><img src="/images/agent-tutorial/agent-definition.png" alt="AI Agent 的广义与狭义定义"></p>
+<h2 id="二、AI-Agent-核心组成"><a href="#二、AI-Agent-核心组成" class="headerlink" title="二、AI Agent 核心组成"></a>二、AI Agent 核心组成</h2><p>AI Agent 是一个多模块协同的系统，经典架构包含四大核心组件，LLM 时代的 Agent 在此基础上扩展了记忆与知识模块。</p>
+<p><img src="/images/agent-tutorial/agent-architecture.svg" alt="AI Agent 核心组成架构"></p>
+<h3 id="1-四大核心基础组件"><a href="#1-四大核心基础组件" class="headerlink" title="1. 四大核心基础组件"></a>1. 四大核心基础组件</h3><table>
+<thead>
+<tr>
+<th>组件</th>
+<th>定位</th>
+<th>功能说明</th>
+<th>旅行预订 Agent 示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>交互环境</td>
+<td>Agent 所处的外部场域与交互边界</td>
+<td>Agent 所有感知和行动的载体，决定了 Agent 的能力边界范围</td>
+<td>机票酒店预订平台、用户对话界面</td>
+</tr>
+<tr>
+<td>感知单元（传感器）</td>
+<td>Agent 的「信息输入接口」</td>
+<td>感知环境的当前状态与变化，将外部信息转化为决策核心可处理的格式</td>
+<td>查询酒店房态、读取航班价格、获取用户历史订单</td>
+</tr>
+<tr>
+<td>决策核心</td>
+<td>Agent 的「大脑」</td>
+<td>接收感知信息，基于规则&#x2F;模型推理判断，生成行动指令</td>
+<td>早期为硬编码规则；LLM Agent 中为大语言模型，负责理解需求、规划行程、判断操作逻辑</td>
+</tr>
+<tr>
+<td>执行单元（执行器）</td>
+<td>Agent 的「动作输出接口」</td>
+<td>接收决策核心的指令，对环境产生实际作用</td>
+<td>提交酒店订单、发送确认短信、取消预订操作</td>
+</tr>
+</tbody></table>
+<h3 id="2-扩展核心：记忆与知识体系"><a href="#2-扩展核心：记忆与知识体系" class="headerlink" title="2. 扩展核心：记忆与知识体系"></a>2. 扩展核心：记忆与知识体系</h3><p>这是 LLM Agent 区别于传统规则 Agent 的关键模块，分为两类：</p>
+<ul>
+<li><strong>短期记忆（上下文记忆）</strong>：存储当前对话&#x2F;任务的交互过程与中间状态，支撑多轮连续推理，例如当前用户的出行目的地、已选航班信息。</li>
+<li><strong>长期记忆（知识库）</strong>：持久化存储历史交互数据、领域知识与用户偏好，支撑个性化与持续优化，例如用户常住的酒店品牌、历史出行习惯。</li>
+</ul>
+<h2 id="三、LLM-Agent-核心运行机制"><a href="#三、LLM-Agent-核心运行机制" class="headerlink" title="三、LLM Agent 核心运行机制"></a>三、LLM Agent 核心运行机制</h2><p>LLM Agent 以「<strong>感知-决策-执行-反馈</strong>」的闭环模式运行，完整流程如下：</p>
+<p><img src="/images/agent-tutorial/agent-loop.svg" alt="LLM Agent 运行闭环"></p>
+<ol>
+<li><p><strong>感知阶段</strong>：感知单元通过工具调用，获取环境状态与用户需求，传递给决策核心。</p>
+</li>
+<li><p><strong>决策阶段</strong>：LLM 基于输入信息、上下文记忆和知识库进行推理，拆解任务步骤，生成具体的工具调用指令。</p>
+<blockquote>
+<p>注：LLM 本身不直接执行操作，仅负责生成决策与指令，是「思考者」而非「执行者」。</p>
+</blockquote>
+</li>
+<li><p><strong>执行阶段</strong>：执行单元接收指令，通过调用对应工具完成实际操作，作用于外部环境。</p>
+</li>
+<li><p><strong>反馈阶段</strong>：执行结果回传给感知单元，再次输入 LLM 进行校验，判断任务是否完成，若未完成则进入下一轮闭环。</p>
+</li>
+</ol>
+<p>其中，<strong>工具</strong>是感知单元与执行单元的具体实现载体：查询类工具对应感知能力，操作类工具对应执行能力；工具的可用范围由交互环境与开发者授权共同决定。</p>
+<h2 id="四、AI-Agent-常见类型"><a href="#四、AI-Agent-常见类型" class="headerlink" title="四、AI Agent 常见类型"></a>四、AI Agent 常见类型</h2><p>AI Agent 可从<strong>决策智能层级</strong>和<strong>系统架构模式</strong>两个独立维度分类，不同维度的类型可叠加存在。</p>
+<h3 id="维度一：按决策智能层级（单-Agent-决策模式）"><a href="#维度一：按决策智能层级（单-Agent-决策模式）" class="headerlink" title="维度一：按决策智能层级（单 Agent 决策模式）"></a>维度一：按决策智能层级（单 Agent 决策模式）</h3><p>该分类按照 Agent 的决策逻辑复杂度与智能水平划分，是单 Agent 的核心分类方式。</p>
+<p><img src="/images/agent-tutorial/agent-levels.svg" alt="Agent 决策智能层级"></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>核心特征</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>简单反射 Agent</td>
+<td>完全基于硬编码规则响应，无记忆、无规划，仅对特定感知输入做出固定动作</td>
+<td>收到投诉邮件后自动转发给客服部门，不做额外处理</td>
+</tr>
+<tr>
+<td>基于模型的反射 Agent</td>
+<td>维护内部环境状态模型，能跟踪环境变化并基于状态做出响应，具备基础状态记忆</td>
+<td>跟踪历史航班价格波动，标记出价格突然上涨的航线并触发预警</td>
+</tr>
+<tr>
+<td>目标驱动 Agent</td>
+<td>具备明确目标，能够自主拆解任务、规划行动路径，逐步推进目标达成</td>
+<td>根据用户的出发地与目的地，自主规划并预订包含航班、接送机、酒店的完整行程</td>
+</tr>
+<tr>
+<td>效用驱动 Agent</td>
+<td>不止满足于达成目标，还会基于效用函数（成本、效率、偏好等维度）权衡方案，输出最优解</td>
+<td>在满足出行时间的前提下，平衡价格与中转时长，选出最符合用户偏好的行程方案</td>
+</tr>
+<tr>
+<td>学习型 Agent</td>
+<td>能通过任务反馈自动优化决策逻辑，随着交互积累持续提升效果</td>
+<td>根据用户行程结束后的满意度评分，调整后续酒店、航班的推荐策略</td>
+</tr>
+</tbody></table>
+<h3 id="维度二：按系统架构与协作模式（系统结构维度）"><a href="#维度二：按系统架构与协作模式（系统结构维度）" class="headerlink" title="维度二：按系统架构与协作模式（系统结构维度）"></a>维度二：按系统架构与协作模式（系统结构维度）</h3><p>该分类按照 Agent 的系统组成与协作方式划分，聚焦多模块&#x2F;多主体的组织形式。</p>
+<p><img src="/images/agent-tutorial/agent-topology.svg" alt="分层 Agent 与多 Agent 系统"></p>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>架构特点</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>分层 Agent</td>
+<td>由一个主 Agent 统筹全局，将复杂任务拆分为子任务，委派给下层子 Agent 分别执行，最终汇总结果</td>
+<td>收到「取消全部行程」请求后，主 Agent 拆分任务，分别调度子 Agent 执行取消航班、取消酒店、取消租车的操作</td>
+</tr>
+<tr>
+<td>多 Agent 系统</td>
+<td>由多个独立且具备完整能力的 Agent 组成，通过协作或竞争共同完成全局目标</td>
+<td>协作模式下，酒店 Agent、航班 Agent、娱乐 Agent 分别负责对应板块，共同生成完整旅行方案；竞争模式下，多个采购 Agent 同时竞价酒店房源，争取最低预订价格</td>
+</tr>
+</tbody></table>
+<h2 id="五、AI-Agent-适用场景"><a href="#五、AI-Agent-适用场景" class="headerlink" title="五、AI Agent 适用场景"></a>五、AI Agent 适用场景</h2><p>AI Agent 并非适用于所有场景，当任务满足以下特征时，使用 Agent 架构收益最高：</p>
+<p><img src="/images/agent-tutorial/agent-scenarios.svg" alt="AI Agent 适用场景"></p>
+<ul>
+<li><strong>开放式复杂问题</strong>：解决路径不固定，需要动态探索、灵活调整，无法通过预编程的固定步骤完成，例如开放式行业调研、复杂问题排查。</li>
+<li><strong>多步骤流程任务</strong>：任务需要多轮调用不同工具、跨系统交互，而非单次查询或单步生成，例如完整业务办理、全链路自动化运维。</li>
+<li><strong>需持续优化的场景</strong>：系统需要基于用户反馈、环境变化持续迭代能力，而非一成不变的固定逻辑，例如个性化推荐系统、自适应运营助手。</li>
+</ul>
+<hr>
+<p>本文是《AI Agent 原理与技术》系列教程的第 1 篇，内容会持续补充完善，后续篇章将深入工具调用、记忆机制与多 Agent 协作等工程实践话题。</p>
+
+        </div>
+
+        
+        <nav class="article-nav">
+          
+          
+          <div class="nav-item next">
+            <div class="nav-label">下一篇</div>
+            <a href="/2026/09/12/drawio-mindmap-ai-secondary-development/" class="nav-title">把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</a>
+          </div>
+          
+        </nav>
+        
+      </article>
+    </main>
+
+    <aside class="sidebar-right">
+  <div class="profile-card">
+    <div class="profile-avatar">
+      <img src="/images/avatar.png" alt="LZH"
+           onerror="this.src='https://ui-avatars.com/api/?name=LZH&background=d97757&color=fff&size=128'">
+    </div>
+    <h3 class="profile-name">LZH</h3>
+    <p class="profile-desc">热爱编程，分享技术笔记</p>
+    <div class="profile-stats">
+      <span class="stat-value">4</span>
+      <span class="stat-label">篇文章</span>
+    </div>
+  </div>
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">近期文章</h4>
+    <ul class="hot-article-list">
+      
+      <li class="hot-article-item">
+        <span class="article-rank">01</span>
+        <a href="/2026/09/21/ai-agent-tutorial-01/" class="hot-article-title">AI Agent 原理与技术教程（一）：核心定义、系统组成与运行机制</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">02</span>
+        <a href="/2026/09/12/drawio-mindmap-ai-secondary-development/" class="hot-article-title">把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">03</span>
+        <a href="/2026/09/01/python-data-analysis-tutorial/" class="hot-article-title">Python 数据分析入门指南 - 从零基础到实战项目</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">04</span>
+        <a href="/2026/09/01/hello-world/" class="hot-article-title">欢迎来到 LZH Code Blog</a>
+      </li>
+      
+    </ul>
+  </div>
+  
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">分类</h4>
+    <ul class="category-list">
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
+          <span>项目实战</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%9A%8F%E7%AC%94/">
+          <span>随笔</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">
+          <span>编程教程</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/%E5%89%8D%E7%AB%AF/">
+          <span>前端</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">
+          <span>Python</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+          <span>数据分析</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">
+          <span>技术教程</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/AI/">
+          <span>AI</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+  
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">标签</h4>
+    <div class="tag-cloud">
+      
+      <a href="/tags/drawio/" class="tag-item">drawio</a>
+      
+      <a href="/tags/AI-Agent/" class="tag-item">AI Agent</a>
+      
+      <a href="/tags/TypeScript/" class="tag-item">TypeScript</a>
+      
+      <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" class="tag-item">思维导图</a>
+      
+      <a href="/tags/Electron/" class="tag-item">Electron</a>
+      
+      <a href="/tags/%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" class="tag-item">二次开发</a>
+      
+      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item">博客</a>
+      
+      <a href="/tags/Hexo/" class="tag-item">Hexo</a>
+      
+      <a href="/tags/Python/" class="tag-item">Python</a>
+      
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item">数据分析</a>
+      
+      <a href="/tags/Pandas/" class="tag-item">Pandas</a>
+      
+      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item">可视化</a>
+      
+      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item">入门教程</a>
+      
+      <a href="/tags/LLM/" class="tag-item">LLM</a>
+      
+      <a href="/tags/%E6%99%BA%E8%83%BD%E4%BD%93/" class="tag-item">智能体</a>
+      
+      <a href="/tags/%E6%95%99%E7%A8%8B/" class="tag-item">教程</a>
+      
+    </div>
+  </div>
+  
+</aside>
+
+  </div>
+
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <p class="footer-title">LZH Code Blog<span class="logo-dot">.</span></p>
+        <p class="footer-desc">一个专注于编程实践、技术分享与个人成长的博客。</p>
+      </div>
+      <nav class="footer-nav">
+        
+        <a href="/">首页</a>
+        
+        <a href="/archives/">归档</a>
+        
+        <a href="/categories/">分类</a>
+        
+        <a href="/tags/">标签</a>
+        
+        <a href="/about/">关于</a>
+        
+      </nav>
+    </div>
+    <p class="footer-copyright">
+      © 2026 LZH · Powered by Hexo · Claude 暖纸设计
+    </p>
+  </div>
+</footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部" onclick="scrollToTop()">↑</button>
+<script src="/js/main.js"></script>
+
+</body>
+</html>

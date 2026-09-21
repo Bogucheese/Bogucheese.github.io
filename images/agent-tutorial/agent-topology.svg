@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 470" font-family="-apple-system, 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans CJK SC', sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6.5" markerHeight="6.5" orient="auto-start-reverse">
+      <path d="M 0 1 L 9 5 L 0 9 z" fill="#9aa5b5"/>
+    </marker>
+  </defs>
+
+  <!-- 左面板：分层 Agent -->
+  <rect x="30" y="30" width="440" height="410" rx="14" fill="#fdfdfd" stroke="#e1e5ec" stroke-width="1.5"/>
+  <text x="250" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#2b3445">分层 Agent</text>
+  <text x="250" y="92" text-anchor="middle" font-size="10.5" fill="#8a94a6">主从委派 · 任务拆分与汇总</text>
+
+  <!-- 委派连线 -->
+  <line x1="250" y1="168" x2="125" y2="250" stroke="#9aa5b5" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <line x1="250" y1="168" x2="250" y2="250" stroke="#9aa5b5" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <line x1="250" y1="168" x2="375" y2="250" stroke="#9aa5b5" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+
+  <!-- 主 Agent -->
+  <rect x="170" y="112" width="160" height="54" rx="10" fill="#fc5533"/>
+  <text x="250" y="145" text-anchor="middle" font-size="13.5" font-weight="700" fill="#ffffff">主 Agent（统筹）</text>
+
+  <!-- 子 Agent -->
+  <rect x="62" y="252" width="126" height="52" rx="10" fill="#ffffff" stroke="#d9dee7" stroke-width="1.5"/>
+  <text x="125" y="283" text-anchor="middle" font-size="11" fill="#2b3445">子 Agent · 取消航班</text>
+  <rect x="187" y="252" width="126" height="52" rx="10" fill="#ffffff" stroke="#d9dee7" stroke-width="1.5"/>
+  <text x="250" y="283" text-anchor="middle" font-size="11" fill="#2b3445">子 Agent · 取消酒店</text>
+  <rect x="312" y="252" width="126" height="52" rx="10" fill="#ffffff" stroke="#d9dee7" stroke-width="1.5"/>
+  <text x="375" y="283" text-anchor="middle" font-size="11" fill="#2b3445">子 Agent · 取消租车</text>
+
+  <text x="250" y="344" text-anchor="middle" font-size="10.5" fill="#5b6472">主 Agent 将复杂任务拆分为子任务，</text>
+  <text x="250" y="363" text-anchor="middle" font-size="10.5" fill="#5b6472">委派给下层子 Agent 执行，最终汇总结果</text>
+  <text x="250" y="400" text-anchor="middle" font-size="10" fill="#c0563a">例：「取消全部行程」→ 调度子 Agent 分别执行</text>
+
+  <!-- 右面板：多 Agent 系统 -->
+  <rect x="490" y="30" width="440" height="410" rx="14" fill="#fdfdfd" stroke="#e1e5ec" stroke-width="1.5"/>
+  <text x="720" y="70" text-anchor="middle" font-size="15" font-weight="700" fill="#2b3445">多 Agent 系统</text>
+  <text x="720" y="92" text-anchor="middle" font-size="10.5" fill="#8a94a6">对等协作 / 竞争</text>
+
+  <!-- 协作连线 -->
+  <line x1="666" y1="172" x2="626" y2="270" stroke="#9aa5b5" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <line x1="774" y1="172" x2="814" y2="270" stroke="#9aa5b5" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <line x1="696" y1="305" x2="744" y2="305" stroke="#9aa5b5" stroke-width="1.8" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  <text x="720" y="240" text-anchor="middle" font-size="11" fill="#8a94a6">协作 / 竞争</text>
+
+  <!-- 对等 Agent -->
+  <rect x="640" y="112" width="160" height="54" rx="10" fill="#fff3ef" stroke="#fc5533" stroke-width="1.5"/>
+  <text x="720" y="145" text-anchor="middle" font-size="13" font-weight="700" fill="#2b3445">酒店 Agent</text>
+  <rect x="530" y="278" width="160" height="54" rx="10" fill="#fff3ef" stroke="#fc5533" stroke-width="1.5"/>
+  <text x="610" y="311" text-anchor="middle" font-size="13" font-weight="700" fill="#2b3445">航班 Agent</text>
+  <rect x="750" y="278" width="160" height="54" rx="10" fill="#fff3ef" stroke="#fc5533" stroke-width="1.5"/>
+  <text x="830" y="311" text-anchor="middle" font-size="13" font-weight="700" fill="#2b3445">娱乐 Agent</text>
+
+  <text x="720" y="382" text-anchor="middle" font-size="10.5" fill="#5b6472">多个独立且具备完整能力的 Agent，</text>
+  <text x="720" y="401" text-anchor="middle" font-size="10.5" fill="#5b6472">通过协作或竞争共同完成全局目标</text>
+  <text x="720" y="428" text-anchor="middle" font-size="10" fill="#c0563a">例：酒店 / 航班 / 娱乐 Agent 协作生成完整旅行方案</text>
+</svg>
