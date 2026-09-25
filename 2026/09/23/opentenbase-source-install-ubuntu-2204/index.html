@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
   <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
-  <title>OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版）：从编译到分布式集群部署全记录 - LZH Code Blog</title>
+  <title>OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版 · 第 3 版）：从编译到分布式集群部署全记录 - LZH Code Blog</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
@@ -42,7 +42,7 @@
     <main class="content-left">
       <article class="article-detail">
         <header class="article-header">
-          <h1 class="article-title-detail">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版）：从编译到分布式集群部署全记录</h1>
+          <h1 class="article-title-detail">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版 · 第 3 版）：从编译到分布式集群部署全记录</h1>
           <div class="article-meta article-meta-detail">
             <span class="meta-item">2026-09-23</span>
             
@@ -61,8 +61,10 @@
         <div class="article-body">
           <blockquote>
 <p>OpenTenBase 是腾讯开源的企业级分布式数据库，但官方支持列表里并没有 Ubuntu 22.04。<br>这篇教程记录了在 Ubuntu 22.04 上从零开始源码编译、部署并验收一套单机分布式集群<br>（1 个 GTM + 1 个 CN + 2 个 DN）的完整过程，重点是解决官方文档没有覆盖到的<br>依赖与兼容性问题。全部命令均在实测环境中验证通过。</p>
+<p>本文为<strong>第 3 版</strong>（2026-09-25 修订）：新增「写在前面」阅读须知与「日常使用」两章，<br>为全部命令补充了逐行注释，修正了依赖清单（uuid-dev 与 libossp-uuid-dev 须同时安装），<br>并全面扩充了排错表与实测踩坑记录。</p>
 </blockquote>
 <h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#%E5%86%99%E5%9C%A8%E5%89%8D%E9%9D%A2%EF%BC%88%E9%98%85%E8%AF%BB%E9%A1%BB%E7%9F%A5%EF%BC%89">写在前面（阅读须知）</a></li>
 <li><a href="#%E4%B8%80%E3%80%81%E5%BC%95%E8%A8%80">引言</a></li>
 <li><a href="#%E4%BA%8C%E3%80%81%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">环境准备</a></li>
 <li><a href="#%E4%B8%89%E3%80%81%E8%8E%B7%E5%8F%96%E6%BA%90%E7%A0%81">获取源码</a></li>
@@ -71,19 +73,72 @@
 <li><a href="#%E5%85%AD%E3%80%81%E9%85%8D%E7%BD%AE%E9%9B%86%E7%BE%A4">配置集群</a></li>
 <li><a href="#%E4%B8%83%E3%80%81%E9%83%A8%E7%BD%B2%E4%B8%8E%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4">部署与启动集群</a></li>
 <li><a href="#%E5%85%AB%E3%80%81%E6%95%B0%E6%8D%AE%E5%BA%93%E5%88%9D%E5%A7%8B%E5%8C%96%E4%B8%8E%E9%AA%8C%E6%94%B6">数据库初始化与验收</a></li>
-<li><a href="#%E4%B9%9D%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8E%92%E9%94%99">常见问题与排错</a></li>
-<li><a href="#%E5%8D%81%E3%80%81%E9%99%84%E5%BD%95">附录</a></li>
+<li><a href="#%E4%B9%9D%E3%80%81%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8%EF%BC%9A%E9%87%8D%E5%90%AF%E5%90%8E%E5%90%AF%E5%8A%A8%E9%9B%86%E7%BE%A4%E4%B8%8E%E5%9F%BA%E7%A1%80-SQL-%E6%93%8D%E4%BD%9C">日常使用：重启后启动集群与基础 SQL 操作</a></li>
+<li><a href="#%E5%8D%81%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E4%B8%8E%E6%8E%92%E9%94%99">常见问题与排错</a></li>
+<li><a href="#%E5%8D%81%E4%B8%80%E3%80%81%E9%99%84%E5%BD%95">附录</a></li>
 </ol>
 <hr>
-<h2 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h2><h3 id="1-OpenTenBase-是什么"><a href="#1-OpenTenBase-是什么" class="headerlink" title="1. OpenTenBase 是什么"></a>1. OpenTenBase 是什么</h3><p>OpenTenBase 是腾讯开源的企业级分布式数据库管理系统，由 OpenAtom 开放原子基金会孵化，前身是 TDSQL 社区版与 Postgres-XL 项目。它采用无共享（share-nothing）架构，集群由三类节点组成：</p>
+<h2 id="写在前面（阅读须知）"><a href="#写在前面（阅读须知）" class="headerlink" title="写在前面（阅读须知）"></a>写在前面（阅读须知）</h2><p>本章说明本教程使用的记号约定与几个常用操作，后续章节不再重复。请按章节顺序依次执行；每一步均提供验证方法，验证通过后再进行下一步。</p>
+<h3 id="0-1-终端的基本操作"><a href="#0-1-终端的基本操作" class="headerlink" title="0.1 终端的基本操作"></a>0.1 终端的基本操作</h3><p>终端（Terminal）是执行命令行操作的窗口，本教程所有命令均在终端中执行。在 Ubuntu 桌面按 Ctrl+Alt+T 即可打开一个新终端。</p>
+<p>两组容易混淆的快捷键：在终端中，Ctrl+Shift+C 为复制、Ctrl+Shift+V 为粘贴（并非 Windows 习惯的 Ctrl+C &#x2F; Ctrl+V）；单独按 Ctrl+C 的作用是终止当前正在运行的命令，后文排错时会用到。</p>
+<h3 id="0-2-提示符与输入约定"><a href="#0-2-提示符与输入约定" class="headerlink" title="0.2 提示符与输入约定"></a>0.2 提示符与输入约定</h3><p>命令行最左侧会显示提示符，用于标识当前用户与环境。提示符本身不是命令的一部分，复制命令时不要将其带上。本教程会出现的提示符见表 0-1。</p>
+<p><strong>表 0-1　本教程中出现的提示符</strong></p>
+<table>
+<thead>
+<tr>
+<th>看到的字符</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lzh@ubuntu:~$</td>
+<td>你自己的普通用户（本机装系统时的用户，本文以 lzh 为例）</td>
+</tr>
+<tr>
+<td>root@ubuntu:~#</td>
+<td>root 超级用户提示符（本教程不直接使用 root）</td>
+</tr>
+<tr>
+<td>opentenbase@ubuntu:~$</td>
+<td>第二章创建的 opentenbase 用户</td>
+</tr>
+<tr>
+<td>pgxc_ctl&gt;</td>
+<td>第七章启动 pgxc_ctl 工具后的交互提示符</td>
+</tr>
+<tr>
+<td>postgres&#x3D;#</td>
+<td>第八章进入 psql 数据库命令行后的提示符</td>
+</tr>
+<tr>
+<td>\（行尾）</td>
+<td>续行符，表示这条命令没写完，下一行接着写</td>
+</tr>
+</tbody></table>
+<p>输入约定：以 <code>#</code> 开头的行是注释，解释下一行或同一行命令的含义，不需要输入到终端；以 <code>--</code> 开头的是 SQL 注释，同样不用输入。带续行符 <code>\</code> 的命令请整块复制，包括反斜杠。</p>
+<h3 id="0-3-开始前的准备"><a href="#0-3-开始前的准备" class="headerlink" title="0.3 开始前的准备"></a>0.3 开始前的准备</h3><p>确认系统版本。打开终端执行 <code>lsb_release -a</code>，Distributor 一行应显示 Ubuntu，Release 应为 22.04。其他版本不保证本文的补丁步骤适用。</p>
+<p>给虚拟机拍快照。本教程涉及系统级配置修改，建议在 VMware 菜单中先执行「虚拟机 → 快照 → 拍摄快照」。后续任一步骤出现异常时，可通过恢复快照快速回到初始状态。</p>
+<p>检查硬件。执行下面两条命令，对照第二章 2.1 节的最低要求。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 查看内存：Mem 行的 total 应在 8G 左右，低于 4G 编译会非常吃力</span>
+free -h
+
+<span class="hljs-comment"># 查看磁盘：Filesystem 行里挂在 / 的分区 Avail 一列应预留 5G 以上</span>
+<span class="hljs-built_in">df</span> -h</code></pre>
+
+<h3 id="0-4-常用应急操作"><a href="#0-4-常用应急操作" class="headerlink" title="0.4 常用应急操作"></a>0.4 常用应急操作</h3><ul>
+<li>终止当前命令：命令长时间未结束时，按 Ctrl+C 终止并回到提示符，不会造成任何破坏。</li>
+<li>退出 vim：编辑过程中按键混乱时，先按 Esc 键，再依次输入 <code>:q!</code> 回车，不保存退出，文件保持原样。第六章编辑配置文件时会给出 vim 的具体按键步骤。</li>
+<li>退出交互界面：普通命令行输入 <code>exit</code>；pgxc_ctl 管理界面输入 <code>exit</code>；psql 数据库交互界面输入 <code>\q</code>。后文用到时会再次说明。</li>
+</ul>
+<h2 id="一、引言"><a href="#一、引言" class="headerlink" title="一、引言"></a>一、引言</h2><h3 id="1-1-OpenTenBase-是什么"><a href="#1-1-OpenTenBase-是什么" class="headerlink" title="1.1 OpenTenBase 是什么"></a>1.1 OpenTenBase 是什么</h3><p>OpenTenBase 是腾讯开源的企业级分布式数据库管理系统，由 OpenAtom 开放原子基金会孵化，前身是 TDSQL 社区版与 Postgres-XL 项目。它采用无共享（share-nothing）架构，集群由三类节点组成：</p>
 <ul>
 <li><strong>GTM</strong>（全局事务管理器）：负责分布式事务号与全局一致性；</li>
 <li><strong>CN</strong>（协调节点 Coordinator）：只存元数据，接收 SQL 后拆分下发；</li>
 <li><strong>DN</strong>（数据节点 DataNode）：存储分片数据。</li>
 </ul>
-<p>用户统一连接 CN，对上层应用透明。内核基于 PostgreSQL 10，兼容大部分 PG 语法与生态工具。</p>
-<p>本教程记录了在 Ubuntu 22.04 上从零开始源码编译、部署并验收一套单机分布式集群（1 个 GTM + 1 个 CN + 2 个 DN）的完整过程，重点是解决官方文档没有覆盖到的依赖与兼容性问题。全部命令均在下述实测环境中验证通过。</p>
-<h3 id="2-实测环境"><a href="#2-实测环境" class="headerlink" title="2. 实测环境"></a>2. 实测环境</h3><table>
+<p>用户统一连接 CN，对上层应用透明。内核基于 PostgreSQL 10，兼容大部分 PG 语法与生态工具。本教程在 Ubuntu 22.04 上从零开始源码编译、部署并验收一套单机分布式集群（1 个 GTM + 1 个 CN + 2 个 DN），重点是解决官方文档没有覆盖到的依赖与兼容性问题。全部命令均在下述实测环境中验证通过。</p>
+<h3 id="1-2-实测环境"><a href="#1-2-实测环境" class="headerlink" title="1.2 实测环境"></a>1.2 实测环境</h3><p><strong>表 1-1　实测环境</strong></p>
+<table>
 <thead>
 <tr>
 <th>项目</th>
@@ -119,17 +174,22 @@
 <td>单机：GTM :20001 + CN cn001 :30004 + DN dn001 :40004 + DN dn002 :40007</td>
 </tr>
 </tbody></table>
-<h3 id="3-为什么需要这篇教程"><a href="#3-为什么需要这篇教程" class="headerlink" title="3. 为什么需要这篇教程"></a>3. 为什么需要这篇教程</h3><p>官方 README 列出的支持系统是 TencentOS 2&#x2F;3、OpenCloudOS 8.x、CentOS 7&#x2F;8 和 Ubuntu 18.04，<strong>Ubuntu 22.04 并不在列</strong>。直接照官方步骤在 Ubuntu 22.04 上编译，会先后碰到 configure 硬编码路径、C 语言 bool 类型冲突等多个报错，本教程逐一给出原因分析与解决方案。</p>
-<h2 id="二、环境准备"><a href="#二、环境准备" class="headerlink" title="二、环境准备"></a>二、环境准备</h2><h3 id="1-硬件要求"><a href="#1-硬件要求" class="headerlink" title="1. 硬件要求"></a>1. 硬件要求</h3><p>官方要求最低 8 GB 内存。实测 <code>make -sj3</code> 编译时峰值占用约 4 GB，8 GB 内存的虚拟机足够；若只有 4 GB，请把编译并发降到 <code>-sj2</code> 并适当加大 swap。磁盘方面，源码约 500 MB、编译中间产物约 2 GB、安装产物约 200 MB、四个数据实例初始化后约 1 GB，共预留 5 GB 以上，生产环境建议 20 GB 以上。</p>
-<h3 id="2-安装系统依赖"><a href="#2-安装系统依赖" class="headerlink" title="2. 安装系统依赖"></a>2. 安装系统依赖</h3><p>以下一条命令安装全部编译依赖（在具有 sudo 权限的用户下执行）：</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> apt update
+<h3 id="1-3-为什么需要这篇教程"><a href="#1-3-为什么需要这篇教程" class="headerlink" title="1.3 为什么需要这篇教程"></a>1.3 为什么需要这篇教程</h3><p>官方 README 列出的支持系统是 TencentOS 2&#x2F;3、OpenCloudOS 8.x、CentOS 7&#x2F;8 和 Ubuntu 18.04，<strong>Ubuntu 22.04 并不在列</strong>。直接照官方步骤在 Ubuntu 22.04 上编译，会先后碰到 configure 硬编码路径、C 语言 bool 类型冲突等多个报错，本教程逐一给出原因分析与解决方案。</p>
+<h2 id="二、环境准备"><a href="#二、环境准备" class="headerlink" title="二、环境准备"></a>二、环境准备</h2><h3 id="2-1-硬件要求"><a href="#2-1-硬件要求" class="headerlink" title="2.1 硬件要求"></a>2.1 硬件要求</h3><p>官方要求最低 8 GB 内存。实测 <code>make -sj3</code> 编译时峰值占用约 4 GB，8 GB 内存的虚拟机足够；若只有 4 GB，请把编译并发降到 <code>-sj2</code> 并适当加大 swap。磁盘方面，源码约 500 MB、编译中间产物约 2 GB、安装产物约 200 MB、四个数据实例初始化后约 1 GB，共预留 5 GB 以上，生产环境建议 20 GB 以上。用 0.3 节的 <code>free -h</code> 和 <code>df -h</code> 自查。</p>
+<h3 id="2-2-安装系统依赖"><a href="#2-2-安装系统依赖" class="headerlink" title="2.2 安装系统依赖"></a>2.2 安装系统依赖</h3><p>在 Ubuntu 桌面的终端里，以你自己的用户（如 lzh）执行以下命令。sudo 会要求输入当前用户（lzh）的密码；输入过程中屏幕不显示任何字符，属正常安全机制，输入完成后直接回车。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 更新 APT 软件包索引，确保能获取到最新软件包信息</span>
+<span class="hljs-built_in">sudo</span> apt update
+
+<span class="hljs-comment"># 安装编译工具、常用开发库、SSH 工具和中文语言包</span>
+<span class="hljs-comment"># -y：自动确认安装，不再逐个询问</span>
+<span class="hljs-comment"># \  ：Shell 续行符，表示下一行仍是同一条命令，整块复制即可</span>
 <span class="hljs-built_in">sudo</span> apt install -y git gcc g++ make cmake bison flex \
     libreadline-dev zlib1g-dev libssl-dev libxml2-dev \
-    libossp-uuid-dev libzstd-dev liblz4-dev libicu-dev \
+    libossp-uuid-dev uuid-dev libzstd-dev liblz4-dev libicu-dev \
     libcurl4-openssl-dev libssh2-1-dev sshpass \
     openssh-server language-pack-zh-hans</code></pre>
 
-<p>上面前半部分与官方 README 一致，但有几个包是官方清单没写、实际必需的，见表 2-1。如果还需要在虚拟机里截图做验收记录，可以额外安装 scrot。</p>
+<p>上面前半部分与官方 README 一致，但有几个包是官方清单没写、实际必需的，见表 2-1。<strong>其中 uuid-dev 与 libossp-uuid-dev 都要装</strong>：前者提供 uuid 库本身，后者提供 configure 检测的 OSSP UUID 接口，缺任一个都会在 configure 阶段报库缺失。如果还需要在虚拟机里截图做验收记录，可以额外安装 scrot。</p>
 <p><strong>表 2-1　关键依赖说明（★ 为官方清单未列出但实际必需）</strong></p>
 <table>
 <thead>
@@ -152,7 +212,7 @@
 <tr>
 <td>g++ ★</td>
 <td>C++ 编译器</td>
-<td>编译 contrib&#x2F;opentenbase_ctl 时需要，缺少则后半段 make 报错</td>
+<td>编译 contrib 阶段需要，缺少则后半段 make 报错</td>
 </tr>
 <tr>
 <td>libicu-dev ★</td>
@@ -165,9 +225,14 @@
 <td>部分模块依赖</td>
 </tr>
 <tr>
-<td>uuid-dev ★</td>
-<td>UUID 支持</td>
+<td>libossp-uuid-dev ★</td>
+<td>UUID 支持（OSSP 接口）</td>
 <td>配合 –with-ossp-uuid</td>
+</tr>
+<tr>
+<td>uuid-dev ★</td>
+<td>UUID 库开发文件</td>
+<td>与 libossp-uuid-dev 同时安装，缺一则 configure 报库缺失</td>
 </tr>
 <tr>
 <td>libreadline-dev</td>
@@ -177,7 +242,7 @@
 <tr>
 <td>libssl-dev</td>
 <td>OpenSSL 加密支持</td>
-<td>配合 –with-openssl；Ubuntu 22.04 为 OpenSSL 3.0，引出第四章的 bool 补丁</td>
+<td>Ubuntu 22.04 为 OpenSSL 3.0，引出第四章的 bool 补丁</td>
 </tr>
 <tr>
 <td>openssh-server</td>
@@ -185,51 +250,138 @@
 <td>pgxc_ctl 高度依赖 SSH</td>
 </tr>
 </tbody></table>
-<h3 id="3-创建-opentenbase-用户"><a href="#3-创建-opentenbase-用户" class="headerlink" title="3. 创建 opentenbase 用户"></a>3. 创建 opentenbase 用户</h3><p>OpenTenBase 不允许用 root 运行，需要专用的运行用户。本教程约定：家目录与所有数据都放在 &#x2F;data&#x2F;opentenbase：</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /data
+<h3 id="2-3-创建-opentenbase-用户"><a href="#2-3-创建-opentenbase-用户" class="headerlink" title="2.3 创建 opentenbase 用户"></a>2.3 创建 opentenbase 用户</h3><p>OpenTenBase 不允许用 root 运行，需要专用的运行用户。本教程约定：家目录与所有数据都放在 &#x2F;data&#x2F;opentenbase。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 创建 /data 目录</span>
+<span class="hljs-comment"># -p：递归创建父目录；如果目录已存在也不会报错</span>
+<span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -p /data
+
+<span class="hljs-comment"># 创建 opentenbase 用户</span>
+<span class="hljs-comment"># -d /data/opentenbase：指定该用户的家目录为 /data/opentenbase</span>
+<span class="hljs-comment"># -s /bin/bash：指定该用户登录后使用的 Shell 为 bash</span>
+<span class="hljs-comment"># -m：如果家目录不存在，则自动创建</span>
 <span class="hljs-built_in">sudo</span> useradd -d /data/opentenbase -s /bin/bash -m opentenbase
-<span class="hljs-built_in">sudo</span> passwd opentenbase          <span class="hljs-comment"># 设置密码，本教程以 opentenbase 为例</span>
+
+<span class="hljs-comment"># 为 opentenbase 用户设置密码</span>
+<span class="hljs-comment"># 会交互式提示输入两次新密码；同样输入时不回显</span>
+<span class="hljs-comment"># 本教程以 opentenbase 为例，请记牢这个密码</span>
+<span class="hljs-built_in">sudo</span> passwd opentenbase
+
+<span class="hljs-comment"># 将 opentenbase 用户追加到 sudo 组</span>
+<span class="hljs-comment"># -aG：追加到附加组，不会覆盖用户原有的其他附加组</span>
 <span class="hljs-built_in">sudo</span> usermod -aG <span class="hljs-built_in">sudo</span> opentenbase
+
+<span class="hljs-comment"># 递归修改 /data/opentenbase 的属主、属组为 opentenbase</span>
+<span class="hljs-comment"># -R：递归处理子目录和文件</span>
 <span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> -R opentenbase:opentenbase /data/opentenbase</code></pre>
 
-<h3 id="4-配置-SSH-免密登录"><a href="#4-配置-SSH-免密登录" class="headerlink" title="4. 配置 SSH 免密登录"></a>4. 配置 SSH 免密登录</h3><p>pgxc_ctl 部署工具把每个节点都当作远程主机，即使全部节点都在本机 127.0.0.1，它也会通过 SSH 下发命令。因此 opentenbase 用户必须能免密 SSH 到自己，否则 <code>deploy all</code> 会反复要求输入密码甚至卡死：</p>
-<pre><code class="hljs bash">su - opentenbase
+<blockquote>
+<p><strong>说明</strong>：后文多处出现 <code>su - opentenbase</code>：此时输入的是 opentenbase 的密码，而非 lzh 的。若报「认证失败」，多为密码输入有误；忘记密码时可用 <code>sudo passwd opentenbase</code> 重设。</p>
+</blockquote>
+<h3 id="2-4-配置-SSH-免密登录"><a href="#2-4-配置-SSH-免密登录" class="headerlink" title="2.4 配置 SSH 免密登录"></a>2.4 配置 SSH 免密登录</h3><p>pgxc_ctl 部署工具把每个节点都当作远程主机，即使全部节点都在本机 127.0.0.1，它也会通过 SSH 下发命令。因此 opentenbase 用户必须能免密 SSH 到自己，否则 <code>deploy all</code> 会反复要求输入密码甚至卡死。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 切换到 opentenbase 用户（输入 2.3 节设置的密码）</span>
+<span class="hljs-comment"># - 表示以登录方式切换，会加载该用户的环境变量和家目录配置</span>
+su - opentenbase
+
+<span class="hljs-comment"># 生成 SSH 密钥对</span>
+<span class="hljs-comment"># -t rsa：指定密钥类型为 RSA</span>
+<span class="hljs-comment"># -N &quot;&quot;：设置私钥密码为空，便于实现免密登录</span>
+<span class="hljs-comment"># -f ~/.ssh/id_rsa：指定私钥文件路径，公钥为 ~/.ssh/id_rsa.pub</span>
 ssh-keygen -t rsa -N <span class="hljs-string">&quot;&quot;</span> -f ~/.ssh/id_rsa
+
+<span class="hljs-comment"># 将刚生成的公钥追加到授权密钥文件中</span>
+<span class="hljs-comment"># &gt;&gt; 表示追加写入，避免覆盖已有公钥</span>
 <span class="hljs-built_in">cat</span> ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys
+
+<span class="hljs-comment"># 修改 authorized_keys 文件权限为 600</span>
+<span class="hljs-comment"># SSH 对权限要求严格，权限过大可能导致免密登录失效</span>
 <span class="hljs-built_in">chmod</span> 600 ~/.ssh/authorized_keys
-ssh 127.0.0.1 <span class="hljs-built_in">date</span>               <span class="hljs-comment"># 首次连接输入 yes 记录主机指纹</span>
+
+<span class="hljs-comment"># 测试本机 SSH 免密登录：登录后执行 date 并返回结果</span>
+<span class="hljs-comment"># 首次连接会问 Are you sure you want to continue connecting (yes/no)?</span>
+<span class="hljs-comment"># 手动输入 yes 回车（不能只按回车）</span>
+ssh 127.0.0.1 <span class="hljs-built_in">date</span>
+
+<span class="hljs-comment"># 退出 opentenbase 用户，回到原来的用户会话</span>
 <span class="hljs-built_in">exit</span></code></pre>
 
-<h2 id="三、获取源码"><a href="#三、获取源码" class="headerlink" title="三、获取源码"></a>三、获取源码</h2><h3 id="1-方式一：git-clone（首选）"><a href="#1-方式一：git-clone（首选）" class="headerlink" title="1. 方式一：git clone（首选）"></a>1. 方式一：git clone（首选）</h3><pre><code class="hljs bash">su - opentenbase
+<blockquote>
+<p><strong>验证标准</strong>：执行 <code>ssh 127.0.0.1 date</code> 后不再询问密码、直接打印出当前日期时间，即为成功。若仍要求输入密码，检查 <code>chmod 600</code> 这一步是否执行过。</p>
+</blockquote>
+<blockquote>
+<p><strong>注意（实测踩坑）</strong>：若跳过 ssh-keygen 直接执行 cat 追加公钥，会报 <code>-bash: /data/opentenbase/.ssh/authorized_keys: No such file or directory</code>——报错出自 bash 而非 cat，说明 ~&#x2F;.ssh 目录本身尚不存在（该目录由 ssh-keygen 自动创建），authorized_keys 自然无从创建，<code>ssh 127.0.0.1 date</code> 也仍会要求密码。解决：补执行 ssh-keygen 生成密钥对，再依次重做 cat 追加与 chmod 600，直至验证通过。</p>
+</blockquote>
+<h2 id="三、获取源码"><a href="#三、获取源码" class="headerlink" title="三、获取源码"></a>三、获取源码</h2><h3 id="3-1-方式一：git-clone（首选）"><a href="#3-1-方式一：git-clone（首选）" class="headerlink" title="3.1 方式一：git clone（首选）"></a>3.1 方式一：git clone（首选）</h3><pre><code class="hljs bash"><span class="hljs-comment"># 切换到 opentenbase 用户</span>
+su - opentenbase
+
+<span class="hljs-comment"># 进入 opentenbase 用户的家目录，源码将下载到这里</span>
 <span class="hljs-built_in">cd</span> /data/opentenbase
+
+<span class="hljs-comment"># 从 GitHub 克隆 OpenTenBase 源码仓库</span>
+<span class="hljs-comment"># 克隆完成后会在当前目录下生成 OpenTenBase 文件夹</span>
 git <span class="hljs-built_in">clone</span> https://github.com/OpenTenBase/OpenTenBase.git</code></pre>
 
-<h3 id="2-方式二：网络不顺时的替代方案"><a href="#2-方式二：网络不顺时的替代方案" class="headerlink" title="2. 方式二：网络不顺时的替代方案"></a>2. 方式二：网络不顺时的替代方案</h3><p>GitHub 直连不稳定时，git clone 常见两类报错：<code>GnuTLS recv error (-110)</code> 和 <code>Connection refused</code>。以下两个方案均实测可用，优先用方案 A：</p>
-<pre><code class="hljs bash"><span class="hljs-comment"># 方案 A：codeload 直接下载源码包（约 36 MB，不走 git 协议）</span>
+<h3 id="3-2-方式二：网络不顺时的替代方案"><a href="#3-2-方式二：网络不顺时的替代方案" class="headerlink" title="3.2 方式二：网络不顺时的替代方案"></a>3.2 方式二：网络不顺时的替代方案</h3><p>GitHub 直连不稳定时，git clone 常见两类报错：<code>GnuTLS recv error (-110)</code> 和 <code>Connection refused</code>。以下两个方案均实测可用，优先用方案 A。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># ============================================================</span>
+<span class="hljs-comment"># 方案 A：通过 codeload 直接下载源码压缩包（约 36 MB，不走 git 协议）</span>
+<span class="hljs-comment"># ============================================================</span>
+
+<span class="hljs-comment"># 下载 master 分支源码压缩包</span>
+<span class="hljs-comment"># -L：跟随 HTTP 重定向（codeload 地址通常会重定向）</span>
+<span class="hljs-comment"># -o：将下载内容保存为指定文件名</span>
 curl -L -o OpenTenBase-master.tar.gz \
     https://codeload.github.com/OpenTenBase/OpenTenBase/tar.gz/refs/heads/master
+
+<span class="hljs-comment"># 解压下载的 tar.gz 压缩包</span>
+<span class="hljs-comment"># z：使用 gzip 解压；x：解压归档；f：指定要解压的文件</span>
 tar zxf OpenTenBase-master.tar.gz
 
-<span class="hljs-comment"># 方案 B：gitcode 平台镜像仓库</span>
+<span class="hljs-comment"># 解压生成的目录名是 OpenTenBase-master，必须改名为 OpenTenBase，</span>
+<span class="hljs-comment"># 否则第四章的 cd /data/opentenbase/OpenTenBase 会失败：</span>
+<span class="hljs-built_in">mv</span> OpenTenBase-master OpenTenBase
+
+<span class="hljs-comment"># ============================================================</span>
+<span class="hljs-comment"># 方案 B：从 gitcode 平台镜像仓库克隆（国内网络更快）</span>
+<span class="hljs-comment"># ============================================================</span>
+
+<span class="hljs-comment"># git clone 会在当前目录下直接创建 OpenTenBase 目录，无需改名</span>
 git <span class="hljs-built_in">clone</span> https://gitcode.com/OpenTenBase/OpenTenBase.git</code></pre>
 
-<p>两种方式拿到的代码完全一致，后续步骤不区分。后文统一以源码目录 &#x2F;data&#x2F;opentenbase&#x2F;OpenTenBase 为准。</p>
+<blockquote>
+<p><strong>目录名必须统一</strong>：两种方式获取的代码完全一致，但目录名必须统一为 &#x2F;data&#x2F;opentenbase&#x2F;OpenTenBase（方案 A 下载的目录名为 OpenTenBase-master，必须执行 mv 改名）。无论采用哪种方式，均应执行以下命令验证，能列出 src、contrib 等目录方为通过：</p>
+</blockquote>
+<pre><code class="hljs bash"><span class="hljs-comment"># 验证源码目录就位：应输出 contrib  src  configure 等内容</span>
+<span class="hljs-built_in">ls</span> /data/opentenbase/OpenTenBase</code></pre>
+
 <h2 id="四、编译前的两处源码修改（核心）"><a href="#四、编译前的两处源码修改（核心）" class="headerlink" title="四、编译前的两处源码修改（核心）"></a>四、编译前的两处源码修改（核心）</h2><p>这一章是整个安装过程中唯一需要动脑子的地方，也是本教程与官方文档的主要差异。两处修改都源于同一个背景：腾讯内部的编译环境（BINARYLIBS 机制）与我们本地的 Ubuntu 22.04 不同，但开源出的配置脚本没有完全适配。</p>
-<h3 id="1-问题一：configure-硬编码了-libzstd-liblz4-的绝对路径"><a href="#1-问题一：configure-硬编码了-libzstd-liblz4-的绝对路径" class="headerlink" title="1. 问题一：configure 硬编码了 libzstd &#x2F; liblz4 的绝对路径"></a>1. 问题一：configure 硬编码了 libzstd &#x2F; liblz4 的绝对路径</h3><p><strong>现象</strong>：即使已经安装了 libzstd-dev，configure 仍然报错：</p>
+<h3 id="4-1-问题一：configure-硬编码了-libzstd-liblz4-的绝对路径"><a href="#4-1-问题一：configure-硬编码了-libzstd-liblz4-的绝对路径" class="headerlink" title="4.1 问题一：configure 硬编码了 libzstd &#x2F; liblz4 的绝对路径"></a>4.1 问题一：configure 硬编码了 libzstd &#x2F; liblz4 的绝对路径</h3><p><strong>现象</strong>：即使已经安装了 libzstd-dev，configure 仍然报错：</p>
 <pre><code class="hljs text">checking for zstd ... configure: error: zstd library not found</code></pre>
 
 <p><strong>原因</strong>：用 grep 检查 configure 脚本可以发现，它没有使用系统动态库，而是硬编码了腾讯内部 BINARYLIBS 环境的静态库绝对路径（共 4 处，行号在 12802、12837、12852、12887 附近）：</p>
-<pre><code class="hljs bash">grep -n <span class="hljs-string">&quot;libzstd.a\|liblz4.a&quot;</span> configure
-<span class="hljs-comment"># 12802:  LIBS=&quot;/usr/local/lib/libzstd.a $LIBS&quot;   &lt;- Ubuntu 上不存在这个文件</span>
-<span class="hljs-comment"># 12837:  LIBS=&quot;/usr/local/lib/liblz4.a $LIBS&quot;    &lt;- 同样不存在</span></code></pre>
+<pre><code class="hljs bash"><span class="hljs-comment"># 在 configure 脚本中搜索硬编码的 libzstd.a 和 liblz4.a 路径</span>
+<span class="hljs-comment"># -n：显示匹配内容所在的行号</span>
+<span class="hljs-comment"># &quot;libzstd.a\|liblz4.a&quot;：基本正则表达式，\| 表示「或」</span>
+grep -n <span class="hljs-string">&quot;libzstd.a\|liblz4.a&quot;</span> configure
 
-<p><strong>解决</strong>：把硬编码路径改成链接器参数，让它去链接 apt 安装的系统库（需要 libzstd-dev 和 liblz4-dev）：</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /data/opentenbase/OpenTenBase
+<span class="hljs-comment"># 输出说明（Ubuntu 上这两个文件通常并不存在）：</span>
+<span class="hljs-comment"># 12802:  LIBS=&quot;/usr/local/lib/libzstd.a $LIBS&quot;</span>
+<span class="hljs-comment"># 12837:  LIBS=&quot;/usr/local/lib/liblz4.a $LIBS&quot;</span></code></pre>
+
+<p><strong>解决</strong>：把硬编码路径改成链接器参数，让它去链接 apt 安装的系统库（依赖 2.2 节安装的 libzstd-dev 和 liblz4-dev）：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 进入 OpenTenBase 源码目录</span>
+<span class="hljs-built_in">cd</span> /data/opentenbase/OpenTenBase
+
+<span class="hljs-comment"># 使用 sed 原地修改 configure 脚本：</span>
+<span class="hljs-comment"># -i：直接修改文件内容，不输出到终端</span>
+<span class="hljs-comment"># s|旧内容|新内容|g：替换语法，用 | 作分隔符避免与路径中的 / 冲突；g 表示全局替换</span>
+<span class="hljs-comment"># 将 /usr/local/lib/libzstd.a 替换为 -lzstd（链接系统 libzstd 库）</span>
+<span class="hljs-comment"># 将 /usr/local/lib/liblz4.a  替换为 -llz4 （链接系统 liblz4 库）</span>
 sed -i <span class="hljs-string">&quot;s|/usr/local/lib/libzstd.a|-lzstd|g; s|/usr/local/lib/liblz4.a|-llz4|g&quot;</span> configure
-<span class="hljs-comment"># 验证：不再有 .a 绝对路径</span>
+
+<span class="hljs-comment"># 验证替换结果：应看到 -lzstd / -llz4 出现在原来硬编码路径的位置</span>
+<span class="hljs-comment"># head：只显示前 10 行，避免输出过多</span>
 grep -n <span class="hljs-string">&quot;lzstd\|llz4&quot;</span> configure | <span class="hljs-built_in">head</span></code></pre>
 
-<h3 id="2-问题二：char-bool-与-OpenSSL-3-0-的-stdbool-h-冲突"><a href="#2-问题二：char-bool-与-OpenSSL-3-0-的-stdbool-h-冲突" class="headerlink" title="2. 问题二：char bool 与 OpenSSL 3.0 的 stdbool.h 冲突"></a>2. 问题二：char bool 与 OpenSSL 3.0 的 stdbool.h 冲突</h3><p><strong>现象</strong>：configure 顺利通过后，make 在编译后端源文件时大量报错：</p>
+<h3 id="4-2-问题二：char-bool-与-OpenSSL-3-0-的-stdbool-h-冲突"><a href="#4-2-问题二：char-bool-与-OpenSSL-3-0-的-stdbool-h-冲突" class="headerlink" title="4.2 问题二：char bool 与 OpenSSL 3.0 的 stdbool.h 冲突"></a>4.2 问题二：char bool 与 OpenSSL 3.0 的 stdbool.h 冲突</h3><p><strong>现象</strong>：configure 顺利通过后，make 在编译后端源文件时大量报错：</p>
 <pre><code class="hljs text">In file included from src/backend/access/common/heaptuple.c:26:
 src/include/access/htup_details.h:706:15:
 error: conflicting types for &#x27;getmissingattr&#x27;;
@@ -238,31 +390,51 @@ have &#x27;Datum(const TupleDescData *, int, bool *)&#x27;
 note: previous declaration of &#x27;getmissingattr&#x27; was here (tuptable.h, bool * -&gt; char *)</code></pre>
 
 <p><strong>原因</strong>：内核头文件 src&#x2F;include&#x2F;c.h 在 C 语言下用 <code>typedef char bool;</code> 自定义了 bool 类型（PostgreSQL 10 时代的写法）。而 Ubuntu 22.04 的 OpenSSL 是 3.0 版本，开启 –with-openssl 编译时，它的头文件会间接把标准头文件 <code>&lt;stdbool.h&gt;</code> 拉进同一个编译单元，其中 <code>_Bool</code> 是编译器内建类型，与 char 定义冲突，同一函数就出现了两个不同的原型。</p>
-<p><strong>解决</strong>：在 c.h 的 bool 定义之前提前引入标准 <code>&lt;stdbool.h&gt;</code>，让整个工程统一使用标准 <code>_Bool</code>。打开 src&#x2F;include&#x2F;c.h，找到大约 220 行的以下代码块：</p>
-<pre><code class="hljs c"><span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> __cplusplus</span>
-<span class="hljs-meta">#<span class="hljs-keyword">ifndef</span> bool</span>
-<span class="hljs-keyword">typedef</span> <span class="hljs-type">char</span> <span class="hljs-type">bool</span>;
-<span class="hljs-meta">#<span class="hljs-keyword">endif</span></span></code></pre>
+<p><strong>解决</strong>：在 c.h 的 bool 定义之前提前引入标准 <code>&lt;stdbool.h&gt;</code>，让整个工程统一使用标准 <code>_Bool</code>。为避免手改出错，直接用下面的命令自动修改（先备份、后验证）：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 进入 OpenTenBase 源码目录</span>
+<span class="hljs-built_in">cd</span> /data/opentenbase/OpenTenBase
 
-<p>在 <code>#ifndef __cplusplus</code> 和 <code>#ifndef bool</code> 之间插入一行 <code>#include &lt;stdbool.h&gt;</code>。为避免手改出错，可以直接用以下命令自动修改（以实际代码为准，改完后务必 grep 确认）：</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> /data/opentenbase/OpenTenBase
+<span class="hljs-comment"># 备份原始 c.h，便于出错时恢复</span>
+<span class="hljs-built_in">cp</span> src/include/c.h src/include/c.h.bak
+
+<span class="hljs-comment"># 用 Python 自动修改 src/include/c.h</span>
+<span class="hljs-comment"># &lt;&lt;&#x27;EOF&#x27; 是 heredoc 写法：把两个 EOF 之间的内容原样传给 python3 执行</span>
+<span class="hljs-comment"># 引号中的单引号表示不做 Shell 变量替换</span>
 python3 - &lt;&lt;<span class="hljs-string">&#x27;EOF&#x27;</span>
 import io
+
+<span class="hljs-comment"># 目标文件路径</span>
 p = <span class="hljs-string">&quot;src/include/c.h&quot;</span>
+
+<span class="hljs-comment"># 读取整个文件</span>
 s = io.open(p, encoding=<span class="hljs-string">&quot;utf-8&quot;</span>).<span class="hljs-built_in">read</span>()
+
+<span class="hljs-comment"># 原始代码片段：bool 定义前没有引入 stdbool.h</span>
 old = <span class="hljs-string">&quot;#ifndef bool\ntypedef char bool;&quot;</span>
+
+<span class="hljs-comment"># 替换后的片段：先引入标准 stdbool.h，再保留原有逻辑</span>
 new = <span class="hljs-string">&quot;#include &lt;stdbool.h&gt;\n\n#ifndef bool\ntypedef char bool;&quot;</span>
+
+<span class="hljs-comment"># 断言原片段存在，避免匹配不到时静默写入无变化的内容</span>
 assert old <span class="hljs-keyword">in</span> s, <span class="hljs-string">&quot;pattern not found&quot;</span>
+
+<span class="hljs-comment"># 只替换第一处（count=1）并写回</span>
 io.open(p, <span class="hljs-string">&quot;w&quot;</span>, encoding=<span class="hljs-string">&quot;utf-8&quot;</span>).write(s.replace(old, new, 1))
+
+<span class="hljs-comment"># 输出成功提示</span>
 <span class="hljs-built_in">print</span>(<span class="hljs-string">&quot;c.h patched&quot;</span>)
 EOF
-<span class="hljs-comment"># 验证</span>
-grep -n <span class="hljs-string">&quot;stdbool&quot;</span> src/include/c.h</code></pre>
+
+<span class="hljs-comment"># 验证：应输出包含 #include &lt;stdbool.h&gt; 的那一行及其行号</span>
+grep -n <span class="hljs-string">&quot;stdbool&quot;</span> src/include/c.h
+
+<span class="hljs-comment"># 再看一眼上下文，确认插入位置在 #ifndef bool 之前</span>
+grep -n -A 6 -B 2 <span class="hljs-string">&quot;stdbool&quot;</span> src/include/c.h</code></pre>
 
 <blockquote>
-<p><strong>重要</strong>：如果中途重新解压了源码包，两处修改都会被覆盖，必须重新执行本章的两个补丁步骤再编译。建议把两步补丁写进自己的一键化构建脚本。</p>
+<p><strong>重要</strong>：如果中途重新解压了源码包，两处修改都会被覆盖，必须重新执行本章的两个补丁步骤再编译。</p>
 </blockquote>
-<h3 id="3-其他常见报错速查"><a href="#3-其他常见报错速查" class="headerlink" title="3. 其他常见报错速查"></a>3. 其他常见报错速查</h3><p><strong>表 4-1　依赖类报错速查表</strong></p>
+<h3 id="4-3-其他常见报错速查"><a href="#4-3-其他常见报错速查" class="headerlink" title="4.3 其他常见报错速查"></a>4.3 其他常见报错速查</h3><p><strong>表 4-1　依赖类报错速查表</strong></p>
 <table>
 <thead>
 <tr>
@@ -289,10 +461,10 @@ grep -n <span class="hljs-string">&quot;stdbool&quot;</span> src/include/c.h</co
 <tr>
 <td>Could not get lock &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend</td>
 <td>后台 unattended-upgrades 正在占用 apt 锁</td>
-<td>等待其结束：ps -p &lt;PID&gt; 确认进程退出后再装；不要强删锁文件</td>
+<td>等待其结束（ps -p &lt;PID&gt; 确认进程退出）后再装；不要强删锁文件</td>
 </tr>
 </tbody></table>
-<h2 id="五、编译与安装"><a href="#五、编译与安装" class="headerlink" title="五、编译与安装"></a>五、编译与安装</h2><h3 id="1-configure-参数说明"><a href="#1-configure-参数说明" class="headerlink" title="1. configure 参数说明"></a>1. configure 参数说明</h3><p><strong>表 5-1　configure 参数说明</strong></p>
+<h2 id="五、编译与安装"><a href="#五、编译与安装" class="headerlink" title="五、编译与安装"></a>五、编译与安装</h2><h3 id="5-1-configure-参数说明"><a href="#5-1-configure-参数说明" class="headerlink" title="5.1 configure 参数说明"></a>5.1 configure 参数说明</h3><p><strong>表 5-1　configure 参数说明</strong></p>
 <table>
 <thead>
 <tr>
@@ -329,51 +501,130 @@ grep -n <span class="hljs-string">&quot;stdbool&quot;</span> src/include/c.h</co
 <td>保留调试符号，便于出错时定位</td>
 </tr>
 </tbody></table>
-<h3 id="2-一次性干净构建"><a href="#2-一次性干净构建" class="headerlink" title="2. 一次性干净构建"></a>2. 一次性干净构建</h3><blockquote>
+<h3 id="5-2-一次性干净构建"><a href="#5-2-一次性干净构建" class="headerlink" title="5.2 一次性干净构建"></a>5.2 一次性干净构建</h3><blockquote>
 <p><strong>重要经验</strong>：务必从全新解压的源码一次性完成 configure 和 make。多次反复 configure 会把不同时刻生成的二进制混在一起，埋下 5.4 节的版本不一致问题（笔者实测两个二进制的编译时间戳相差了 12 分钟，导致 initdb 拒绝启动 postgres）。如果之前编译失败过，先删掉源码目录和安装目录，重新解压、重打第四章两个补丁，再执行：</p>
 </blockquote>
-<pre><code class="hljs bash">su - opentenbase
+<pre><code class="hljs bash"><span class="hljs-comment"># 切换到 opentenbase 用户</span>
+su - opentenbase
+
+<span class="hljs-comment"># 设置源码目录环境变量，指向 OpenTenBase 源码根目录</span>
 <span class="hljs-built_in">export</span> SOURCECODE_PATH=/data/opentenbase/OpenTenBase
+
+<span class="hljs-comment"># 设置安装目录环境变量，后续编译安装都放在这个目录下</span>
 <span class="hljs-built_in">export</span> INSTALL_PATH=/data/opentenbase/install
+
+<span class="hljs-comment"># 确保安装目录存在，避免后续安装因目录缺失而失败</span>
+<span class="hljs-built_in">mkdir</span> -p <span class="hljs-variable">$INSTALL_PATH</span>
+
+<span class="hljs-comment"># 进入源码目录</span>
 <span class="hljs-built_in">cd</span> <span class="hljs-variable">$SOURCECODE_PATH</span>
+
+<span class="hljs-comment"># 删除旧的安装目录，确保本次是干净安装</span>
+<span class="hljs-comment"># -r：递归删除；-f：强制删除不提示</span>
 <span class="hljs-built_in">rm</span> -rf <span class="hljs-variable">$INSTALL_PATH</span>/opentenbase_bin_v5.0
+
+<span class="hljs-comment"># 赋予 configure 脚本可执行权限</span>
 <span class="hljs-built_in">chmod</span> +x configure
+
+<span class="hljs-comment"># 运行 configure 进行编译配置</span>
+<span class="hljs-comment"># --prefix：安装到 $INSTALL_PATH/opentenbase_bin_v5.0</span>
+<span class="hljs-comment"># 其余参数含义见表 5-1</span>
 ./configure --prefix=<span class="hljs-variable">$INSTALL_PATH</span>/opentenbase_bin_v5.0 \
     --enable-user-switch --with-libxml --disable-license \
     --with-openssl --with-ossp-uuid CFLAGS=<span class="hljs-string">&quot;-g&quot;</span>
-make -sj3        <span class="hljs-comment"># 8 GB 内存建议 -j3；内存充足可提高到 -j4</span>
-make install</code></pre>
 
-<h3 id="3-编译-contrib-工具（pgxc-ctl-在这里）"><a href="#3-编译-contrib-工具（pgxc-ctl-在这里）" class="headerlink" title="3. 编译 contrib 工具（pgxc_ctl 在这里）"></a>3. 编译 contrib 工具（pgxc_ctl 在这里）</h3><p>主体 make install 不会安装集群管理工具 pgxc_ctl，它在 contrib 目录里需要单独编译（这一步会用到 g++）：</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">cd</span> <span class="hljs-variable">$SOURCECODE_PATH</span>
-<span class="hljs-built_in">chmod</span> +x contrib/pgxc_ctl/make_signature
-<span class="hljs-built_in">cd</span> contrib
+<span class="hljs-comment"># 编译源码（约 20~40 分钟）</span>
+<span class="hljs-comment"># -s：静默模式；-j3：并行 3 个任务，8 GB 内存建议 3，充足可到 4</span>
 make -sj3
+
+<span class="hljs-comment"># 将编译好的文件安装到 --prefix 指定的目录</span>
 make install</code></pre>
 
-<h3 id="4-版本一致性验证（必做）"><a href="#4-版本一致性验证（必做）" class="headerlink" title="4. 版本一致性验证（必做）"></a>4. 版本一致性验证（必做）</h3><p>安装完成后验证 initdb 与 postgres 的版本字符串必须完全一致，尤其是末尾的编译时间戳：</p>
-<pre><code class="hljs bash"><span class="hljs-variable">$INSTALL_PATH</span>/opentenbase_bin_v5.0/bin/initdb --version
+<blockquote>
+<p><strong>环境变量只在当前终端有效</strong>：export 设置的 SOURCECODE_PATH 和 INSTALL_PATH 只在当前这个终端窗口里有效，新开一个终端或断开重连后就没了，需要重新执行上面两行 export。如果后面哪一步报「变量不存在」或路径为空，先检查是不是换了终端。</p>
+</blockquote>
+<h3 id="5-3-编译-contrib-工具（pgxc-ctl-在这里）"><a href="#5-3-编译-contrib-工具（pgxc-ctl-在这里）" class="headerlink" title="5.3 编译 contrib 工具（pgxc_ctl 在这里）"></a>5.3 编译 contrib 工具（pgxc_ctl 在这里）</h3><p>主体 make install 不会安装集群管理工具 pgxc_ctl，它在 contrib 目录里，需要单独编译（这一步会用到 g++）：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 回到源码根目录（$SOURCECODE_PATH 是 5.2 节设置的环境变量）</span>
+<span class="hljs-built_in">cd</span> <span class="hljs-variable">$SOURCECODE_PATH</span>
+
+<span class="hljs-comment"># 赋予 contrib/pgxc_ctl/make_signature 脚本可执行权限</span>
+<span class="hljs-comment"># 不赋权可能导致后续步骤失败</span>
+<span class="hljs-built_in">chmod</span> +x contrib/pgxc_ctl/make_signature
+
+<span class="hljs-comment"># 进入 contrib 目录（包含附加模块和扩展工具）</span>
+<span class="hljs-built_in">cd</span> contrib
+
+<span class="hljs-comment"># 编译 contrib 下所有模块</span>
+make -sj3
+
+<span class="hljs-comment"># 安装到 configure 时指定的 --prefix 目录下</span>
+make install</code></pre>
+
+<h3 id="5-4-版本一致性验证（必做）"><a href="#5-4-版本一致性验证（必做）" class="headerlink" title="5.4 版本一致性验证（必做）"></a>5.4 版本一致性验证（必做）</h3><p>安装完成后验证 initdb 与 postgres 的版本字符串必须完全一致，尤其是末尾的编译时间戳：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 查看 initdb 的版本字符串，重点看末尾的编译时间戳</span>
+<span class="hljs-variable">$INSTALL_PATH</span>/opentenbase_bin_v5.0/bin/initdb --version
+
+<span class="hljs-comment"># 查看 postgres 的版本字符串，必须与上面完全一致</span>
 <span class="hljs-variable">$INSTALL_PATH</span>/opentenbase_bin_v5.0/bin/postgres --version
-<span class="hljs-comment"># 两行输出必须一样，例如：</span>
+
+<span class="hljs-comment"># 两行输出应类似（时间戳一致）：</span>
 <span class="hljs-comment"># initdb (PostgreSQL) 10.0 @ OpenTenBase_v5.0 OpenTenBase V5.21 2026-09-23 21:46:29</span>
 <span class="hljs-comment"># postgres (PostgreSQL) 10.0 @ OpenTenBase_v5.0 OpenTenBase V5.21 2026-09-23 21:46:29</span></code></pre>
 
-<p>如果两行的时间戳不同（例如一个 21:46:29、一个 21:34:xx），说明安装目录里混入了不同批次的产物。别纠结单个文件，直接回到「一次性干净构建」从全新解压重来一遍最快。后续 initdb 报 <code>postgres was not the same version as initdb</code> 就是这个病因。</p>
-<h2 id="六、配置集群"><a href="#六、配置集群" class="headerlink" title="六、配置集群"></a>六、配置集群</h2><h3 id="1-环境变量：必须写在-bashrc-最顶部"><a href="#1-环境变量：必须写在-bashrc-最顶部" class="headerlink" title="1. 环境变量：必须写在 .bashrc 最顶部"></a>1. 环境变量：必须写在 .bashrc 最顶部</h3><p>在 opentenbase 用户的 ~&#x2F;.bashrc（即 &#x2F;data&#x2F;opentenbase&#x2F;.bashrc）<strong>最顶部</strong>加入以下四行：</p>
-<pre><code class="hljs bash"><span class="hljs-built_in">export</span> PG_HOME=/data/opentenbase/install/opentenbase_bin_v5.0
-<span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PG_HOME</span>/bin:<span class="hljs-variable">$PATH</span>
-<span class="hljs-built_in">export</span> LD_LIBRARY_PATH=<span class="hljs-variable">$PG_HOME</span>/lib:<span class="hljs-variable">$&#123;LD_LIBRARY_PATH:-&#125;</span>
-<span class="hljs-built_in">export</span> LC_ALL=C</code></pre>
-
-<p>注意是最顶部：Ubuntu 的 ~&#x2F;.bashrc 开头有一段交互检查，非交互场景直接 return 退出，写在它之后的变量对非交互场景无效：</p>
+<p>如果两行的时间戳不同（例如一个 21:46:29、一个 21:34:xx），说明安装目录里混入了不同批次的产物，无需逐个文件排查，直接回到「一次性干净构建」，从全新解压的源码重新构建一遍即可。后续 initdb 报 <code>postgres was not the same version as initdb</code> 就是这个病因。</p>
+<h2 id="六、配置集群"><a href="#六、配置集群" class="headerlink" title="六、配置集群"></a>六、配置集群</h2><h3 id="6-1-环境变量：必须写在-bashrc-最顶部"><a href="#6-1-环境变量：必须写在-bashrc-最顶部" class="headerlink" title="6.1 环境变量：必须写在 .bashrc 最顶部"></a>6.1 环境变量：必须写在 .bashrc 最顶部</h3><p>先解释为什么：Ubuntu 的 ~&#x2F;.bashrc 开头自带一段「交互检查」，非交互场景直接 return 退出，写在它之后的变量对非交互场景无效：</p>
 <pre><code class="hljs bash"><span class="hljs-comment"># Ubuntu ~/.bashrc 开头自带：非交互 shell 直接 return</span>
 <span class="hljs-keyword">case</span> $- <span class="hljs-keyword">in</span>
     *i*) ;;
       *) <span class="hljs-built_in">return</span>;;
 <span class="hljs-keyword">esac</span></code></pre>
 
-<p>而 pgxc_ctl 部署时正是通过 <code>ssh 127.0.0.1 initdb ...</code> 这样的非交互方式执行命令。如果把环境变量写在交互检查之后，远程会话看不到 PATH，就会满屏 <code>initdb: command not found</code>、<code>pg_ctl: command not found</code>。这是源码安装（非 RPM 包）特有的坑：官方镜像里 PATH 是预配好的。</p>
-<h3 id="2-集群规划"><a href="#2-集群规划" class="headerlink" title="2. 集群规划"></a>2. 集群规划</h3><p><strong>表 6-1　单机四节点端口规划</strong></p>
+<p>而 pgxc_ctl 部署时正是通过 <code>ssh 127.0.0.1 initdb ...</code> 这样的非交互方式执行命令。如果把环境变量写在交互检查之后，远程会话看不到 PATH，就会满屏报错：</p>
+<pre><code class="hljs text">initdb: command not found
+pg_ctl: command not found</code></pre>
+
+<p>这是源码安装（非 RPM 包）特有的坑：官方镜像里 PATH 是预配好的。</p>
+<p>因此要把下面四行加在 opentenbase 用户 ~&#x2F;.bashrc（即 &#x2F;data&#x2F;opentenbase&#x2F;.bashrc）的<strong>最顶部</strong>。vim 编辑步骤如下：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 确认当前用户是 opentenbase（应输出 opentenbase）</span>
+<span class="hljs-built_in">whoami</span>
+
+<span class="hljs-comment"># 若不是，先切换：su - opentenbase</span>
+
+<span class="hljs-comment"># 用 vim 编辑家目录下的 .bashrc 配置文件</span>
+vim ~/.bashrc</code></pre>
+
+<blockquote>
+<p><strong>注意（实测踩坑）</strong>：执行 <code>vim ~/.bashrc</code> 时可能提示 <code>Command &#39;vim&#39; not found</code>——Ubuntu 22.04 最小化安装并不预装 vim。解决：先执行 <code>sudo apt install vim</code> 安装（opentenbase 已在 2.3 节加入 sudo 组，输入 opentenbase 自己的密码），再重新执行 <code>vim ~/.bashrc</code>；或改用 nano 编辑（按键方式见下文）。</p>
+</blockquote>
+<p>vim 打开后依次执行以下五步：①连按两次小写 g，光标跳至文件第一行；②按大写 I 进入插入模式，左下角显示 – INSERT –；③使用终端粘贴快捷键 Ctrl+Shift+V 粘贴下方四行；④按 Esc 退出插入模式；⑤输入 <code>:wq</code> 并回车，保存并退出。也可改用 <code>nano ~/.bashrc</code>：粘贴后按 Ctrl+O 回车保存，Ctrl+X 退出。需要粘贴的四行如下：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># OpenTenBase 安装根目录（后面第七、八章的命令都依赖它）</span>
+<span class="hljs-built_in">export</span> PG_HOME=/data/opentenbase/install/opentenbase_bin_v5.0
+
+<span class="hljs-comment"># 把 OpenTenBase 的 bin 目录加入 PATH，</span>
+<span class="hljs-comment"># 使 initdb、postgres、pg_ctl、pgxc_ctl 等命令可以直接调用</span>
+<span class="hljs-built_in">export</span> PATH=<span class="hljs-variable">$PG_HOME</span>/bin:<span class="hljs-variable">$PATH</span>
+
+<span class="hljs-comment"># 把 lib 目录加入动态库搜索路径</span>
+<span class="hljs-comment"># $&#123;LD_LIBRARY_PATH:-&#125; 表示原变量未设置时取空值，避免报错</span>
+<span class="hljs-built_in">export</span> LD_LIBRARY_PATH=<span class="hljs-variable">$PG_HOME</span>/lib:<span class="hljs-variable">$&#123;LD_LIBRARY_PATH:-&#125;</span>
+
+<span class="hljs-comment"># 统一语言环境，避免 locale 差异导致初始化或运行异常</span>
+<span class="hljs-built_in">export</span> LC_ALL=C</code></pre>
+
+<p>保存后需让配置生效：修改 .bashrc 后，已打开的终端不会自动重新加载，须手动执行一次 source：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 让配置在当前终端立即生效（每改一次 .bashrc 都要执行一次）</span>
+<span class="hljs-built_in">source</span> ~/.bashrc
+
+<span class="hljs-comment"># 验证 1：应输出 /data/opentenbase/install/opentenbase_bin_v5.0</span>
+<span class="hljs-built_in">echo</span> <span class="hljs-variable">$PG_HOME</span>
+
+<span class="hljs-comment"># 验证 2：应输出 /data/opentenbase/install/opentenbase_bin_v5.0/bin/pgxc_ctl</span>
+<span class="hljs-built_in">which</span> pgxc_ctl</code></pre>
+
+<blockquote>
+<p><strong>注意</strong>：以后每修改一次 .bashrc，都需执行 <code>source ~/.bashrc</code> 使其对当前终端生效；新开终端会自动加载，无需再次 source。第七、八章如遇 command not found，应首先确认是否执行过 source。</p>
+</blockquote>
+<h3 id="6-2-集群规划"><a href="#6-2-集群规划" class="headerlink" title="6.2 集群规划"></a>6.2 集群规划</h3><p><strong>表 6-1　单机四节点端口规划</strong></p>
 <table>
 <thead>
 <tr>
@@ -408,8 +659,16 @@ make install</code></pre>
 <td>&#x2F;data&#x2F;opentenbase&#x2F;data&#x2F;dn002</td>
 </tr>
 </tbody></table>
-<p>每个节点还有一个转发端口和一个连接池端口（例如 cn001 另占 30005、30006），按下面配置文件中的写法保持递增即可。</p>
-<h3 id="3-pgxc-ctl-conf-完整配置"><a href="#3-pgxc-ctl-conf-完整配置" class="headerlink" title="3. pgxc_ctl.conf 完整配置"></a>3. pgxc_ctl.conf 完整配置</h3><p>创建配置目录 &#x2F;data&#x2F;opentenbase&#x2F;pgxc_ctl，将以下内容保存为 pgxc_ctl.conf（这是实测可用的完整文件，可直接复制）：</p>
+<p>每个节点还有一个转发端口和一个连接池端口（例如 cn001 另占 30005、30006），按 6.3 节配置文件中的写法保持递增即可。完整端口清单见第十一章表 11-1。</p>
+<h3 id="6-3-pgxc-ctl-conf-完整配置"><a href="#6-3-pgxc-ctl-conf-完整配置" class="headerlink" title="6.3 pgxc_ctl.conf 完整配置"></a>6.3 pgxc_ctl.conf 完整配置</h3><p>创建配置目录，并在该目录下新建 pgxc_ctl.conf 文件（注意当前用户必须是 opentenbase，文件属主错了第七章会读不到配置）：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 创建 pgxc_ctl 专用配置目录并进入</span>
+<span class="hljs-built_in">mkdir</span> -p /data/opentenbase/pgxc_ctl
+<span class="hljs-built_in">cd</span> /data/opentenbase/pgxc_ctl
+
+<span class="hljs-comment"># 用 vim 新建并编辑配置文件（文件不存在时 vim 会自动创建）</span>
+vim pgxc_ctl.conf</code></pre>
+
+<p>vim 按键流程：打开后按 I 进入插入模式 → Ctrl+Shift+V 粘贴下方全部内容 → 按 Esc → 输入 <code>:wq</code> 回车保存。若中途编辑出错，按 Esc 后输入 <code>:q!</code> 回车不保存退出，重新打开文件再编辑。粘贴的内容如下（这是实测可用的完整文件，从 #!&#x2F;bin&#x2F;bash 到最后一个 (none) 全部复制）：</p>
 <pre><code class="hljs bash"><span class="hljs-meta">#!/bin/bash</span>
 pgxcInstallDir=/data/opentenbase/install/opentenbase_bin_v5.0
 pgxcOwner=opentenbase
@@ -517,43 +776,187 @@ datanodeSpecificExtraConfig=(none)
 datanodeExtraPgHba=none
 datanodeSpecificExtraPgHba=(none)</code></pre>
 
-<p>有两个细节容易踩坑：第一，<strong>所有数组型变量的元素个数必须与节点数一一对应</strong>，例如两个 DN 就必须写 <code>datanodeMaxWALSenders=(4 4)</code>，只写 <code>(4)</code> 会在启动时报 <code>Number of elements in datanode master definitions are different</code>；第二，<code>coordPgHbaEntries=(127.0.0.0/8)</code> 控制客户端白名单，单机环境保持环回地址段即可。若需要从其它机器连接，把对应网段加进去。</p>
-<h2 id="七、部署与启动集群"><a href="#七、部署与启动集群" class="headerlink" title="七、部署与启动集群"></a>七、部署与启动集群</h2><pre><code class="hljs bash">su - opentenbase
+<pre><code class="hljs bash"><span class="hljs-comment"># 保存后检查：应能打印出文件的前 3 行（#!/bin/bash 等）</span>
+<span class="hljs-built_in">ls</span> -l pgxc_ctl.conf
+<span class="hljs-built_in">head</span> -3 pgxc_ctl.conf</code></pre>
+
+<p>有两个细节容易踩坑：第一，<strong>所有数组型变量的元素个数必须与节点数一一对应</strong>，例如两个 DN 就必须写 <code>datanodeMaxWALSenders=(4 4)</code>，只写 <code>(4)</code> 会在启动时报 <code>Number of elements in datanode master definitions are different</code>；第二，<code>coordPgHbaEntries=(127.0.0.0/8)</code> 控制客户端白名单，单机环境保持环回地址段即可，若需要从其它机器连接，把对应网段加进去。</p>
+<h2 id="七、部署与启动集群"><a href="#七、部署与启动集群" class="headerlink" title="七、部署与启动集群"></a>七、部署与启动集群</h2><p>配置完成后开始部署。确保当前为 opentenbase 用户：</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 切换到 opentenbase 用户</span>
+su - opentenbase
+
+<span class="hljs-comment"># 进入 pgxc_ctl 工作目录</span>
+<span class="hljs-comment"># pgxc_ctl 启动时会自动读取当前目录下的 pgxc_ctl.conf，所以必须先 cd 过来</span>
 <span class="hljs-built_in">cd</span> /data/opentenbase/pgxc_ctl
+
+<span class="hljs-comment"># 启动 pgxc_ctl 交互式命令行</span>
 pgxc_ctl</code></pre>
 
-<pre><code class="hljs text">&gt; deploy all      # 把二进制分发到各节点（本机即本机），生成 pgxc_ctl_bash
-&gt; init all        # 初始化 GTM / CN / DN 四个实例并拉起
-&gt; monitor all     # 查看状态</code></pre>
+<p>提示符变为 <code>pgxc_ctl&gt;</code> 即表示已进入管理界面。依次执行以下三条子命令，过程中若弹出类似 Continue? 的确认提示，输入 y 回车：</p>
+<pre><code class="hljs text"># 1) 将二进制分发到各节点（本机即本机），并生成 pgxc_ctl_bash
+#    会把 $PG_HOME 打包，按配置分发到各节点
+&gt; deploy all
 
-<p><code>monitor all</code> 全部正常时应输出四行 Running（见下方验收截图一）：</p>
+# 2) 初始化 GTM / CN / DN 四个实例并拉起
+#    GTM：全局事务管理器；CN：协调节点，对外提供 SQL；DN：数据节点
+&gt; init all
+
+# 3) 查看集群状态
+&gt; monitor all</code></pre>
+
+<p><code>monitor all</code> 全部正常时应输出四行 Running：</p>
 <pre><code class="hljs text">Running: gtm master
 Running: coordinator master cn001
 Running: datanode master dn001
 Running: datanode master dn002</code></pre>
 
-<p><strong>日常启停</strong>：重启虚拟机后集群不会自动拉起，登录 opentenbase 用户执行 pgxc_ctl 后输入 <code>start all</code> 即可（不需要再 deploy&#x2F;init）；关闭前先 <code>stop all</code>。另外，刚才的 deploy all 过程中 pgxc_ctl 会在 &#x2F;data&#x2F;opentenbase&#x2F;install 下打包二进制 tar 包，若磁盘紧张可以删掉生成的临时包。</p>
-<h2 id="八、数据库初始化与验收"><a href="#八、数据库初始化与验收" class="headerlink" title="八、数据库初始化与验收"></a>八、数据库初始化与验收</h2><h3 id="1-连接协调节点"><a href="#1-连接协调节点" class="headerlink" title="1. 连接协调节点"></a>1. 连接协调节点</h3><pre><code class="hljs bash">psql -h 127.0.0.1 -p 30004 -d postgres -U opentenbase</code></pre>
+<p><strong>日常启停</strong>：重启虚拟机后集群不会自动拉起，登录 opentenbase 用户执行 pgxc_ctl 后输入 <code>start all</code> 即可（不需要再 deploy&#x2F;init）；关闭前先 <code>stop all</code>（完整步骤见第九章）。另外，刚才的 deploy all 过程中 pgxc_ctl 会在 &#x2F;data&#x2F;opentenbase&#x2F;install 下打包二进制 tar 包，若磁盘紧张可以删掉生成的临时包。</p>
+<blockquote>
+<p><strong>退出方式</strong>：退出 pgxc_ctl 管理界面：在 <code>pgxc_ctl&gt;</code> 后输入 exit 回车（或按 Ctrl+D），即回到普通命令行。</p>
+</blockquote>
+<h2 id="八、数据库初始化与验收"><a href="#八、数据库初始化与验收" class="headerlink" title="八、数据库初始化与验收"></a>八、数据库初始化与验收</h2><h3 id="8-1-连接协调节点"><a href="#8-1-连接协调节点" class="headerlink" title="8.1 连接协调节点"></a>8.1 连接协调节点</h3><pre><code class="hljs bash"><span class="hljs-comment"># 使用 psql 连接协调节点（CN）</span>
+<span class="hljs-comment"># -h 127.0.0.1：连接本机</span>
+<span class="hljs-comment"># -p 30004：协调节点端口，与 pgxc_ctl.conf 中的 coordPorts 一致</span>
+<span class="hljs-comment"># -d postgres：连接默认的 postgres 数据库</span>
+<span class="hljs-comment"># -U opentenbase：使用 opentenbase 用户登录</span>
+psql -h 127.0.0.1 -p 30004 -d postgres -U opentenbase</code></pre>
 
-<h3 id="2-初始化节点组与分片组（源码安装必做）"><a href="#2-初始化节点组与分片组（源码安装必做）" class="headerlink" title="2. 初始化节点组与分片组（源码安装必做）"></a>2. 初始化节点组与分片组（源码安装必做）</h3><p>这是源码安装与官方镜像的又一关键差异：pgxc_ctl 的 <code>init all</code> <strong>不会创建分片映射</strong>，直接 CREATE TABLE 会报错 <code>ERROR: default group not defined (42704)</code>，补上节点组后再建表会报 <code>please initialize group ... sharding map first</code>。在 psql 里执行以下两条 SQL 即可一劳永逸：</p>
-<pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">DEFAULT</span> NODE <span class="hljs-keyword">GROUP</span> default_group <span class="hljs-keyword">WITH</span> (dn001, dn002);
+<p>连接成功后提示符变为 <code>postgres=#</code>，表示已进入 psql 交互界面。此界面中的 SQL 语句须以英文分号结尾才会执行；psql 自身的元命令以反斜杠开头（如 <code>\c</code>、<code>\l</code>）；退出 psql 使用 <code>\q</code> 命令。</p>
+<h3 id="8-2-初始化节点组与分片组（源码安装必做）"><a href="#8-2-初始化节点组与分片组（源码安装必做）" class="headerlink" title="8.2 初始化节点组与分片组（源码安装必做）"></a>8.2 初始化节点组与分片组（源码安装必做）</h3><p>这是源码安装与官方镜像的又一关键差异：pgxc_ctl 的 <code>init all</code> <strong>不会创建分片映射</strong>，直接 CREATE TABLE 会报错 <code>ERROR: default group not defined (42704)</code>，补上节点组后再建表会报 <code>please initialize group ... sharding map first</code>。在 psql 里执行以下两条 SQL 即可一劳永逸：</p>
+<pre><code class="hljs sql"><span class="hljs-comment">-- 创建默认节点组 default_group，包含两个数据节点 dn001、dn002</span>
+<span class="hljs-comment">-- default_group 是节点组名称；WITH (dn001, dn002) 指定组内的 DN 列表</span>
+<span class="hljs-keyword">CREATE</span> <span class="hljs-keyword">DEFAULT</span> NODE <span class="hljs-keyword">GROUP</span> default_group <span class="hljs-keyword">WITH</span> (dn001, dn002);
+
+<span class="hljs-comment">-- 将默认节点组设置为分片组，初始化全局分片映射</span>
+<span class="hljs-comment">-- 为后续建表的分片规则建立基础映射关系</span>
 <span class="hljs-keyword">CREATE</span> SHARDING <span class="hljs-keyword">GROUP</span> <span class="hljs-keyword">TO</span> <span class="hljs-keyword">GROUP</span> default_group;</code></pre>
 
-<p>第一条把两个 DN 组成默认节点组，第二条初始化全局分片映射。相关语法定义在源码 src&#x2F;backend&#x2F;parser&#x2F;gram.y 中（<code>CREATE [DEFAULT] NODE GROUP ... WITH (...)</code> 与 <code>CREATE SHARDING GROUP TO GROUP ...</code>），如果后续想建显式指定分片的表，语法为 <code>DISTRIBUTE BY SHARD(id) TO GROUP default_group</code>。</p>
-<h3 id="3-建库建表验收"><a href="#3-建库建表验收" class="headerlink" title="3. 建库建表验收"></a>3. 建库建表验收</h3><pre><code class="hljs sql"><span class="hljs-keyword">CREATE</span> DATABASE simple_db;
-\c simple_db
-<span class="hljs-keyword">CREATE TABLE</span> test01 (id <span class="hljs-type">INT</span>, name TEXT);
-<span class="hljs-keyword">INSERT INTO</span> test01 <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;hello&#x27;</span>), (<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;world&#x27;</span>);
-<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> test01;     <span class="hljs-comment">-- 查到 2 行 = 全链路打通</span></code></pre>
+<p>第一条把两个 DN 组成默认节点组，第二条初始化全局分片映射。如果后续想建显式指定分片的表，语法为 <code>DISTRIBUTE BY SHARD(id) TO GROUP default_group</code>：</p>
+<pre><code class="hljs sql"><span class="hljs-comment">-- 建表时通过 DISTRIBUTE BY SHARD(id) 指定按 id 分片</span>
+<span class="hljs-comment">-- TO GROUP default_group 指定分片到 default_group 节点组</span>
+<span class="hljs-keyword">CREATE TABLE</span> ... DISTRIBUTE <span class="hljs-keyword">BY</span> SHARD(id) <span class="hljs-keyword">TO</span> <span class="hljs-keyword">GROUP</span> default_group;</code></pre>
 
-<p>三项验收结果如下，均为实测真实运行截图：</p>
+<h3 id="8-3-建库建表验收"><a href="#8-3-建库建表验收" class="headerlink" title="8.3 建库建表验收"></a>8.3 建库建表验收</h3><pre><code class="hljs sql"><span class="hljs-comment">-- 创建验收用数据库</span>
+<span class="hljs-keyword">CREATE</span> DATABASE simple_db;
+
+<span class="hljs-comment">-- 切换到 simple_db 数据库（提示符会变成 simple_db=#）</span>
+\c simple_db
+
+<span class="hljs-comment">-- 创建测试表 test01，含两个字段：id 和 name</span>
+<span class="hljs-keyword">CREATE TABLE</span> test01 (id <span class="hljs-type">INT</span>, name TEXT);
+
+<span class="hljs-comment">-- 插入两行测试数据</span>
+<span class="hljs-keyword">INSERT INTO</span> test01 <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;hello&#x27;</span>), (<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;world&#x27;</span>);
+
+<span class="hljs-comment">-- 查询 test01 全部数据</span>
+<span class="hljs-comment">-- 能查到 2 行，说明协调节点 → 数据节点 → 存储 全链路打通</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> test01;</code></pre>
+
+<h3 id="8-4-验收结果"><a href="#8-4-验收结果" class="headerlink" title="8.4 验收结果"></a>8.4 验收结果</h3><p>三项验收结果如下，均为实测真实运行截图。</p>
 <p><strong>验收项一：monitor all 四个节点全部 Running</strong></p>
 <p><img src="/images/opentenbase/monitor-all.png" alt="验收项一：monitor all 四个节点全部 Running"></p>
 <p><strong>验收项二：psql 连接成功，SELECT version() 显示 OpenTenBase V5.21</strong></p>
 <p><img src="/images/opentenbase/psql-version.png" alt="验收项二：psql 连接成功，SELECT version() 显示 OpenTenBase V5.21"></p>
 <p><strong>验收项三：simple_db.test01 建表插入查询到 2 行</strong></p>
 <p><img src="/images/opentenbase/query-result.png" alt="验收项三：simple_db.test01 建表插入查询到 2 行"></p>
-<h2 id="九、常见问题与排错"><a href="#九、常见问题与排错" class="headerlink" title="九、常见问题与排错"></a>九、常见问题与排错</h2><p><strong>表 9-1　全流程排错表</strong></p>
+<h2 id="九、日常使用：重启后启动集群与基础-SQL-操作"><a href="#九、日常使用：重启后启动集群与基础-SQL-操作" class="headerlink" title="九、日常使用：重启后启动集群与基础 SQL 操作"></a>九、日常使用：重启后启动集群与基础 SQL 操作</h2><p>安装与验收全部完成后，集群进入日常使用阶段。本章给出两个最常用的流程：一是重启虚拟机后把集群重新拉起来，二是在 psql 里完成建库、建表、查询、修改、删除等基础操作。所有命令均假设第八章的验收已经通过。</p>
+<h3 id="9-1-重启虚拟机后的集群启动"><a href="#9-1-重启虚拟机后的集群启动" class="headerlink" title="9.1 重启虚拟机后的集群启动"></a>9.1 重启虚拟机后的集群启动</h3><p>虚拟机重启后，GTM、CN、DN 四个进程不会自动拉起（本教程未配置开机自启，如有需要可自行编写 systemd 服务单元，此处不展开），需要手动启动。此前做过的配置都保存在磁盘上，重启后依然有效，无需重做：2.4 节的 SSH 免密、6.1 节写在 .bashrc 最顶部的环境变量如此，第八章创建的数据库、表以及 8.2 节的节点组与分片映射也是如此。同样不需要再执行第七章的 deploy all 与 init all，用 <code>start all</code> 拉起即可。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 打开终端（Ctrl+Alt+T），切换到 opentenbase 用户（输入它的密码）</span>
+su - opentenbase
+
+<span class="hljs-comment"># 进入 pgxc_ctl 工作目录</span>
+<span class="hljs-comment"># pgxc_ctl 启动时自动读取当前目录下的 pgxc_ctl.conf，必须先 cd 过来</span>
+<span class="hljs-built_in">cd</span> /data/opentenbase/pgxc_ctl
+
+<span class="hljs-comment"># 启动 pgxc_ctl 交互式命令行，提示符变为 pgxc_ctl&gt; 即成功</span>
+pgxc_ctl</code></pre>
+
+<pre><code class="hljs text"># 查看集群当前状态：刚开机时应显示四个节点均为 Not running
+&gt; monitor all
+
+# 一键拉起全部节点（GTM / CN / DN），无需再 deploy / init
+&gt; start all
+
+# 再次确认状态：应输出四行 Running（gtm / cn001 / dn001 / dn002）
+&gt; monitor all
+
+# 退出 pgxc_ctl 管理界面，回到普通命令行
+&gt; exit</code></pre>
+
+<blockquote>
+<p><strong>验证标准</strong>：monitor all 输出四行 Running 即启动成功，随后即可按 9.3 节连接数据库。若 start all 中途报错或状态长期为 Not running，先按第十章排错表排查——最常见的原因是上次关机前没有 stop all 就直接关闭了虚拟机。</p>
+</blockquote>
+<h3 id="9-2-关闭虚拟机前：干净地停止集群"><a href="#9-2-关闭虚拟机前：干净地停止集群" class="headerlink" title="9.2 关闭虚拟机前：干净地停止集群"></a>9.2 关闭虚拟机前：干净地停止集群</h3><p>日常关机前建议先停止集群，让四个节点把内存中的数据正常落盘，避免留下脏数据；停止后再次开机就按 9.1 节的流程启动。若只是暂时不用数据库而不打算关机，同样先 stop all，需要时再 start all。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 切换到 opentenbase 用户</span>
+su - opentenbase
+
+<span class="hljs-comment"># 进入 pgxc_ctl 工作目录</span>
+<span class="hljs-built_in">cd</span> /data/opentenbase/pgxc_ctl
+
+<span class="hljs-comment"># 启动 pgxc_ctl 管理界面</span>
+pgxc_ctl</code></pre>
+
+<pre><code class="hljs text"># 停止全部节点（GTM / CN / DN 依次关闭）
+&gt; stop all
+
+# 确认已全部停止：应显示四个 Not running
+&gt; monitor all
+
+# 退出管理界面，之后即可正常关闭虚拟机
+&gt; exit</code></pre>
+
+<blockquote>
+<p><strong>说明</strong>：先 stop all 再关机可避开绝大多数启动异常。若曾强制关机导致 start all 失败，按第十章排错表处理；注意其中「清空 &#x2F;data&#x2F;opentenbase&#x2F;data&#x2F;* 重新 init」的做法会删除全部数据，仅适用于库里没有重要数据的场合。</p>
+</blockquote>
+<h3 id="9-3-基础-SQL-操作：建库、建表、增删改查"><a href="#9-3-基础-SQL-操作：建库、建表、增删改查" class="headerlink" title="9.3 基础 SQL 操作：建库、建表、增删改查"></a>9.3 基础 SQL 操作：建库、建表、增删改查</h3><p>以下操作在集群启动后进行，先按 8.1 节连接协调节点，再依次执行。SQL 语句以英文分号 <code>;</code> 结尾才会执行；以 <code>--</code> 开头的是注释，不用输入。示例使用新的练习数据库 demo_db，与 8.3 节的验收数据互不影响；建表依赖 8.2 节创建的 default_group，若当时跳过了那两条 SQL，先回 8.2 节补做。</p>
+<pre><code class="hljs bash"><span class="hljs-comment"># 连接协调节点（CN），成功后提示符变为 postgres=#</span>
+<span class="hljs-comment"># -h/-p：本机 30004 端口；-d：默认数据库；-U：登录用户</span>
+psql -h 127.0.0.1 -p 30004 -d postgres -U opentenbase</code></pre>
+
+<pre><code class="hljs sql"><span class="hljs-comment">-- 创建练习用数据库</span>
+<span class="hljs-keyword">CREATE</span> DATABASE demo_db;
+
+<span class="hljs-comment">-- 切换到 demo_db（提示符变为 demo_db=#）</span>
+\c demo_db
+
+<span class="hljs-comment">-- 建表：三个字段；DISTRIBUTE BY SHARD(id) 表示按 id 字段分片</span>
+<span class="hljs-comment">-- TO GROUP default_group：分片落到 8.2 节创建的默认节点组（dn001、dn002）</span>
+<span class="hljs-keyword">CREATE TABLE</span> student (id <span class="hljs-type">INT</span>, name TEXT, score <span class="hljs-type">INT</span>) DISTRIBUTE <span class="hljs-keyword">BY</span> SHARD(id) <span class="hljs-keyword">TO</span> <span class="hljs-keyword">GROUP</span> default_group;
+
+<span class="hljs-comment">-- 插入三行数据</span>
+<span class="hljs-keyword">INSERT INTO</span> student <span class="hljs-keyword">VALUES</span> (<span class="hljs-number">1</span>, <span class="hljs-string">&#x27;张三&#x27;</span>, <span class="hljs-number">90</span>), (<span class="hljs-number">2</span>, <span class="hljs-string">&#x27;李四&#x27;</span>, <span class="hljs-number">85</span>), (<span class="hljs-number">3</span>, <span class="hljs-string">&#x27;王五&#x27;</span>, <span class="hljs-number">78</span>);
+
+<span class="hljs-comment">-- 查询全部数据（应返回 3 行）</span>
+<span class="hljs-keyword">SELECT</span> <span class="hljs-operator">*</span> <span class="hljs-keyword">FROM</span> student;
+
+<span class="hljs-comment">-- 条件查询 + 排序：80 分及以上，按分数从高到低</span>
+<span class="hljs-keyword">SELECT</span> name, score <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> score <span class="hljs-operator">&gt;=</span> <span class="hljs-number">80</span> <span class="hljs-keyword">ORDER</span> <span class="hljs-keyword">BY</span> score <span class="hljs-keyword">DESC</span>;
+
+<span class="hljs-comment">-- 修改：把 id 为 2 的分数改为 95</span>
+<span class="hljs-keyword">UPDATE</span> student <span class="hljs-keyword">SET</span> score <span class="hljs-operator">=</span> <span class="hljs-number">95</span> <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-number">2</span>;
+
+<span class="hljs-comment">-- 删除行：删掉 id 为 3 的记录</span>
+<span class="hljs-keyword">DELETE</span> <span class="hljs-keyword">FROM</span> student <span class="hljs-keyword">WHERE</span> id <span class="hljs-operator">=</span> <span class="hljs-number">3</span>;
+
+<span class="hljs-comment">-- 查看表结构（字段名与类型）</span>
+\d student
+
+<span class="hljs-comment">-- 删除表</span>
+<span class="hljs-keyword">DROP</span> <span class="hljs-keyword">TABLE</span> student;
+
+<span class="hljs-comment">-- 删除数据库：不能删除当前正在连接的库，先切回 postgres</span>
+\c postgres
+
+<span class="hljs-comment">-- 删除 demo_db</span>
+<span class="hljs-keyword">DROP</span> DATABASE demo_db;
+
+<span class="hljs-comment">-- 退出 psql，回到命令行</span>
+\q</code></pre>
+
+<blockquote>
+<p><strong>说明</strong>：以上是最基础的入门操作。OpenTenBase 兼容大部分 PostgreSQL 语法，普通建表、查询的写法与 PostgreSQL 一致；分布式相关特性（分片键的选择、复制表等）建议先查阅官方文档（见 11.3 节）再用于实际数据。</p>
+</blockquote>
+<h2 id="十、常见问题与排错"><a href="#十、常见问题与排错" class="headerlink" title="十、常见问题与排错"></a>十、常见问题与排错</h2><p><strong>表 10-1　全流程排错表</strong></p>
 <table>
 <thead>
 <tr>
@@ -585,17 +988,17 @@ Running: datanode master dn002</code></pre>
 <tr>
 <td>initdb&#x2F;pg_ctl: command not found（init all 时）</td>
 <td>非交互 SSH 看不到 PATH</td>
-<td>环境变量写到 .bashrc 最顶部（第六章）</td>
+<td>环境变量写到 .bashrc 最顶部（6.1 节）并确认 source 过</td>
 </tr>
 <tr>
 <td>Number of elements in datanode master definitions are different</td>
 <td>数组元素个数与节点数不符</td>
-<td>datanodeMaxWALSenders 等改成每节点一个元素（第六章）</td>
+<td>datanodeMaxWALSenders 等改成每节点一个元素（6.3 节）</td>
 </tr>
 <tr>
 <td>ERROR: default group not defined</td>
 <td>pgxc_ctl 不会自动创建分片映射</td>
-<td>执行第八章的两条 CREATE … GROUP SQL</td>
+<td>执行 8.2 节的两条 CREATE … GROUP SQL</td>
 </tr>
 <tr>
 <td>monitor all 显示 Not running</td>
@@ -603,13 +1006,48 @@ Running: datanode master dn002</code></pre>
 <td>停掉进程后清空 &#x2F;data&#x2F;opentenbase&#x2F;data&#x2F;*，重新 deploy all + init all</td>
 </tr>
 <tr>
+<td>su - opentenbase 报「认证失败」</td>
+<td>密码输错（输入时不回显）</td>
+<td>重新输入；忘记密码用 sudo passwd opentenbase 重设</td>
+</tr>
+<tr>
+<td>cat ~&#x2F;.ssh&#x2F;id_rsa.pub &gt;&gt; authorized_keys 报 No such file or directory，ssh 仍要密码</td>
+<td>跳过了 ssh-keygen，~&#x2F;.ssh 目录与密钥对都不存在</td>
+<td>补执行 ssh-keygen 生成密钥对，再重做 cat 追加与 chmod 600（2.4 节）</td>
+</tr>
+<tr>
+<td>刚改完 .bashrc，命令仍 command not found</td>
+<td>忘了 source，或变量写在交互检查之后</td>
+<td>source ~&#x2F;.bashrc；确认四行 export 在文件最顶部（6.1 节）</td>
+</tr>
+<tr>
+<td>vim 里按错键、画面混乱</td>
+<td>插入&#x2F;普通模式混淆</td>
+<td>先按 Esc，再输入 :q! 回车不保存退出，重新打开重来</td>
+</tr>
+<tr>
+<td>Command ‘vim’ not found（编辑 .bashrc &#x2F; pgxc_ctl.conf 时）</td>
+<td>Ubuntu 22.04 未预装 vim</td>
+<td>sudo apt install vim；或改用 nano（Ctrl+O 回车保存，Ctrl+X 退出）</td>
+</tr>
+<tr>
+<td>在 psql 中无法退出</td>
+<td>psql 有独立的元命令体系</td>
+<td>输入 \q 回车退出；pgxc_ctl 中则输入 exit</td>
+</tr>
+<tr>
+<td>pgxc_ctl 找不到配置 &#x2F; 配置不生效</td>
+<td>未在 pgxc_ctl.conf 所在目录启动</td>
+<td>先 cd &#x2F;data&#x2F;opentenbase&#x2F;pgxc_ctl 再运行 pgxc_ctl（第七章）</td>
+</tr>
+<tr>
 <td>Could not get lock &#x2F;var&#x2F;lib&#x2F;dpkg&#x2F;lock-frontend</td>
 <td>unattended-upgrades 后台升级占用 apt</td>
 <td>等待其自然结束（ps -p &lt;PID&gt; 确认），不要强删锁</td>
 </tr>
 </tbody></table>
-<p>另外一个小技巧：如果需要在脚本里得到带 <code>postgres=#</code> 提示符的交互式输出（比如截图存档），用 <code>printf &#39;...&#39; | ssh -tt opentenbase@127.0.0.1 psql ...</code> 强制分配终端；直接管道进 psql 的非交互输出是没有提示符的。</p>
-<h2 id="十、附录"><a href="#十、附录" class="headerlink" title="十、附录"></a>十、附录</h2><h3 id="1-完整端口清单"><a href="#1-完整端口清单" class="headerlink" title="1. 完整端口清单"></a>1. 完整端口清单</h3><p><strong>表 10-1　端口占用清单</strong></p>
+<p>一个小技巧：如果需要在脚本里得到带 <code>postgres=#</code> 提示符的交互式输出（比如截图存档），用 <code>printf &#39;...&#39; | ssh -tt opentenbase@127.0.0.1 psql ...</code> 强制分配终端；直接管道进 psql 的非交互输出是没有提示符的。</p>
+<h2 id="十一、附录"><a href="#十一、附录" class="headerlink" title="十一、附录"></a>十一、附录</h2><h3 id="11-1-完整端口清单"><a href="#11-1-完整端口清单" class="headerlink" title="11.1 完整端口清单"></a>11.1 完整端口清单</h3><p><strong>表 11-1　端口占用清单</strong></p>
 <table>
 <thead>
 <tr>
@@ -646,7 +1084,8 @@ Running: datanode master dn002</code></pre>
 <td>DN dn002 主 &#x2F; 转发 &#x2F; 连接池</td>
 </tr>
 </tbody></table>
-<h3 id="2-目录结构"><a href="#2-目录结构" class="headerlink" title="2. 目录结构"></a>2. 目录结构</h3><pre><code class="hljs text">/data/opentenbase/
+<h3 id="11-2-目录结构"><a href="#11-2-目录结构" class="headerlink" title="11.2 目录结构"></a>11.2 目录结构</h3><p>全部安装完成后，&#x2F;data&#x2F;opentenbase 的目录结构如下：</p>
+<pre><code class="hljs text">/data/opentenbase/
 ├── OpenTenBase/               # 源码（已打两处补丁）
 ├── install/
 │   └── opentenbase_bin_v5.0/  # 编译安装产物（bin lib include share）
@@ -658,13 +1097,14 @@ Running: datanode master dn002</code></pre>
     ├── dn001/                 # 数据节点 1
     └── dn002/                 # 数据节点 2</code></pre>
 
-<h3 id="3-参考链接"><a href="#3-参考链接" class="headerlink" title="3. 参考链接"></a>3. 参考链接</h3><ul>
-<li>官方仓库：<a target="_blank" rel="noopener" href="https://github.com/OpenTenBase/OpenTenBase">https://github.com/OpenTenBase/OpenTenBase</a></li>
-<li>官方主页：<a target="_blank" rel="noopener" href="https://www.opentenbase.org/">https://www.opentenbase.org/</a></li>
-<li>官方文档：<a target="_blank" rel="noopener" href="https://docs.opentenbase.org/">https://docs.opentenbase.org/</a></li>
-<li>国内镜像：<a target="_blank" rel="noopener" href="https://gitcode.com/OpenTenBase/OpenTenBase">https://gitcode.com/OpenTenBase/OpenTenBase</a></li>
+<h3 id="11-3-参考链接"><a href="#11-3-参考链接" class="headerlink" title="11.3 参考链接"></a>11.3 参考链接</h3><ul>
+<li>OpenTenBase 官方仓库（GitHub）：<a target="_blank" rel="noopener" href="https://github.com/OpenTenBase/OpenTenBase">https://github.com/OpenTenBase/OpenTenBase</a></li>
+<li>OpenTenBase 官方主页：<a target="_blank" rel="noopener" href="https://www.opentenbase.org/">https://www.opentenbase.org/</a></li>
+<li>OpenTenBase 官方文档：<a target="_blank" rel="noopener" href="https://docs.opentenbase.org/">https://docs.opentenbase.org/</a></li>
+<li>国内镜像（gitcode）：<a target="_blank" rel="noopener" href="https://gitcode.com/OpenTenBase/OpenTenBase">https://gitcode.com/OpenTenBase/OpenTenBase</a></li>
 <li>本教程独立仓库（含 Word 原稿）：<a target="_blank" rel="noopener" href="https://github.com/Bogucheese/opentenbase-ubuntu-install-guide">https://github.com/Bogucheese/opentenbase-ubuntu-install-guide</a></li>
 </ul>
+<h3 id="11-4-结语"><a href="#11-4-结语" class="headerlink" title="11.4 结语"></a>11.4 结语</h3><p>至此，Ubuntu 22.04 环境下的源码编译与单机分布式集群部署全部完成。安装过程中的两项关键经验——修改前备份、修改后立即验证——同样适用于后续的版本升级与问题排查。遇到本教程未覆盖的报错时，建议优先完整阅读报错原文，多数问题的线索位于前两行。</p>
 
         </div>
 
@@ -703,7 +1143,7 @@ Running: datanode master dn002</code></pre>
       
       <li class="hot-article-item">
         <span class="article-rank">01</span>
-        <a href="/2026/09/23/opentenbase-source-install-ubuntu-2204/" class="hot-article-title">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版）：从编译到分布式集群部署全记录</a>
+        <a href="/2026/09/23/opentenbase-source-install-ubuntu-2204/" class="hot-article-title">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版 · 第 3 版）：从编译到分布式集群部署全记录</a>
       </li>
       
       <li class="hot-article-item">
@@ -743,8 +1183,8 @@ Running: datanode master dn002</code></pre>
       </li>
       
       <li class="category-item">
-        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
-          <span>项目实战</span>
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/AI/">
+          <span>AI</span>
           <span class="category-count">1</span>
         </a>
       </li>
@@ -757,13 +1197,6 @@ Running: datanode master dn002</code></pre>
       </li>
       
       <li class="category-item">
-        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/AI/">
-          <span>AI</span>
-          <span class="category-count">1</span>
-        </a>
-      </li>
-      
-      <li class="category-item">
         <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">
           <span>编程教程</span>
           <span class="category-count">1</span>
@@ -771,8 +1204,8 @@ Running: datanode master dn002</code></pre>
       </li>
       
       <li class="category-item">
-        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/%E5%89%8D%E7%AB%AF/">
-          <span>前端</span>
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
+          <span>项目实战</span>
           <span class="category-count">1</span>
         </a>
       </li>
@@ -787,6 +1220,13 @@ Running: datanode master dn002</code></pre>
       <li class="category-item">
         <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">
           <span>Python</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/%E5%89%8D%E7%AB%AF/">
+          <span>前端</span>
           <span class="category-count">1</span>
         </a>
       </li>
@@ -815,6 +1255,20 @@ Running: datanode master dn002</code></pre>
       
       <a href="/tags/%E6%95%99%E7%A8%8B/" class="tag-item">教程</a>
       
+      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item">博客</a>
+      
+      <a href="/tags/Hexo/" class="tag-item">Hexo</a>
+      
+      <a href="/tags/Python/" class="tag-item">Python</a>
+      
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item">数据分析</a>
+      
+      <a href="/tags/Pandas/" class="tag-item">Pandas</a>
+      
+      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item">可视化</a>
+      
+      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item">入门教程</a>
+      
       <a href="/tags/drawio/" class="tag-item">drawio</a>
       
       <a href="/tags/TypeScript/" class="tag-item">TypeScript</a>
@@ -834,20 +1288,6 @@ Running: datanode master dn002</code></pre>
       <a href="/tags/Ubuntu/" class="tag-item">Ubuntu</a>
       
       <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" class="tag-item">源码编译</a>
-      
-      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item">博客</a>
-      
-      <a href="/tags/Hexo/" class="tag-item">Hexo</a>
-      
-      <a href="/tags/Python/" class="tag-item">Python</a>
-      
-      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item">数据分析</a>
-      
-      <a href="/tags/Pandas/" class="tag-item">Pandas</a>
-      
-      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item">可视化</a>
-      
-      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item">入门教程</a>
       
     </div>
   </div>
