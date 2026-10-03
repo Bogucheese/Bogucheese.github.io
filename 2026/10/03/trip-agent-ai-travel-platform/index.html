@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>从 0 到上线：我用 Spring AI + Vue3 做了一个 AI 旅游预订平台「畅游 TripAgent」 - LZH Code Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <header class="site-header">
+  <div class="header-container">
+    <a href="/" class="logo">
+      LZH Code Blog<span class="logo-dot">.</span>
+    </a>
+    <nav class="header-nav">
+      
+      <a href="/" class="nav-link ">首页</a>
+      
+      <a href="/archives/" class="nav-link ">归档</a>
+      
+      <a href="/categories/" class="nav-link ">分类</a>
+      
+      <a href="/tags/" class="nav-link ">标签</a>
+      
+      <a href="/about/" class="nav-link ">关于</a>
+      
+    </nav>
+    <form class="search-box" action="/" method="get" role="search">
+      <input type="search" name="search" class="search-input" placeholder="搜索文章…" aria-label="搜索文章">
+    </form>
+  </div>
+</header>
+
+
+  <div class="main-container">
+    <main class="content-left">
+      <article class="article-detail">
+        <header class="article-header">
+          <h1 class="article-title-detail">从 0 到上线：我用 Spring AI + Vue3 做了一个 AI 旅游预订平台「畅游 TripAgent」</h1>
+          <div class="article-meta article-meta-detail">
+            <span class="meta-item">2026-10-03</span>
+            
+            <span class="meta-item">
+              <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">项目实战</a>
+            </span>
+            
+            
+            <span class="meta-item">
+              <a href="/tags/AI-Agent/">AI Agent</a> · <a href="/tags/Spring-Boot/">Spring Boot</a> · <a href="/tags/Spring-AI/">Spring AI</a> · <a href="/tags/Vue3/">Vue3</a> · <a href="/tags/%E5%85%A8%E6%A0%88%E9%A1%B9%E7%9B%AE/">全栈项目</a>
+            </span>
+            
+          </div>
+        </header>
+
+        <div class="article-body">
+          <blockquote>
+<p>起初只有一句话需求：「我想做一个旅游预订平台，可以给客户提供旅游行程、推荐旅游地点、预订机票、预订酒店」。<br>一个多月后，它长成了这样——<strong>AI 行程规划、机票酒店预订、目的地推荐、露营攻略</strong>四大链路全部可用，<br>AI 挂了还有规则引擎兜底，行程结果永远出得来。这篇文章复盘整个项目：架构、Agent 模式、真实数据链路、踩坑与部署。</p>
+</blockquote>
+<p><img src="/images/trip-agent-article/home.png" alt="畅游 TripAgent 首页"></p>
+<h2 id="一、项目全景"><a href="#一、项目全景" class="headerlink" title="一、项目全景"></a>一、项目全景</h2><p>畅游 TripAgent 是一个前后端分离的 AI 旅游预订平台，当前各模块状态：</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI 行程规划</td>
+<td>Agent 模式：模型自主调用只读工具（查景点&#x2F;查航班&#x2F;搜酒店&#x2F;查天气&#x2F;确认酒店运营状态&#x2F;位置查询）后生成逐日行程，停业酒店自动规避</td>
+</tr>
+<tr>
+<td>目的地推荐</td>
+<td>30 个热门城市，热度&#x2F;兴趣&#x2F;预算规则打分，景点攻略带真实门票与简介</td>
+</tr>
+<tr>
+<td>机票预订</td>
+<td>航线搜索、实时余票、下单扣座（乐观锁）、取消回补</td>
+</tr>
+<tr>
+<td>酒店预订</td>
+<td>省&#x2F;市&#x2F;区县级联选城市、日期&#x2F;星级搜索、房型明细、<strong>30 城约 700+ 家真实采集酒店</strong></td>
+</tr>
+<tr>
+<td>露营</td>
+<td>30 城 1600+ 真实露营地、驾车导航真实道路路线、天气预报驱动装备清单、评价 LLM 分析</td>
+</tr>
+<tr>
+<td>订单中心</td>
+<td>类型&#x2F;状态筛选、详情快照、取消订单</td>
+</tr>
+<tr>
+<td>在线地图</td>
+<td>Leaflet + 高德底图，行程逐日路线连线、景区酒店分布、酒店位置图</td>
+</tr>
+</tbody></table>
+<p>技术栈一句话概括：<strong>后端 Java 21 + Spring Boot 3.4 + Spring AI 1.0（火山方舟豆包模型），前端 Vue 3 + Vite + TypeScript + Element Plus + Pinia，数据层 JPA + H2 文件库（可平滑切 MySQL）</strong>。</p>
+<h2 id="二、架构：一切依赖都是”端口”"><a href="#二、架构：一切依赖都是”端口”" class="headerlink" title="二、架构：一切依赖都是”端口”"></a>二、架构：一切依赖都是”端口”</h2><p>做集成类项目最容易把第三方 API 写得到处都是。我的原则是：<strong>凡是会换的东西，一律收口成端口接口</strong>。</p>
+<pre><code class="hljs java"><span class="hljs-comment">// 上层只依赖这三个口子，Mock/真实实现可随时替换</span>
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">LlmPort</span> &#123; <span class="hljs-comment">/* 单轮对话 + 工具调用两个重载 */</span> &#125;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">FlightSupplierPort</span> &#123; <span class="hljs-comment">/* 航班搜索/下单/取消 */</span> &#125;
+<span class="hljs-keyword">public</span> <span class="hljs-keyword">interface</span> <span class="hljs-title class_">HotelSupplierPort</span> &#123; <span class="hljs-comment">/* 酒店搜索/详情/下单 */</span> &#125;</code></pre>
+
+<pre><code class="hljs dart">浏览器 (<span class="hljs-title class_">Vue3</span>)
+   │  /api
+   ▼
+<span class="hljs-title class_">Spring</span> <span class="hljs-title class_">Boot</span> <span class="hljs-number">3.4</span>
+   ├── <span class="hljs-title class_">ItineraryService</span> ──&gt; <span class="hljs-title class_">LlmPort</span> ──&gt; <span class="hljs-title class_">Spring</span> AI ──&gt; 火山方舟(豆包)
+   │        │  工具循环：findAttractions / searchFlights / searchHotels
+   │        │            <span class="hljs-title function_">getWeather</span>(<span class="hljs-title class_">Open</span>-<span class="hljs-title class_">Meteo</span>) / checkHotelStatus / searchLocation
+   ├── <span class="hljs-title class_">FlightSupplierPort</span> / <span class="hljs-title class_">HotelSupplierPort</span> ──&gt; <span class="hljs-title class_">Mock</span> 或真实采集数据
+   └── JPA + <span class="hljs-title class_">H2</span> 文件库（MODE=<span class="hljs-title class_">MySQL</span>，切 <span class="hljs-title class_">MySQL</span> 改配置即可）</code></pre>
+
+<p>好处立竿见影：机票目前是 Mock 种子数据，将来接真实供应商时<strong>上层业务代码零改动</strong>；LLM 从豆包换到 GLM&#x2F;DeepSeek 也只是换一个配置。</p>
+<h2 id="三、AI-行程规划：从”提示词生成”到”真-Agent”"><a href="#三、AI-行程规划：从”提示词生成”到”真-Agent”" class="headerlink" title="三、AI 行程规划：从”提示词生成”到”真 Agent”"></a>三、AI 行程规划：从”提示词生成”到”真 Agent”</h2><h3 id="1-两代实现"><a href="#1-两代实现" class="headerlink" title="1. 两代实现"></a>1. 两代实现</h3><ul>
+<li><strong>单轮模式（一代）</strong>：把目的地&#x2F;天数&#x2F;预算&#x2F;兴趣拼成一个大 prompt，让模型一次性吐出 JSON。能用，但模型只能”编”，机酒价格经常脱离实时库存。</li>
+<li><strong>Agent 模式（二代，<code>app.ai.agent-mode</code> 默认开启）</strong>：把系统提示词改写成”你可以调用这些工具，先查再答”。模型自己决定查什么、查几次，最后基于<strong>服务端真实数据</strong>输出行程。</li>
+</ul>
+<h3 id="2-实测一次真实的规划过程"><a href="#2-实测一次真实的规划过程" class="headerlink" title="2. 实测一次真实的规划过程"></a>2. 实测一次真实的规划过程</h3><p>在向导里选「北京 → 三亚、4 天 2 人、预算 9000、海滨&#x2F;美食&#x2F;亲子、舒适」：</p>
+<p><img src="/images/trip-agent-article/ai-wizard.png" alt="AI 行程规划向导"></p>
+<p>点击生成后，后端日志里能看到模型<strong>自主发起的一连串工具调用</strong>：</p>
+<pre><code class="hljs text">[agent-tool] getWeather      三亚 2026-10-04~2026-10-07 返回 4 天
+[agent-tool] checkHotelStatus 147(Holiday Inn Resort SANYA BAY by IHG) operating=true
+[agent-tool] searchLocation  亚龙湾@三亚 返回 3 条
+[agent-tool] searchLocation  蜈支洲岛@三亚 返回 3 条
+[agent-tool] searchLocation  南山文化旅游区@三亚 返回 3 条
+[agent-tool] searchLocation  第一市场@三亚 返回 3 条</code></pre>
+
+<p>约 40 秒后，结果页出来了——顶部有行程地图（逐日路线连线与路程）：</p>
+<p><img src="/images/trip-agent-article/ai-result-map.png" alt="AI 行程结果：地图与概览"></p>
+<p>逐日行程按上午&#x2F;中午&#x2F;下午&#x2F;傍晚&#x2F;夜晚组织，每个条目带预估花费，右侧是预算明细与<strong>按实时库存校准过的推荐航班</strong>（含一键预订）：</p>
+<p><img src="/images/trip-agent-article/ai-result-day1.png" alt="AI 行程结果：Day1 与预算明细"></p>
+<p>最有意思的是「出行贴士」：模型把工具查到的<strong>真实天气预报</strong>融进了建议里——“10月5-7日三亚多雷阵雨天气，降水概率 80%-100%，建议携带雨衣、雨伞和防水鞋套””蜈支洲岛若遇风浪过大可能停航……可改去亚特兰蒂斯室内海洋馆作为备选”。这不是提示词里教它说的话术，是 Open-Meteo 的真实预报数据。</p>
+<p><img src="/images/trip-agent-article/ai-result-tips.png" alt="AI 行程结果：出行贴士引用真实天气"></p>
+<h3 id="3-停业酒店闭环"><a href="#3-停业酒店闭环" class="headerlink" title="3. 停业酒店闭环"></a>3. 停业酒店闭环</h3><p>给演示数据标了一个”装修停业”的三亚湾酒店，然后观察 Agent 的行为：<code>searchHotels</code> 返回列表时带上 <code>operating</code> 字段 → 推荐前模型再调 <code>checkHotelStatus</code> 二次确认 → <code>InventoryMerger</code> 把停业推荐直接丢弃 → 即使绕过 AI 直接下单，<code>OrderService.bookHotel</code> 也会拒单（”该酒店暂停营业：酒店装修改造中…”）。<strong>AI 的”自觉”永远要有业务规则兜底</strong>，这是我在这条链路上最深的体会。</p>
+<p>另外，下单类工具（扣库存）<strong>有意不暴露</strong>给 Agent——没有确认机制之前，绝不让模型直接改状态。</p>
+<h2 id="四、七道防线：让-LLM-输出永远可用"><a href="#四、七道防线：让-LLM-输出永远可用" class="headerlink" title="四、七道防线：让 LLM 输出永远可用"></a>四、七道防线：让 LLM 输出永远可用</h2><p>LLM 输出 JSON 的可靠性是老大难，我的解法是纵深防御，一道不过还有下一道：</p>
+<ol>
+<li>提示词要求<strong>只输出 JSON</strong>；</li>
+<li>Spring AI <code>JSON_OBJECT</code> 响应格式约束；</li>
+<li>解析前剥离 &#96;&#96;&#96;json 围栏；</li>
+<li>解析失败自动发起一次”修复 JSON”重试；</li>
+<li><strong>天数完整性校验</strong>（说好 4 天就必须有 4 天，缺天直接判废）；</li>
+<li>行程条目 <code>refId</code> 回查失败时按名称模糊匹配，再不行降级为纯文案条目（不丢内容）；</li>
+<li>以上全崩 → <strong>规则引擎兜底</strong>生成行程，响应里标记 <code>source=RULE, degraded=true</code>。</li>
+</ol>
+<p>前端对用户永远是可用的，差别只在响应标记。机酒价格与库存则一律以服务端实时数据重算，模型只负责”编排”，不负责”报价”。</p>
+<h2 id="五、真实数据链路：爬虫-高德-Open-Meteo"><a href="#五、真实数据链路：爬虫-高德-Open-Meteo" class="headerlink" title="五、真实数据链路：爬虫 + 高德 + Open-Meteo"></a>五、真实数据链路：爬虫 + 高德 + Open-Meteo</h2><p>演示数据再好看也是假的，这块花了不少功夫：</p>
+<ul>
+<li><strong>酒店</strong>：<code>tools/hotel-crawler</code> 用高德 POI 拿真实名称&#x2F;前台电话&#x2F;坐标，再配 trip.com 的房价&#x2F;早餐&#x2F;评分，采集 30 城约 700+ 家。列表页真实酒店优先展示并带「真实信息」徽标；详情页有电话、地址和高德位置地图。</li>
+</ul>
+<p><img src="/images/trip-agent-article/hotels.png" alt="真实酒店列表：评分&#x2F;点评数&#x2F;价格"></p>
+<p><img src="/images/trip-agent-article/hotel-detail.png" alt="酒店详情：真实照片 + 高德位置地图"></p>
+<ul>
+<li><strong>露营地</strong>：高德采集 30 城 1600+ 个真实露营地（电话&#x2F;评分&#x2F;人均），点击任一营地可看<strong>驾车导航路线</strong>（高德路径规划，真实道路里程与耗时）、天气预报驱动的装备清单、以及评价的 LLM 正负面分析。</li>
+</ul>
+<p><img src="/images/trip-agent-article/camp.png" alt="露营：真实营地 + 导航路线 + 天气装备清单"></p>
+<ul>
+<li><strong>景点</strong>：马蜂窝 POI 爬虫补充真实门票（亚龙湾免费&#x2F;蜈支洲岛 ¥144&#x2F;南山 ¥129）与简介。</li>
+<li><strong>天气</strong>：Open-Meteo 免费无 key，16 天日级预报，WMO 代码转中文。</li>
+<li><strong>地图</strong>：Leaflet + 高德街道底图；WGS-84 坐标上图前自动纠偏到 GCJ-02，否则点位会偏出几百米。</li>
+</ul>
+<h2 id="六、预订与订单链路"><a href="#六、预订与订单链路" class="headerlink" title="六、预订与订单链路"></a>六、预订与订单链路</h2><p>机票搜索结果带实时余票，下单即扣座（乐观锁防超卖），取消自动回补——下图里 HU6538 显示”余 15 张”，正是我在结果页订掉 2 张之后的数字：</p>
+<p><img src="/images/trip-agent-article/flights.png" alt="机票搜索与实时余票"></p>
+<p>订单中心支持类型&#x2F;状态筛选、详情快照与取消：</p>
+<p><img src="/images/trip-agent-article/orders.png" alt="订单中心"></p>
+<p>诚实声明（MVP 边界）：机票为 Mock 种子数据（通过 Supplier Port 可替换）；金额与库存是演示逻辑；无支付。<strong>但扣座&#x2F;扣房&#x2F;回补&#x2F;停业拒单这些业务规则都是真实生效的。</strong></p>
+<h2 id="七、部署上线"><a href="#七、部署上线" class="headerlink" title="七、部署上线"></a>七、部署上线</h2><p>线上是一台阿里云轻量应用服务器（宝塔镜像），架构简单可靠：</p>
+<pre><code class="hljs nginx">:80 <span class="hljs-attribute">nginx</span>
+ ├── /        → /opt/trip-agent/dist   <span class="hljs-comment"># Vue3 打包静态文件</span>
+ ├── /api/    → http://127.0.0.1:8080   <span class="hljs-comment"># 反代 Spring Boot</span>
+ └── /images/ → http://127.0.0.1:8080   <span class="hljs-comment"># 爬虫图片</span></code></pre>
+
+<ul>
+<li>后端用 systemd 守护（<code>EnvironmentFile</code> 加载 LLM&#x2F;高德 key，权限 600）；</li>
+<li>H2 文件库直接落盘 <code>/opt/trip-agent/data/</code>，备份 &#x3D; 复制一个文件；</li>
+<li>更新流程：<code>mvn package</code> → 传 jar → <code>systemctl restart trip-agent</code>，全程 1 分钟。</li>
+</ul>
+<h2 id="八、踩坑记录"><a href="#八、踩坑记录" class="headerlink" title="八、踩坑记录"></a>八、踩坑记录</h2><ol>
+<li><strong><code>ddl-auto=update</code> 不会缩短&#x2F;加长已存在的列</strong>。真实景点简介 300 字塞进默认 <code>VARCHAR(255)</code> 直接启动崩，最后用 H2 tools 手工 <code>ALTER TABLE ... ALTER COLUMN</code> 保住历史数据。</li>
+<li><strong>深度思考拖慢生成</strong>：4 天行程默认要 90s，给豆包配 <code>reasoning-effort: none</code> 后降到 20~35s（Agent 模式多轮工具往返约 40s，仍在前端 90s 超时内）。</li>
+<li><strong>模型偶尔把数组写成一个长字符串</strong>，标准反序列化直接崩且修复重试救不回——解析器单独开 <code>ACCEPT_SINGLE_VALUE_AS_ARRAY</code> 后整体加固。</li>
+<li><strong>坐标系陷阱</strong>：OSM&#x2F;高德的坐标基准不同（WGS-84 vs GCJ-02），不纠偏的话所有点位都”漂移”。</li>
+<li><strong>别让 Agent 直接改状态</strong>：下单类工具一律不暴露，先做确认机制再谈。</li>
+</ol>
+<h2 id="九、写在最后"><a href="#九、写在最后" class="headerlink" title="九、写在最后"></a>九、写在最后</h2><p>回头看，这个项目最大的收获不是”接入了大模型”，而是<strong>把不确定的 LLM 关进确定性的工程笼子里</strong>：端口化隔离供应商、工具调用只读化、输出解析七道防线、业务规则兜底。AI 负责灵感，工程负责兑现。</p>
+<p>接下来计划：接入支付沙箱、机票真实供应商、把 H2 切到 MySQL 做多实例。如果你也在做 Agent 落地，欢迎交流。</p>
+
+        </div>
+
+        
+        <nav class="article-nav">
+          
+          
+          <div class="nav-item next">
+            <div class="nav-label">下一篇</div>
+            <a href="/2026/09/23/opentenbase-source-install-ubuntu-2204/" class="nav-title">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版 · 第 3 版）：从编译到分布式集群部署全记录</a>
+          </div>
+          
+        </nav>
+        
+      </article>
+    </main>
+
+    <aside class="sidebar-right">
+  <div class="profile-card">
+    <div class="profile-avatar">
+      <img src="/images/avatar.png" alt="LZH"
+           onerror="this.src='https://ui-avatars.com/api/?name=LZH&background=d97757&color=fff&size=128'">
+    </div>
+    <h3 class="profile-name">LZH</h3>
+    <p class="profile-desc">热爱编程，分享技术笔记</p>
+    <div class="profile-stats">
+      <span class="stat-value">6</span>
+      <span class="stat-label">篇文章</span>
+    </div>
+  </div>
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">近期文章</h4>
+    <ul class="hot-article-list">
+      
+      <li class="hot-article-item">
+        <span class="article-rank">01</span>
+        <a href="/2026/10/03/trip-agent-ai-travel-platform/" class="hot-article-title">从 0 到上线：我用 Spring AI + Vue3 做了一个 AI 旅游预订平台「畅游 TripAgent」</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">02</span>
+        <a href="/2026/09/23/opentenbase-source-install-ubuntu-2204/" class="hot-article-title">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版 · 第 3 版）：从编译到分布式集群部署全记录</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">03</span>
+        <a href="/2026/09/21/ai-agent-tutorial-01/" class="hot-article-title">AI Agent 原理与技术教程（一）：核心定义、系统组成与运行机制</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">04</span>
+        <a href="/2026/09/12/drawio-mindmap-ai-secondary-development/" class="hot-article-title">把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">05</span>
+        <a href="/2026/09/01/python-data-analysis-tutorial/" class="hot-article-title">Python 数据分析入门指南 - 从零基础到实战项目</a>
+      </li>
+      
+    </ul>
+  </div>
+  
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">分类</h4>
+    <ul class="category-list">
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
+          <span>项目实战</span>
+          <span class="category-count">2</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%9A%8F%E7%AC%94/">
+          <span>随笔</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">
+          <span>技术教程</span>
+          <span class="category-count">2</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/%E5%89%8D%E7%AB%AF/">
+          <span>前端</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/AI/">
+          <span>AI</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">
+          <span>编程教程</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+          <span>数据库</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">
+          <span>Python</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+          <span>数据分析</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+  
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">标签</h4>
+    <div class="tag-cloud">
+      
+      <a href="/tags/drawio/" class="tag-item">drawio</a>
+      
+      <a href="/tags/AI-Agent/" class="tag-item">AI Agent</a>
+      
+      <a href="/tags/TypeScript/" class="tag-item">TypeScript</a>
+      
+      <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" class="tag-item">思维导图</a>
+      
+      <a href="/tags/Electron/" class="tag-item">Electron</a>
+      
+      <a href="/tags/%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" class="tag-item">二次开发</a>
+      
+      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item">博客</a>
+      
+      <a href="/tags/Hexo/" class="tag-item">Hexo</a>
+      
+      <a href="/tags/LLM/" class="tag-item">LLM</a>
+      
+      <a href="/tags/%E6%99%BA%E8%83%BD%E4%BD%93/" class="tag-item">智能体</a>
+      
+      <a href="/tags/%E6%95%99%E7%A8%8B/" class="tag-item">教程</a>
+      
+      <a href="/tags/Python/" class="tag-item">Python</a>
+      
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item">数据分析</a>
+      
+      <a href="/tags/Pandas/" class="tag-item">Pandas</a>
+      
+      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item">可视化</a>
+      
+      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item">入门教程</a>
+      
+      <a href="/tags/Spring-Boot/" class="tag-item">Spring Boot</a>
+      
+      <a href="/tags/Spring-AI/" class="tag-item">Spring AI</a>
+      
+      <a href="/tags/Vue3/" class="tag-item">Vue3</a>
+      
+      <a href="/tags/%E5%85%A8%E6%A0%88%E9%A1%B9%E7%9B%AE/" class="tag-item">全栈项目</a>
+      
+      <a href="/tags/OpenTenBase/" class="tag-item">OpenTenBase</a>
+      
+      <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" class="tag-item">分布式数据库</a>
+      
+      <a href="/tags/PostgreSQL/" class="tag-item">PostgreSQL</a>
+      
+      <a href="/tags/Ubuntu/" class="tag-item">Ubuntu</a>
+      
+      <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" class="tag-item">源码编译</a>
+      
+    </div>
+  </div>
+  
+</aside>
+
+  </div>
+
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <p class="footer-title">LZH Code Blog<span class="logo-dot">.</span></p>
+        <p class="footer-desc">一个专注于编程实践、技术分享与个人成长的博客。</p>
+      </div>
+      <nav class="footer-nav">
+        
+        <a href="/">首页</a>
+        
+        <a href="/archives/">归档</a>
+        
+        <a href="/categories/">分类</a>
+        
+        <a href="/tags/">标签</a>
+        
+        <a href="/about/">关于</a>
+        
+      </nav>
+    </div>
+    <p class="footer-copyright">
+      © 2026 LZH · Powered by Hexo · Claude 暖纸设计
+    </p>
+  </div>
+</footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部" onclick="scrollToTop()">↑</button>
+<script src="/js/main.js"></script>
+
+</body>
+</html>
