@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>畅游 TripAgent 技术文档（二）：大区域目的地体系、落地交通与工程化加固 - LZH Code Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <header class="site-header">
+  <div class="header-container">
+    <a href="/" class="logo">
+      LZH Code Blog<span class="logo-dot">.</span>
+    </a>
+    <nav class="header-nav">
+      
+      <a href="/" class="nav-link ">首页</a>
+      
+      <a href="/archives/" class="nav-link ">归档</a>
+      
+      <a href="/categories/" class="nav-link ">分类</a>
+      
+      <a href="/tags/" class="nav-link ">标签</a>
+      
+      <a href="/about/" class="nav-link ">关于</a>
+      
+    </nav>
+    <form class="search-box" action="/" method="get" role="search">
+      <input type="search" name="search" class="search-input" placeholder="搜索文章…" aria-label="搜索文章">
+    </form>
+  </div>
+</header>
+
+
+  <div class="main-container">
+    <main class="content-left">
+      <article class="article-detail">
+        <header class="article-header">
+          <h1 class="article-title-detail">畅游 TripAgent 技术文档（二）：大区域目的地体系、落地交通与工程化加固</h1>
+          <div class="article-meta article-meta-detail">
+            <span class="meta-item">2026-10-04</span>
+            
+            <span class="meta-item">
+              <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">项目实战</a>
+            </span>
+            
+            
+            <span class="meta-item">
+              <a href="/tags/AI-Agent/">AI Agent</a> · <a href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/">技术文档</a> · <a href="/tags/Spring-Boot/">Spring Boot</a> · <a href="/tags/Vue3/">Vue3</a> · <a href="/tags/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE/">高德地图</a>
+            </span>
+            
+          </div>
+        </header>
+
+        <div class="article-body">
+          <blockquote>
+<p>上篇<a href="/2026/10/03/trip-agent-ai-travel-platform/">《从 0 到上线：我用 Spring AI + Vue3 做了一个 AI 旅游预订平台》</a>复盘了 TripAgent 的整体架构与 AI 行程规划。<br>本篇是第二篇技术文档，记录 10 月 4 日这次大版本迭代：<strong>目的地从”城市平铺”重构为”34 大区”内容体系、行程落地交通接驳、地图真实道路路线与周边图层、账号安全加固与频控、数据质量治理</strong>。依然老规矩：功能、API 契约、实现要点、踩坑，全部来自实测。</p>
+</blockquote>
+<h2 id="一、本版本变更总览"><a href="#一、本版本变更总览" class="headerlink" title="一、本版本变更总览"></a>一、本版本变更总览</h2><table>
+<thead>
+<tr>
+<th>模块</th>
+<th>变更</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>目的地体系</td>
+<td>34 大区重构（中国 27 省级 + 日本 7 大区），25 个日本子区域，4 个新前端页面族</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>落地交通</td>
+<td>行程结果页”落地交通”卡：机场 → 酒店高德实时公交&#x2F;打车规划</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>行程地图</td>
+<td>逐日路线改真实道路规划折线；行程条目带景点封面；周边 POI 图层</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>账号安全</td>
+<td>邮箱验证码注册 + 图形验证码 + BCrypt + opaque token + 五类频控</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>数据质量</td>
+<td>38 城封面逐张人工校验重抓；34 个日本景点权威坐标；H2 坐标精度修复</td>
+<td>✅ 已验证</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>公网入口全部关闭，仅留 SSH 隧道访问（安全优先）</td>
+<td>✅ 已验证</td>
+</tr>
+</tbody></table>
+<h2 id="二、大区域目的地体系"><a href="#二、大区域目的地体系" class="headerlink" title="二、大区域目的地体系"></a>二、大区域目的地体系</h2><h3 id="1-为什么要重构"><a href="#1-为什么要重构" class="headerlink" title="1. 为什么要重构"></a>1. 为什么要重构</h3><p>旧版目的地是 30 个城市平铺，两个问题：一是<strong>颗粒度错位</strong>——用户心智里的旅行单位是”云南””京都”，不是”昆明代码 YIN”；二是<strong>内容深度不够</strong>——一个城市的 summary + 景点列表撑不起”种草”环节。参考 japan-travel.cn 的信息架构，把目的地重组为三层：</p>
+<pre><code class="hljs dart">大区 <span class="hljs-title class_">Region</span>（<span class="hljs-number">34</span> 个）        中国 <span class="hljs-number">27</span> 省级（云南=昆明+丽江+大理…）+ 日本 <span class="hljs-number">7</span> 大区（北海道/东京/京都/大阪/冲绳/九州·福冈/中部·名古屋）
+ ├── 城市 <span class="hljs-title class_">City</span>             原有 <span class="hljs-title class_">Destination</span>，新增 regionCode 归属
+ └── 子区域 <span class="hljs-title class_">SubRegion</span>      <span class="hljs-number">25</span> 个（仅日本）：金阁寺与岚山、祇园清水、伏见稻荷…</code></pre>
+
+<p><img src="/images/trip-agent-article/regions.png" alt="大区目的地列表：国家筛选 + 大图卡片"></p>
+<h3 id="2-内容模型：region-content-json"><a href="#2-内容模型：region-content-json" class="headerlink" title="2. 内容模型：region-content.json"></a>2. 内容模型：region-content.json</h3><p>大区内容走静态 JSON 而不是数据库——<strong>文案型内容（summary&#x2F;美食&#x2F;季节）变更频率低、需要人工润色，静态文件 + 启动加载是最省力的方案</strong>。每个大区的结构：</p>
+<pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;jp-kyo&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;京都&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;country&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;日本&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;cities&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;KYO&quot;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;summary&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;千年古都，十七处世界文化遗产散落全城……&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;foods&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;怀石料理&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;茶道衍生的极致会席……&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;image&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/images/region-food/jp-kyo_1.jpg&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;抹茶甜品&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;宇治抹茶的抹茶芭菲、生茶冻……&quot;</span> <span class="hljs-punctuation">&#125;</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;seasons&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;season&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;春&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;哲学之道樱花 · 岚山花灯&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;……&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;season&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;秋&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;title&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;红叶狩 · 永观堂夜枫&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;desc&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;……&quot;</span> <span class="hljs-punctuation">&#125;</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">&#125;</span></code></pre>
+
+<p>美食图从 360 图片接口抓取后<strong>逐张人工校验</strong>入库（这个流程在数据治理一节展开）。日本大区额外带子区域列表，子区域有独立的地区介绍与景点集合。</p>
+<h3 id="3-API-契约"><a href="#3-API-契约" class="headerlink" title="3. API 契约"></a>3. API 契约</h3><pre><code class="hljs perl">GET /api/regions                        <span class="hljs-comment"># 34 个大区（国家筛选、搜索）</span>
+GET /api/regions/<span class="hljs-string">&#123;code&#125;</span>                 <span class="hljs-comment"># 聚合：summary + 城市列表 + 热门景点 + 美食 + 季节 + 子区域</span>
+GET /api/regions/<span class="hljs-string">&#123;code&#125;</span>/<span class="hljs-function"><span class="hljs-keyword">sub</span>/</span>&#123;subCode&#125;   <span class="hljs-comment"># 日本子区域详情 + 景点</span></code></pre>
+
+<p><code>GET /api/regions/jp-kyo</code> 返回节选（热门景点已带权威坐标与本地化封面）：</p>
+<pre><code class="hljs json"><span class="hljs-punctuation">&#123;</span>
+  <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;jp-kyo&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;京都&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;cities&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;KYO&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;京都&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;hotScore&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">94</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;avgDailyBudget&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">1000.0</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;hotAttractions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;id&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">129</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;清水寺&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;ticketPrice&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">30.0</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;openTime&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;08:00-18:00&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;latitude&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">34.9949</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;longitude&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">135.785</span><span class="hljs-punctuation">,</span> <span class="hljs-attr">&quot;coverImage&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;/images/attractions-jp/KYO_1.jpg&quot;</span> <span class="hljs-punctuation">&#125;</span>
+  <span class="hljs-punctuation">]</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;subRegions&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kiyomizu-gion&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">,</span> <span class="hljs-punctuation">&#123;</span> <span class="hljs-attr">&quot;code&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;kinkakuji-arashiyama&quot;</span> <span class="hljs-punctuation">&#125;</span><span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">&#125;</span></code></pre>
+
+<h3 id="4-前端页面族"><a href="#4-前端页面族" class="headerlink" title="4. 前端页面族"></a>4. 前端页面族</h3><p>新增四个页面，形成完整的”种草 → 决策 → 预订”漏斗：</p>
+<table>
+<thead>
+<tr>
+<th>页面</th>
+<th>路由</th>
+<th>职责</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RegionListView</td>
+<td><code>/destinations</code></td>
+<td>大图卡片流 + 国家筛选 + 城市搜索</td>
+</tr>
+<tr>
+<td>RegionDetailView</td>
+<td><code>/destinations/region/:code</code></td>
+<td>japan-travel 风格长页：Hero&#x2F;热门景点&#x2F;特色美食&#x2F;季节特色&#x2F;按地区探索&#x2F;城市入口</td>
+</tr>
+<tr>
+<td>SubRegionDetailView</td>
+<td><code>/destinations/region/:code/sub/:subCode</code></td>
+<td>子区域介绍 + 景点</td>
+</tr>
+<tr>
+<td>AttractionDetailView</td>
+<td><code>/attractions/:id</code></td>
+<td>景点介绍&#x2F;门票&#x2F;开放时间&#x2F;地址 + “找酒店” CTA</td>
+</tr>
+</tbody></table>
+<p><img src="/images/trip-agent-article/region-detail.png" alt="京都大区详情：Hero + 预订 CTA + 热门景点"></p>
+<p><img src="/images/trip-agent-article/region-foods-seasons.png" alt="特色美食与四季特色"></p>
+<p><img src="/images/trip-agent-article/subregion.png" alt="子区域详情：金阁寺与岚山"></p>
+<p><img src="/images/trip-agent-article/attraction-detail.png" alt="景点详情：实用信息 + 找酒店&#x2F;AI 规划 CTA"></p>
+<p>导航栏同步升级为 <strong>mega menu</strong>（目的地：中国&#x2F;日本两列，悬停联动大图卡；旅游攻略：精选区卡；旅游计划：AI 规划入口）：</p>
+<p><img src="/images/trip-agent-article/mega-menu.png" alt="导航 mega menu：两列国家 + 悬停联动大图卡"></p>
+<h3 id="5-区域上下文预订（本次最有价值的设计）"><a href="#5-区域上下文预订（本次最有价值的设计）" class="headerlink" title="5. 区域上下文预订（本次最有价值的设计）"></a>5. 区域上下文预订（本次最有价值的设计）</h3><p>大区页的「预订京都的酒店」跳 <code>/hotels?region=jp-kyo</code>，后端把<strong>区域内全部城市的酒店合并检索、统一排序</strong>，前端横幅提示”正在浏览该区域的酒店（含区域内全部城市）”：</p>
+<p><img src="/images/trip-agent-article/hotels-region.png" alt="区域上下文酒店：云南 3 城合并列表"></p>
+<p>实测云南（昆明+丽江+大理）31 家、东京+横滨 23 家，无越界城市混入；景点详情页的「找京都的酒店」则带 cityCode 精确到城市。这样”区域”就贯通了内容浏览到交易闭环，而不是一个纯展示层。</p>
+<h2 id="三、落地交通接驳"><a href="#三、落地交通接驳" class="headerlink" title="三、落地交通接驳"></a>三、落地交通接驳</h2><p>行程结果页新增「落地交通」卡，回答下机后”怎么去酒店”这个高频问题：</p>
+<p><img src="/images/trip-agent-article/transfer.png" alt="落地交通卡：打车估算 + 步行方案"></p>
+<ul>
+<li><strong>API</strong>：<code>GET /api/transfer/plan?itineraryId=</code>，由行程里的到达机场与推荐酒店坐标计算；</li>
+<li><strong>策略</strong>：优先高德实时公交&#x2F;地铁整合规划（含票价）→ 驾车打车费估算（起步 13 元含 3km + 2.3 元&#x2F;km）→ 近距（约 2km 内）补步行方案；拿不到实时数据时明确标注”示意估算，实际以平台计价为准”；</li>
+<li>实测参考：萧山机场 → 西湖酒店，地铁 19 号线 → 1 号线 66 分钟 7 元、打车 32.5km 约 81 元。</li>
+</ul>
+<p>设计取舍：交通方案<strong>每次实时查询而不入库</strong>——票价与运营时间随时变，缓存的意义远小于准确性。</p>
+<h2 id="四、行程地图升级"><a href="#四、行程地图升级" class="headerlink" title="四、行程地图升级"></a>四、行程地图升级</h2><p>上一版的逐日路线是两点直线，本版改为<strong>真实道路路线</strong>：逐日按途经点逐腿调用高德步行&#x2F;驾车路径规划（≤5km 自动走步行），拼接为折线渲染，图例里程同步改为实际道路里程；规划结果服务端缓存，避免重复计费调用。</p>
+<p><img src="/images/trip-agent-article/map-nearby.png" alt="地图：周边 POI 图层 + 真实道路路线"></p>
+<p>地图上方新增<strong>周边图层</strong>按钮（🍜美食 &#x2F; 🏨酒店 &#x2F; 🏞️景点），点击即以行程位置为中心调高德 place&#x2F;around 搜索 3km POI 叠加标记（<code>GET /api/map/nearby</code>）。行程条目也补上了景点封面图（<code>PlanItem.imageUrl</code>，老行程打开时自动从景点库回填）。</p>
+<h2 id="五、账号体系与安全加固"><a href="#五、账号体系与安全加固" class="headerlink" title="五、账号体系与安全加固"></a>五、账号体系与安全加固</h2><p>上篇提到的”游客模式”已退役，本版补齐了完整账号体系，核心原则一句话：<strong>身份与额度都以服务端为准，前端传什么都不算数</strong>。</p>
+<h3 id="1-认证链路"><a href="#1-认证链路" class="headerlink" title="1. 认证链路"></a>1. 认证链路</h3><pre><code class="hljs llvm">注册：邮箱 → 图形验证码（真人校验）→ 邮箱 <span class="hljs-number">6</span> 位验证码（<span class="hljs-number">5</span><span class="hljs-keyword">min</span>/一次性/错<span class="hljs-number">5</span>次作废/<span class="hljs-number">60</span>s冷却）→ 落库（BCrypt）
+登录：用户名密码 + 图形验证码 → 签发 <span class="hljs-type">opaque</span> <span class="hljs-type">token</span>（auth_tokens 表，<span class="hljs-number">7</span> 天滑动过期）
+鉴权：订单/预订/AI 接口强制登录，userId 一律从 <span class="hljs-type">token</span> 解析，请求体里的 userId 字段直接忽略（防越权）</code></pre>
+
+<ul>
+<li>SMTP 未配置时自动回落”日志模拟模式”（验证码打印到应用日志），本地开发零成本；</li>
+<li>密码 BCrypt 哈希存储；token 是不透明随机串而非 JWT——<strong>服务端可即时吊销</strong>，代价小收益大。</li>
+</ul>
+<h3 id="2-频控矩阵"><a href="#2-频控矩阵" class="headerlink" title="2. 频控矩阵"></a>2. 频控矩阵</h3><table>
+<thead>
+<tr>
+<th>维度</th>
+<th>限额</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI 行程</td>
+<td>单用户 30&#x2F;天、单 IP 30&#x2F;小时、全站 300&#x2F;天兜底</td>
+</tr>
+<tr>
+<td>验证码</td>
+<td>30&#x2F;10min·IP</td>
+</tr>
+<tr>
+<td>登录</td>
+<td>10&#x2F;15min·IP + 用户名</td>
+</tr>
+<tr>
+<td>注册</td>
+<td>5&#x2F;小时·IP</td>
+</tr>
+</tbody></table>
+<p>取 clientIp 时取 <code>X-Forwarded-For</code> 的最后一跳，防止伪造头绕过限流。</p>
+<h3 id="3-部署安全"><a href="#3-部署安全" class="headerlink" title="3. 部署安全"></a>3. 部署安全</h3><p>公网入口全部关闭：阿里云防火墙只留 22&#x2F;ICMP，80&#x2F;443 全禁，后端仅监听 127.0.0.1，H2 控制台关闭。访问走 SSH 隧道：</p>
+<pre><code class="hljs bash">ssh -N -L 9999:127.0.0.1:80 admin@116.62.42.1   <span class="hljs-comment"># 本地打开 http://localhost:9999</span></code></pre>
+
+<p>Demo 项目不承接公网流量，把攻击面收到一条 SSH 通道，是性价比最高的安全方案。</p>
+<h2 id="六、数据质量治理"><a href="#六、数据质量治理" class="headerlink" title="六、数据质量治理"></a>六、数据质量治理</h2><p>这轮花时间最多、也最值得的一块。<strong>上篇说过”演示数据再好看也是假的”，但这轮发现：爬来的数据不校验，比假数据更有害。</strong></p>
+<ul>
+<li><strong>封面图翻车</strong>：目的地&#x2F;景点封面最初来自必应图片爬虫、无内容校验——福冈的封面赫然是一张”扁平疣”医学科普图。修复：38 城封面用收紧的地标查询词重抓，生成校验拼图<strong>逐张人工过目</strong>，不合格换词重抓；图片全部下载本地化（<code>static/images/destinations/{CODE}.jpg</code>），启动时强制替换，不再依赖外链。</li>
+<li><strong>日本景点坐标缺失</strong>：DB 里日本景点没有坐标，地图标记其实是前端伪随机撒点。修复：34 个景点补权威坐标 + 校验过的封面图，启动时 initializer 修正。</li>
+<li><strong>H2 精度坑</strong>：坐标列被默认建成 <code>DECIMAL(?, 2)</code>——小数只有 2 位，约 1km 的定位误差，再权威的坐标存进去也会漂。扩宽为 <code>DECIMAL(9,6)</code>（注意 H2 表名是复数 <code>ATTRACTIONS</code>，单数表名 ALTER 直接 Table not found）。</li>
+<li><strong>搜索源结论</strong>：必应对”日本景点中文名”这类小众查询的图片结果基本不可用；360 图片 JSON 接口国内稳定可用，作为兜底源。</li>
+<li>脚本沉淀在 <code>tools/city-images/</code>（<code>fetch_bing_covers.py</code> &#x2F; <code>fetch_japan_attrs_360.py</code> &#x2F; <code>fetch_food_images.py</code>），抓取 → 拼校验图 → 人工审 → 入库，形成可复跑的流水线。</li>
+</ul>
+<h2 id="七、踩坑记录（本周期）"><a href="#七、踩坑记录（本周期）" class="headerlink" title="七、踩坑记录（本周期）"></a>七、踩坑记录（本周期）</h2><ol>
+<li><strong>vue-router 同路由换参数不刷新</strong>：组件实例复用，<code>onMounted</code> 不重跑。全局修法是 <code>RouterView</code> 绑 <code>:key=&quot;route.fullPath&quot;</code>。</li>
+<li><strong>mega 下拉”闪没”</strong>：<code>mouseleave</code> 必须绑在包装层——绑在面板上时，鼠标从链接到面板之间还没进面板就先离开了；链接与面板之间的空隙用 <code>.nav-mega::after</code> 隐形桥盖住。</li>
+<li><strong>酒店页默认城市吃掉 region 参数</strong>：带 <code>?region=yn</code> 进入时，cityCode 的默认值必须为空，否则默认 SYX 永远覆盖区域参数。</li>
+<li><strong>target 里混入 IDE 编译的 ECJ 坏类</strong>：运行时报 “Unresolved compilation problem”——部署一律 <code>mvn clean package</code>，别信增量。</li>
+<li><strong><code>open-in-view=false</code> 下的 LAZY 关联</strong>：视图层访问懒关联直接 LazyInitializationException，懒得改 DTO 层级时，<code>@Transactional</code> 加在 controller 方法上可解（权衡过的取舍）。</li>
+<li><strong>浏览器自动化里 JsonNode 没有 <code>stream()</code></strong>：遍历用 for-each，别照抄 JDK 文档。</li>
+</ol>
+<h2 id="八、下一步"><a href="#八、下一步" class="headerlink" title="八、下一步"></a>八、下一步</h2><ul>
+<li>区域内容扩容：中国大区的子区域化（目前仅日本 25 个）与美食&#x2F;季节文案补齐；</li>
+<li>落地交通接入返程与站间换乘；</li>
+<li>酒店区域合并检索分页优化（当前一次拉全量再排序）；</li>
+<li>AI 规划结果与区域内容打通（行程 Day N 直接关联景点详情与子区域攻略）。</li>
+</ul>
+<p>两篇文档覆盖了从 0 到 1 与从 1 到 1.5。工程上没有惊为天人的技术，全是”把坑一个个填平”的笨功夫——但 Demo 和产品之间的距离，恰恰就是这些笨功夫。</p>
+
+        </div>
+
+        
+        <nav class="article-nav">
+          
+          
+          <div class="nav-item next">
+            <div class="nav-label">下一篇</div>
+            <a href="/2026/10/03/trip-agent-ai-travel-platform/" class="nav-title">从 0 到上线：我用 Spring AI + Vue3 做了一个 AI 旅游预订平台「畅游 TripAgent」</a>
+          </div>
+          
+        </nav>
+        
+      </article>
+    </main>
+
+    <aside class="sidebar-right">
+  <div class="profile-card">
+    <div class="profile-avatar">
+      <img src="/images/avatar.png" alt="LZH"
+           onerror="this.src='https://ui-avatars.com/api/?name=LZH&background=d97757&color=fff&size=128'">
+    </div>
+    <h3 class="profile-name">LZH</h3>
+    <p class="profile-desc">热爱编程，分享技术笔记</p>
+    <div class="profile-stats">
+      <span class="stat-value">7</span>
+      <span class="stat-label">篇文章</span>
+    </div>
+  </div>
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">近期文章</h4>
+    <ul class="hot-article-list">
+      
+      <li class="hot-article-item">
+        <span class="article-rank">01</span>
+        <a href="/2026/10/04/trip-agent-tech-doc-02-region-transfer-security/" class="hot-article-title">畅游 TripAgent 技术文档（二）：大区域目的地体系、落地交通与工程化加固</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">02</span>
+        <a href="/2026/10/03/trip-agent-ai-travel-platform/" class="hot-article-title">从 0 到上线：我用 Spring AI + Vue3 做了一个 AI 旅游预订平台「畅游 TripAgent」</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">03</span>
+        <a href="/2026/09/23/opentenbase-source-install-ubuntu-2204/" class="hot-article-title">OpenTenBase 源码编译安装教程（Ubuntu 22.04 适配版 · 第 3 版）：从编译到分布式集群部署全记录</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">04</span>
+        <a href="/2026/09/21/ai-agent-tutorial-01/" class="hot-article-title">AI Agent 原理与技术教程（一）：核心定义、系统组成与运行机制</a>
+      </li>
+      
+      <li class="hot-article-item">
+        <span class="article-rank">05</span>
+        <a href="/2026/09/12/drawio-mindmap-ai-secondary-development/" class="hot-article-title">把 drawio 二开成 AI 思维导图工具：架构设计与踩坑实录</a>
+      </li>
+      
+    </ul>
+  </div>
+  
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">分类</h4>
+    <ul class="category-list">
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/">
+          <span>技术教程</span>
+          <span class="category-count">2</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/">
+          <span>项目实战</span>
+          <span class="category-count">3</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%9A%8F%E7%AC%94/">
+          <span>随笔</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/AI/">
+          <span>AI</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E6%8A%80%E6%9C%AF%E6%95%99%E7%A8%8B/%E6%95%B0%E6%8D%AE%E5%BA%93/">
+          <span>数据库</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E9%A1%B9%E7%9B%AE%E5%AE%9E%E6%88%98/%E5%89%8D%E7%AB%AF/">
+          <span>前端</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/">
+          <span>编程教程</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/">
+          <span>Python</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+      <li class="category-item">
+        <a href="/categories/%E7%BC%96%E7%A8%8B%E6%95%99%E7%A8%8B/Python/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/">
+          <span>数据分析</span>
+          <span class="category-count">1</span>
+        </a>
+      </li>
+      
+    </ul>
+  </div>
+  
+
+  
+  <div class="sidebar-module">
+    <h4 class="module-title">标签</h4>
+    <div class="tag-cloud">
+      
+      <a href="/tags/AI-Agent/" class="tag-item">AI Agent</a>
+      
+      <a href="/tags/LLM/" class="tag-item">LLM</a>
+      
+      <a href="/tags/%E6%99%BA%E8%83%BD%E4%BD%93/" class="tag-item">智能体</a>
+      
+      <a href="/tags/%E6%95%99%E7%A8%8B/" class="tag-item">教程</a>
+      
+      <a href="/tags/%E6%8A%80%E6%9C%AF%E6%96%87%E6%A1%A3/" class="tag-item">技术文档</a>
+      
+      <a href="/tags/Spring-Boot/" class="tag-item">Spring Boot</a>
+      
+      <a href="/tags/Vue3/" class="tag-item">Vue3</a>
+      
+      <a href="/tags/%E9%AB%98%E5%BE%B7%E5%9C%B0%E5%9B%BE/" class="tag-item">高德地图</a>
+      
+      <a href="/tags/drawio/" class="tag-item">drawio</a>
+      
+      <a href="/tags/TypeScript/" class="tag-item">TypeScript</a>
+      
+      <a href="/tags/%E6%80%9D%E7%BB%B4%E5%AF%BC%E5%9B%BE/" class="tag-item">思维导图</a>
+      
+      <a href="/tags/Electron/" class="tag-item">Electron</a>
+      
+      <a href="/tags/%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" class="tag-item">二次开发</a>
+      
+      <a href="/tags/%E5%8D%9A%E5%AE%A2/" class="tag-item">博客</a>
+      
+      <a href="/tags/Hexo/" class="tag-item">Hexo</a>
+      
+      <a href="/tags/OpenTenBase/" class="tag-item">OpenTenBase</a>
+      
+      <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93/" class="tag-item">分布式数据库</a>
+      
+      <a href="/tags/PostgreSQL/" class="tag-item">PostgreSQL</a>
+      
+      <a href="/tags/Ubuntu/" class="tag-item">Ubuntu</a>
+      
+      <a href="/tags/%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/" class="tag-item">源码编译</a>
+      
+      <a href="/tags/Python/" class="tag-item">Python</a>
+      
+      <a href="/tags/%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/" class="tag-item">数据分析</a>
+      
+      <a href="/tags/Pandas/" class="tag-item">Pandas</a>
+      
+      <a href="/tags/%E5%8F%AF%E8%A7%86%E5%8C%96/" class="tag-item">可视化</a>
+      
+      <a href="/tags/%E5%85%A5%E9%97%A8%E6%95%99%E7%A8%8B/" class="tag-item">入门教程</a>
+      
+      <a href="/tags/Spring-AI/" class="tag-item">Spring AI</a>
+      
+      <a href="/tags/%E5%85%A8%E6%A0%88%E9%A1%B9%E7%9B%AE/" class="tag-item">全栈项目</a>
+      
+    </div>
+  </div>
+  
+</aside>
+
+  </div>
+
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <p class="footer-title">LZH Code Blog<span class="logo-dot">.</span></p>
+        <p class="footer-desc">一个专注于编程实践、技术分享与个人成长的博客。</p>
+      </div>
+      <nav class="footer-nav">
+        
+        <a href="/">首页</a>
+        
+        <a href="/archives/">归档</a>
+        
+        <a href="/categories/">分类</a>
+        
+        <a href="/tags/">标签</a>
+        
+        <a href="/about/">关于</a>
+        
+      </nav>
+    </div>
+    <p class="footer-copyright">
+      © 2026 LZH · Powered by Hexo · Claude 暖纸设计
+    </p>
+  </div>
+</footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部" onclick="scrollToTop()">↑</button>
+<script src="/js/main.js"></script>
+
+</body>
+</html>
