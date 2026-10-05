@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="项目详情">
+  <title>项目详情 - LZH 作品集</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-page="detail">
+
+  <header class="site-header">
+    <div class="header-container">
+      <a class="logo" href="index.html">作品集<span class="logo-dot">.</span></a>
+      <nav class="header-nav">
+        <a class="nav-link" href="index.html">全部项目</a>
+      </nav>
+      <div class="header-links">
+        <a class="nav-link" href="https://lzhcodeblog.site" target="_blank" rel="noopener">博客 ↗</a>
+        <a class="nav-link header-github" id="githubLink" href="#" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="main-container">
+    <aside class="sidebar-left" id="sidebar">
+      <!-- 个人资料卡 由 JS 渲染 -->
+    </aside>
+
+    <main class="content-right">
+      <div class="detail-back">
+        <a href="index.html" class="back-link">← 返回全部项目</a>
+      </div>
+
+      <article class="project-detail" id="projectDetail">
+        <!-- 详情由 JS 渲染 -->
+      </article>
+
+      <nav class="article-nav" id="projectNav" hidden>
+        <div class="nav-item prev" id="navPrev"></div>
+        <div class="nav-item next" id="navNext"></div>
+      </nav>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-container">
+      <div class="footer-main">
+        <div class="footer-brand">
+          <p class="footer-title">LZH 作品集<span class="logo-dot">.</span></p>
+          <p class="footer-desc">记录每一个从想法到落地的项目。</p>
+        </div>
+        <nav class="footer-nav">
+          <a href="index.html">全部项目</a>
+          <a href="https://lzhcodeblog.site" target="_blank" rel="noopener">我的博客</a>
+          <a id="footerGithub" href="#" target="_blank" rel="noopener">GitHub</a>
+        </nav>
+      </div>
+      <p class="footer-copyright">
+        © <span id="copyrightYear"></span> LZH · 暖纸设计 · 与博客同源的设计体系
+      </p>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="回到顶部">↑</button>
+
+  <script src="js/marked.min.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
