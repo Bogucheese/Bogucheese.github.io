@@ -4,6 +4,11 @@
  * 加载顺序在主题 style.css 之后，用于镜像栅格与状态覆盖。
  * ========================================================================== */
 
+/* ===== 作品集页画布加宽（主题默认 1200px 是博客三列的宽度，两列大卡片需要 1440px） ===== */
+:root {
+  --page-max-width: 1440px;
+}
+
 /* ===== 镜像栅格：侧栏在左，内容在右 ===== */
 .main-container.pf-mirror {
   grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
@@ -217,11 +222,11 @@
   transform: scale(1.03);
 }
 
-/* ===== 项目卡片 ===== */
+/* ===== 项目卡片 —— 两列竖版大卡 ===== */
 .project-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px;
 }
 
 .project-card {
@@ -243,7 +248,7 @@
   position: relative;
   display: block;
   aspect-ratio: 16 / 10;
-  padding: 14px;
+  padding: 16px;
   overflow: hidden;
   background: linear-gradient(135deg, var(--color-soft-stone) 0%, #e7e3dc 100%);
 }
@@ -297,7 +302,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  padding: 20px;
+  padding: 24px;
 }
 
 .card-meta {
@@ -315,10 +320,10 @@
 
 .card-title {
   font-family: var(--font-serif);
-  font-size: 18px;
+  font-size: 21px;
   font-weight: 400;
   line-height: 1.35;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .card-title a {
@@ -330,12 +335,12 @@
 }
 
 .card-desc {
-  font-size: 13px;
-  line-height: 1.65;
+  font-size: 13.5px;
+  line-height: 1.7;
   color: var(--color-graphite);
-  margin-bottom: 14px;
+  margin-bottom: 16px;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -360,7 +365,7 @@
   display: flex;
   align-items: center;
   gap: 14px;
-  padding: 12px 20px;
+  padding: 14px 24px;
   border-top: 1px solid var(--color-chalk);
   font-size: 12px;
 }
@@ -421,12 +426,6 @@
 }
 
 /* ===== 响应式 ===== */
-@media (max-width: 1280px) {
-  .project-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 1024px) {
   .main-container.pf-mirror {
     grid-template-columns: 1fr;

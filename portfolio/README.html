@@ -49,21 +49,25 @@
         </header>
 
         <div class="article-body page-content">
-          <h1 id="LZH-作品集（博客子站）"><a href="#LZH-作品集（博客子站）" class="headerlink" title="LZH 作品集（博客子站）"></a>LZH 作品集（博客子站）</h1><p>暖纸印刷风格的个人作品集，<strong>已并入 LZH Code Blog</strong>，作为博客的一个静态子站运行在线地址 <code>https://lzhcodeblog.site/portfolio/</code>。本目录位于博客仓库内（<code>blog/source/portfolio/</code>），通过 Hexo 的 <code>skip_render</code> 原样发布，也是作品集唯一的源——加项目、改样式都在这里做。</p>
-<p>视觉体系与博客 csdn-style 主题同源：骨纸底色、碳黑墨迹、陶土橙点缀、衬线标题；布局为左侧个人信息栏 + 顶部导航 + 右侧三列项目卡片，点卡片进入项目详情。</p>
+          <h1 id="LZH-作品集（博客子站）"><a href="#LZH-作品集（博客子站）" class="headerlink" title="LZH 作品集（博客子站）"></a>LZH 作品集（博客子站）</h1><p>暖纸印刷风格的个人作品集，<strong>深度并入 LZH Code Blog</strong>，线上地址 <code>https://lzhcodeblog.site/portfolio/</code>。首页由博客主题渲染（共用博客页头页脚，导航「作品集」高亮），项目详情页保留独立样式，本目录位于博客仓库内，是作品集唯一的源。</p>
 <h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><pre><code class="hljs nix">blog<span class="hljs-operator">/</span>source<span class="hljs-operator">/</span>portfolio<span class="hljs-symbol">/</span>
-├── index.html            <span class="hljs-comment"># 首页：侧栏 + 三列卡片网格 + 分类筛选</span>
-├── project.html          <span class="hljs-comment"># 项目详情页（project.html?p=slug）</span>
+├── index.md              <span class="hljs-comment"># 首页入口（frontmatter 指定 layout: portfolio，经主题渲染）</span>
+├── project.html          <span class="hljs-comment"># 项目详情页（独立样式，project.html?p=slug）</span>
 ├── build.js              <span class="hljs-comment"># 扫描 projects/*.md → data/projects.json（零依赖，node 直接跑）</span>
-├── css<span class="hljs-symbol">/style.css</span>         <span class="hljs-comment"># 设计体系（与博客主题同源）</span>
+├── css<span class="hljs-operator">/</span>portfolio-page.css<span class="hljs-comment"># 首页专用组件样式（镜像栅格/卡片/窗口框/筛选条）</span>
+├── css<span class="hljs-symbol">/style.css</span>         <span class="hljs-comment"># 详情页完整样式</span>
 ├── js<span class="hljs-symbol">/main.js</span>            <span class="hljs-comment"># 渲染逻辑：窗口框封面 / 卡片 / 筛选 / 详情 / 图注</span>
 ├── js<span class="hljs-symbol">/marked.min.js</span>      <span class="hljs-comment"># 本地 Markdown 渲染（无 CDN 依赖）</span>
-├── data<span class="hljs-symbol">/profile.json</span>     <span class="hljs-comment"># 左侧栏个人信息（头像 / 简介 / GitHub / 邮箱 / 博客）</span>
+├── data<span class="hljs-symbol">/profile.json</span>     <span class="hljs-comment"># 侧栏个人信息（头像 / 简介 / GitHub / 邮箱 / 博客）</span>
 ├── projects<span class="hljs-symbol">/</span>             <span class="hljs-comment"># 每个项目一个 Markdown 文件（_template.md 为模板）</span>
-└── assets<span class="hljs-symbol">/</span>
-    ├── covers<span class="hljs-symbol">/</span>           <span class="hljs-comment"># 卡片封面图</span>
-    └── screenshots<span class="hljs-symbol">/</span>      <span class="hljs-comment"># 详情页正文插图</span></code></pre>
+└── assets<span class="hljs-symbol">/</span>               <span class="hljs-comment"># covers/ 封面图 · screenshots/ 正文插图</span></code></pre>
 
+<p>与主题相关的部分（改动需谨慎）：</p>
+<ul>
+<li><code>themes/csdn-style/layout/portfolio.ejs</code> —— 首页布局（博客壳 + 内容区骨架）</li>
+<li><code>themes/csdn-style/layout/_partial/head.ejs</code> —— 按 <code>page.portfolio_css</code> 条件注入首页样式</li>
+<li><code>_config.yml</code> 的 <code>skip_render</code> —— 让 <code>projects/*.md</code> 与 <code>project.html</code> 原样发布，<code>index.md</code> 正常渲染</li>
+</ul>
 <h2 id="如何添加新项目"><a href="#如何添加新项目" class="headerlink" title="如何添加新项目"></a>如何添加新项目</h2><ol>
 <li>复制模板：<code>cp projects/_template.md projects/我的项目.md</code>（文件名即 URL 中的 slug）</li>
 <li>编辑 frontmatter 和正文</li>
@@ -91,7 +95,7 @@
 <tr>
 <td><code>category</code></td>
 <td>建议</td>
-<td>分类，如 <code>Web</code> &#x2F; <code>AI</code> &#x2F; <code>工具</code>；自动生成导航和筛选</td>
+<td>分类，如 <code>Web</code> &#x2F; <code>AI</code> &#x2F; <code>工具</code>；自动生成侧栏分类与筛选</td>
 </tr>
 <tr>
 <td><code>tags</code></td>
@@ -129,18 +133,12 @@
 <td>在线演示链接，同上</td>
 </tr>
 </tbody></table>
-<p>正文是标准 Markdown：</p>
-<ul>
-<li>图片写 <code>![图注](assets/screenshots/xxx.jpg)</code>，会自动裱进浏览器窗口框并显示图注</li>
-<li>封面图建议 1440×900 及以上（16:10 附近），放 <code>assets/covers/</code></li>
-</ul>
-<h2 id="修改个人信息"><a href="#修改个人信息" class="headerlink" title="修改个人信息"></a>修改个人信息</h2><p>编辑 <code>data/profile.json</code>：<code>name</code>、<code>avatar</code>（留空显示首字母占位）、<code>bio</code>、<code>social.github</code> &#x2F; <code>social.email</code> &#x2F; <code>social.blog</code>。改完刷新页面即可，无需 build。</p>
+<p>正文是标准 Markdown：图片写 <code>![图注](assets/screenshots/xxx.jpg)</code> 会自动裱进窗口框并显示图注；封面图建议 16:10 左右，放 <code>assets/covers/</code>。</p>
+<h2 id="修改个人信息"><a href="#修改个人信息" class="headerlink" title="修改个人信息"></a>修改个人信息</h2><p>编辑 <code>data/profile.json</code>（<code>name</code> &#x2F; <code>avatar</code> &#x2F; <code>bio</code> &#x2F; <code>social.github</code> &#x2F; <code>social.email</code> &#x2F; <code>social.blog</code>），改完刷新页面即可，无需 build。</p>
 <h2 id="预览与发布"><a href="#预览与发布" class="headerlink" title="预览与发布"></a>预览与发布</h2><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> blog
 npx hexo server                <span class="hljs-comment"># 本地预览 http://localhost:4001/portfolio/</span>
-npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy   <span class="hljs-comment"># 发布上线</span>
+npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy   <span class="hljs-comment"># 发布上线（改过主题/布局后务必 clean）</span>
 git add -A &amp;&amp; git commit -m <span class="hljs-string">&quot;...&quot;</span> &amp;&amp; git push            <span class="hljs-comment"># 源码推 GitHub（本仓库）</span></code></pre>
-
-<p>注意：作品集的改动必须从 <code>blog</code> 仓库根目录走 Hexo 的 generate&#x2F;deploy 才会出现在线上；本目录下 <code>node build.js</code> 只重新生成 <code>data/projects.json</code>。</p>
 
         </div>
 
