@@ -1,36 +1,48 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="LZH 的个人作品集：开发项目展示，记录用代码构建的想法。">
-  <meta name="keywords" content="作品集, 项目展示, 前端, 后端, AI 应用">
-  <title>LZH 作品集</title>
+  <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>LZH 作品集 - LZH Code Blog</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
-  <link rel="stylesheet" href="css/style.css">
-</head>
+  <link rel="stylesheet" href="/css/style.css">
+  
+  <link rel="stylesheet" href="/portfolio/css/portfolio-page.css">
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
 <body data-page="index">
-
   <header class="site-header">
-    <div class="header-container">
-      <a class="logo" href="index.html">作品集<span class="logo-dot">.</span></a>
-      <nav class="header-nav" id="headerNav">
-        <a class="nav-link active" href="index.html" data-filter="">全部项目</a>
-        <!-- 分类由 JS 根据项目数据渲染 -->
-      </nav>
-      <div class="header-links">
-        <a class="nav-link" href="https://lzhcodeblog.site" target="_blank" rel="noopener">博客 ↗</a>
-        <a class="nav-link header-github" id="githubLink" href="#" target="_blank" rel="noopener">GitHub ↗</a>
-      </div>
-    </div>
-  </header>
+  <div class="header-container">
+    <a href="/" class="logo">
+      LZH Code Blog<span class="logo-dot">.</span>
+    </a>
+    <nav class="header-nav">
+      
+      <a href="/" class="nav-link ">首页</a>
+      
+      <a href="/archives/" class="nav-link ">归档</a>
+      
+      <a href="/categories/" class="nav-link ">分类</a>
+      
+      <a href="/tags/" class="nav-link ">标签</a>
+      
+      <a href="/portfolio/" class="nav-link active">作品集</a>
+      
+      <a href="/about/" class="nav-link ">关于</a>
+      
+    </nav>
+    <form class="search-box" action="/" method="get" role="search">
+      <input type="search" name="search" class="search-input" placeholder="搜索文章…" aria-label="搜索文章">
+    </form>
+  </div>
+</header>
 
-  <div class="main-container">
-    <aside class="sidebar-left" id="sidebar">
-      <!-- 个人资料卡 / 分类 / 技能 / 最新项目 由 JS 渲染 -->
-    </aside>
+
+  <div class="main-container pf-mirror">
+    <aside class="sidebar-left" id="sidebar"></aside>
 
     <main class="content-right">
       <section class="hero">
@@ -42,7 +54,6 @@
       <div class="filter-bar">
         <div class="filter-chips" id="filterChips">
           <button class="filter-chip active" data-filter="">全部</button>
-          <!-- 其余分类 chip 由 JS 渲染 -->
         </div>
         <span class="filter-count" id="filterCount"></span>
       </div>
@@ -51,33 +62,43 @@
 
       <div class="empty-state" id="emptyState" hidden>
         <p class="empty-title">这个分类下还没有项目</p>
-        <p class="empty-desc">把项目 Markdown 文件放进 projects/ 目录，运行 <code>node build.js</code> 即可发布。</p>
+        <p class="empty-desc">把项目 Markdown 文件放进 source/portfolio/projects/，运行 node build.js 即可发布。</p>
       </div>
     </main>
   </div>
 
   <footer class="site-footer">
-    <div class="footer-container">
-      <div class="footer-main">
-        <div class="footer-brand">
-          <p class="footer-title">LZH 作品集<span class="logo-dot">.</span></p>
-          <p class="footer-desc">记录每一个从想法到落地的项目。</p>
-        </div>
-        <nav class="footer-nav">
-          <a href="index.html">全部项目</a>
-          <a href="https://lzhcodeblog.site" target="_blank" rel="noopener">我的博客</a>
-          <a id="footerGithub" href="#" target="_blank" rel="noopener">GitHub</a>
-        </nav>
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <p class="footer-title">LZH Code Blog<span class="logo-dot">.</span></p>
+        <p class="footer-desc">一个专注于编程实践、技术分享与个人成长的博客。</p>
       </div>
-      <p class="footer-copyright">
-        © <span id="copyrightYear"></span> LZH · 暖纸设计 · 与博客同源的设计体系
-      </p>
+      <nav class="footer-nav">
+        
+        <a href="/">首页</a>
+        
+        <a href="/archives/">归档</a>
+        
+        <a href="/categories/">分类</a>
+        
+        <a href="/tags/">标签</a>
+        
+        <a href="/portfolio/">作品集</a>
+        
+        <a href="/about/">关于</a>
+        
+      </nav>
     </div>
-  </footer>
+    <p class="footer-copyright">
+      © 2026 LZH · Powered by Hexo · Claude 暖纸设计
+    </p>
+  </div>
+</footer>
 
-  <button class="back-to-top" id="backToTop" aria-label="回到顶部">↑</button>
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部" onclick="scrollToTop()">↑</button>
+<script src="/js/main.js"></script>
 
-  <script src="js/marked.min.js"></script>
-  <script src="js/main.js"></script>
+  <script src="/portfolio/js/main.js"></script>
 </body>
 </html>

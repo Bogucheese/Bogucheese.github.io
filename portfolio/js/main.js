@@ -155,15 +155,17 @@
       return tagCounts[b] - tagCounts[a];
     });
 
-    /* 顶部导航：全部 + 各分类 */
+    /* 顶部导航：全部 + 各分类（仅独立版首页有 headerNav；博客壳下分类走侧栏与筛选 chips） */
     var nav = document.getElementById('headerNav');
-    nav.innerHTML =
-      '<a class="nav-link' + (state.category === '' && !state.tag ? ' active' : '') + '" href="index.html" data-cat="">全部项目</a>' +
-      categories
-        .map(function (c) {
-          return '<a class="nav-link' + (state.category === c ? ' active' : '') + '" href="index.html?cat=' + encodeURIComponent(c) + '" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</a>';
-        })
-        .join('');
+    if (nav) {
+      nav.innerHTML =
+        '<a class="nav-link' + (state.category === '' && !state.tag ? ' active' : '') + '" href="index.html" data-cat="">全部项目</a>' +
+        categories
+          .map(function (c) {
+            return '<a class="nav-link' + (state.category === c ? ' active' : '') + '" href="index.html?cat=' + encodeURIComponent(c) + '" data-cat="' + escapeHtml(c) + '">' + escapeHtml(c) + '</a>';
+          })
+          .join('');
+    }
 
     /* 筛选 chips */
     var chips = document.getElementById('filterChips');
@@ -200,13 +202,13 @@
         })
         .join('') +
       '</div></div>' +
-      '<div class="sidebar-module"><h4 class="module-title">最新项目</h4><ul class="hot-list">' +
+      '<div class="sidebar-module"><h4 class="module-title">最新项目</h4><ul class="hot-article-list hot-list">' +
       projects
         .slice()
         .sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); })
         .slice(0, 4)
         .map(function (p, i) {
-          return '<li class="hot-item"><span class="hot-rank">0' + (i + 1) + '</span><a class="hot-title" href="project.html?p=' + encodeURIComponent(p.slug) + '">' + escapeHtml(p.title) + '</a></li>';
+          return '<li class="hot-article-item hot-item"><span class="article-rank hot-rank">0' + (i + 1) + '</span><a class="hot-article-title hot-title" href="project.html?p=' + encodeURIComponent(p.slug) + '">' + escapeHtml(p.title) + '</a></li>';
         })
         .join('') +
       '</ul></div>';
@@ -384,13 +386,16 @@
   var yearEl = document.getElementById('copyrightYear');
   if (yearEl) yearEl.textContent = new Date().getFullYear();
 
-  var backToTop = document.getElementById('backToTop');
-  backToTop.addEventListener('click', function () {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-  window.addEventListener('scroll', function () {
-    backToTop.classList.toggle('show', window.scrollY > 400);
-  });
+  /* 博客壳内的首页由主题 js 提供返回顶部；详情页（独立样式）自己接线 */
+  if (PAGE === 'detail') {
+    var backToTop = document.getElementById('backToTop');
+    backToTop.addEventListener('click', function () {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    window.addEventListener('scroll', function () {
+      backToTop.classList.toggle('show', window.scrollY > 400);
+    });
+  }
 
   Promise.all([loadJSON('data/profile.json'), loadJSON('data/projects.json')])
     .then(function (results) {

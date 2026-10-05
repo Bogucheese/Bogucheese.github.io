@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="一个专注于编程实践、技术分享与个人成长的博客。">
+  <meta name="keywords" content="编程, 技术博客, 前端, 后端, 学习笔记">
+  <title>LZH Code Blog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Sans+SC:wght@400;500;600&family=Noto+Serif+SC:wght@400&family=Source+Serif+4:ital,wght@0,400;1,400&display=swap">
+  <link rel="stylesheet" href="/css/style.css">
+  
+<meta name="generator" content="Hexo 8.1.2"></head>
+
+<body>
+  <header class="site-header">
+  <div class="header-container">
+    <a href="/" class="logo">
+      LZH Code Blog<span class="logo-dot">.</span>
+    </a>
+    <nav class="header-nav">
+      
+      <a href="/" class="nav-link ">首页</a>
+      
+      <a href="/archives/" class="nav-link ">归档</a>
+      
+      <a href="/categories/" class="nav-link ">分类</a>
+      
+      <a href="/tags/" class="nav-link ">标签</a>
+      
+      <a href="/portfolio/" class="nav-link active">作品集</a>
+      
+      <a href="/about/" class="nav-link ">关于</a>
+      
+    </nav>
+    <form class="search-box" action="/" method="get" role="search">
+      <input type="search" name="search" class="search-input" placeholder="搜索文章…" aria-label="搜索文章">
+    </form>
+  </div>
+</header>
+
+
+  <div class="main-container single">
+    <main class="content-left">
+      <div class="page-container">
+        <header class="section-header">
+          <h1 class="section-title"></h1>
+        </header>
+
+        <div class="article-body page-content">
+          <h1 id="LZH-作品集（博客子站）"><a href="#LZH-作品集（博客子站）" class="headerlink" title="LZH 作品集（博客子站）"></a>LZH 作品集（博客子站）</h1><p>暖纸印刷风格的个人作品集，<strong>已并入 LZH Code Blog</strong>，作为博客的一个静态子站运行在线地址 <code>https://lzhcodeblog.site/portfolio/</code>。本目录位于博客仓库内（<code>blog/source/portfolio/</code>），通过 Hexo 的 <code>skip_render</code> 原样发布，也是作品集唯一的源——加项目、改样式都在这里做。</p>
+<p>视觉体系与博客 csdn-style 主题同源：骨纸底色、碳黑墨迹、陶土橙点缀、衬线标题；布局为左侧个人信息栏 + 顶部导航 + 右侧三列项目卡片，点卡片进入项目详情。</p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><pre><code class="hljs nix">blog<span class="hljs-operator">/</span>source<span class="hljs-operator">/</span>portfolio<span class="hljs-symbol">/</span>
+├── index.html            <span class="hljs-comment"># 首页：侧栏 + 三列卡片网格 + 分类筛选</span>
+├── project.html          <span class="hljs-comment"># 项目详情页（project.html?p=slug）</span>
+├── build.js              <span class="hljs-comment"># 扫描 projects/*.md → data/projects.json（零依赖，node 直接跑）</span>
+├── css<span class="hljs-symbol">/style.css</span>         <span class="hljs-comment"># 设计体系（与博客主题同源）</span>
+├── js<span class="hljs-symbol">/main.js</span>            <span class="hljs-comment"># 渲染逻辑：窗口框封面 / 卡片 / 筛选 / 详情 / 图注</span>
+├── js<span class="hljs-symbol">/marked.min.js</span>      <span class="hljs-comment"># 本地 Markdown 渲染（无 CDN 依赖）</span>
+├── data<span class="hljs-symbol">/profile.json</span>     <span class="hljs-comment"># 左侧栏个人信息（头像 / 简介 / GitHub / 邮箱 / 博客）</span>
+├── projects<span class="hljs-symbol">/</span>             <span class="hljs-comment"># 每个项目一个 Markdown 文件（_template.md 为模板）</span>
+└── assets<span class="hljs-symbol">/</span>
+    ├── covers<span class="hljs-symbol">/</span>           <span class="hljs-comment"># 卡片封面图</span>
+    └── screenshots<span class="hljs-symbol">/</span>      <span class="hljs-comment"># 详情页正文插图</span></code></pre>
+
+<h2 id="如何添加新项目"><a href="#如何添加新项目" class="headerlink" title="如何添加新项目"></a>如何添加新项目</h2><ol>
+<li>复制模板：<code>cp projects/_template.md projects/我的项目.md</code>（文件名即 URL 中的 slug）</li>
+<li>编辑 frontmatter 和正文</li>
+<li>重新构建：<code>node build.js</code>（就在本目录运行）</li>
+<li>本地预览：<code>cd ../.. &amp;&amp; npx hexo server</code>，访问 <code>http://localhost:4001/portfolio/</code></li>
+</ol>
+<h3 id="frontmatter-字段说明"><a href="#frontmatter-字段说明" class="headerlink" title="frontmatter 字段说明"></a>frontmatter 字段说明</h3><table>
+<thead>
+<tr>
+<th>字段</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>title</code></td>
+<td>✅</td>
+<td>项目名称（卡片标题 + 详情页标题）</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>✅</td>
+<td>一句话简介，显示在卡片上，建议 40 字以内</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>建议</td>
+<td>分类，如 <code>Web</code> &#x2F; <code>AI</code> &#x2F; <code>工具</code>；自动生成导航和筛选</td>
+</tr>
+<tr>
+<td><code>tags</code></td>
+<td>建议</td>
+<td>技术栈数组 <code>[Python, FastAPI]</code>，自动聚合进侧栏「技术栈」</td>
+</tr>
+<tr>
+<td><code>cover</code></td>
+<td>可选</td>
+<td>封面图路径（放 <code>assets/covers/</code>）；截图会自动裱进浏览器窗口框</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>建议</td>
+<td>日期 <code>YYYY-MM-DD</code>，用于排序和展示</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>可选</td>
+<td><code>已完成</code> &#x2F; <code>开发中</code> &#x2F; <code>已归档</code>，显示为卡片左上角徽章</td>
+</tr>
+<tr>
+<td><code>featured</code></td>
+<td>可选</td>
+<td><code>true</code> 置顶排序</td>
+</tr>
+<tr>
+<td><code>github</code></td>
+<td>可选</td>
+<td>GitHub 仓库链接，显示在卡片底部和详情页按钮</td>
+</tr>
+<tr>
+<td><code>demo</code></td>
+<td>可选</td>
+<td>在线演示链接，同上</td>
+</tr>
+</tbody></table>
+<p>正文是标准 Markdown：</p>
+<ul>
+<li>图片写 <code>![图注](assets/screenshots/xxx.jpg)</code>，会自动裱进浏览器窗口框并显示图注</li>
+<li>封面图建议 1440×900 及以上（16:10 附近），放 <code>assets/covers/</code></li>
+</ul>
+<h2 id="修改个人信息"><a href="#修改个人信息" class="headerlink" title="修改个人信息"></a>修改个人信息</h2><p>编辑 <code>data/profile.json</code>：<code>name</code>、<code>avatar</code>（留空显示首字母占位）、<code>bio</code>、<code>social.github</code> &#x2F; <code>social.email</code> &#x2F; <code>social.blog</code>。改完刷新页面即可，无需 build。</p>
+<h2 id="预览与发布"><a href="#预览与发布" class="headerlink" title="预览与发布"></a>预览与发布</h2><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> blog
+npx hexo server                <span class="hljs-comment"># 本地预览 http://localhost:4001/portfolio/</span>
+npx hexo clean &amp;&amp; npx hexo generate &amp;&amp; npx hexo deploy   <span class="hljs-comment"># 发布上线</span>
+git add -A &amp;&amp; git commit -m <span class="hljs-string">&quot;...&quot;</span> &amp;&amp; git push            <span class="hljs-comment"># 源码推 GitHub（本仓库）</span></code></pre>
+
+<p>注意：作品集的改动必须从 <code>blog</code> 仓库根目录走 Hexo 的 generate&#x2F;deploy 才会出现在线上；本目录下 <code>node build.js</code> 只重新生成 <code>data/projects.json</code>。</p>
+
+        </div>
+
+        
+      </div>
+    </main>
+  </div>
+
+  <footer class="site-footer">
+  <div class="footer-container">
+    <div class="footer-main">
+      <div class="footer-brand">
+        <p class="footer-title">LZH Code Blog<span class="logo-dot">.</span></p>
+        <p class="footer-desc">一个专注于编程实践、技术分享与个人成长的博客。</p>
+      </div>
+      <nav class="footer-nav">
+        
+        <a href="/">首页</a>
+        
+        <a href="/archives/">归档</a>
+        
+        <a href="/categories/">分类</a>
+        
+        <a href="/tags/">标签</a>
+        
+        <a href="/portfolio/">作品集</a>
+        
+        <a href="/about/">关于</a>
+        
+      </nav>
+    </div>
+    <p class="footer-copyright">
+      © 2026 LZH · Powered by Hexo · Claude 暖纸设计
+    </p>
+  </div>
+</footer>
+
+  <button class="back-to-top" id="backToTop" aria-label="返回顶部" onclick="scrollToTop()">↑</button>
+<script src="/js/main.js"></script>
+
+</body>
+</html>
